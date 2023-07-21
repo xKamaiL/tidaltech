@@ -1,8 +1,11 @@
 import 'package:TidalTech/styles/button.dart';
+import 'package:TidalTech/ui/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:niku/namespace.dart' as n;
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../stores/stores.dart';
 
@@ -26,9 +29,11 @@ class LoginPage extends HookConsumerWidget {
 
     return Scaffold(
       body: SingleChildScrollView(
-        child: Form(
+        child: Center(
+          child: Form(
             key: _formKey,
             child: n.Column([
+              n.Box()..height = 32,
               n.Image.network("https://placehold.co/100x100/png")
                 ..cover
                 ..width = 100
@@ -47,6 +52,9 @@ class LoginPage extends HookConsumerWidget {
               n.TextFormField()
                 ..controller = username
                 ..isFilled
+                ..scrollPhysics = const NeverScrollableScrollPhysics()
+                ..scrollPadding = EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom - 16 * 4)
                 ..bg = Colors.grey.shade100
                 ..maxLines = 1
                 ..rounded = 12
@@ -74,6 +82,9 @@ class LoginPage extends HookConsumerWidget {
                 ..controller = password
                 ..noUnderline
                 ..isFilled
+                ..scrollPhysics = const NeverScrollableScrollPhysics()
+                ..scrollPadding = EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom - 16 * 4)
                 ..rounded = 12
                 ..fontSize = 14
                 ..useDecoration(
@@ -113,9 +124,19 @@ class LoginPage extends HookConsumerWidget {
                 ..onPressed = () async {
                   if (loading.value) return;
                   if (_formKey.currentState!.validate()) {
+                    FocusManager.instance.primaryFocus?.unfocus();
+
                     loading.value = true;
                     await Future.delayed(const Duration(seconds: 2));
                     loading.value = false;
+                    // show alert message
+                    showTopSnackBar(
+                      Overlay.of(context),
+                      XSnackBar.success(
+                        message:
+                            "Good job, your release is successful. Have a nice day",
+                      ),
+                    );
                   }
                 }
                 ..fullWidth,
@@ -132,14 +153,17 @@ class LoginPage extends HookConsumerWidget {
                 ..color = Colors.grey.shade900,
               n.Box()
                 ..height = 100
-                ..bg = Colors.red
+                ..bg = Colors.grey.shade200
+                ..rounded = 16
                 ..width = 100,
               // sign in with google
             ])
               ..mainCenter
-              ..fullSize
+              ..crossCenter
               ..gap = 16
-              ..px = 16),
+              ..p = 16,
+          ),
+        ),
       ),
     );
   }

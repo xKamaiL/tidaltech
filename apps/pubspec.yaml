@@ -38,6 +38,8 @@ dependencies:
   vrouter: ^1.2.1
   hooks_riverpod: ^2.3.6
   niku: 2.3.3
+  google_sign_in: ^6.1.4
+  top_snackbar_flutter: ^3.1.0
 
 dev_dependencies:
   flutter_test:
