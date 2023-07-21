@@ -2,13 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:niku/namespace.dart' as n;
 
 class XButtonStyle {
-  static final confirm = n.Button.elevated("".n)
-    ..fontSize = 20
-    ..splash = Colors.indigo.withOpacity(0.1)
-    ..bg = Colors.indigo
-    ..px = 16
-    ..py = 10
-    ..fontWeight = FontWeight.w600
-    ..color = Colors.white
-    ..rounded = 8;
+  static confirm({
+    bool loading = false,
+    String label = "Confirm",
+    Icon? icon,
+  }) {
+    return n.Button.elevated("".n)
+      ..fontSize = 20
+      ..splash = Colors.indigo.withOpacity(0.1)
+      ..bg = !loading ? Colors.indigo : Colors.indigo.withOpacity(0.1)
+      ..px = 16
+      ..py = 10
+      ..fontWeight = FontWeight.w600
+      ..color = Colors.white
+      ..icon = loading
+          ? Container(
+              width: 16,
+              height: 16,
+              padding: const EdgeInsets.all(2.0),
+              child: const CircularProgressIndicator(
+                color: Colors.white,
+                strokeWidth: 3,
+              ),
+            )
+          : icon
+      ..label = label.n
+      ..rounded = 8;
+  }
+
+  static final large = n.Button("".n);
 }

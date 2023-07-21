@@ -21,6 +21,12 @@ class UserNotifier extends StateNotifier<User?> {
   void clearUser() {
     state = null;
   }
+
+  Future<void> login(
+      {required String username, required String password}) async {
+    await Future.delayed(const Duration(seconds: 3));
+    setUser(User("1", username, "John Doe", id: "1"));
+  }
 }
 
 final userProvider = StateNotifierProvider<UserNotifier, User?>((ref) {
