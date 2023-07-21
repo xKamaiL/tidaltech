@@ -9,9 +9,9 @@ class XSnackBar extends StatefulWidget {
     required this.message,
     this.messagePadding = const EdgeInsets.symmetric(horizontal: 24),
     this.icon = const Icon(
-      Icons.sentiment_very_satisfied,
+      Icons.check_circle_outline,
       color: Color(0x15000000),
-      size: 120,
+      size: 60,
     ),
     this.textStyle = const TextStyle(
       fontWeight: FontWeight.w600,
@@ -19,9 +19,9 @@ class XSnackBar extends StatefulWidget {
       color: Colors.white,
     ),
     this.maxLines = 2,
-    this.iconRotationAngle = 32,
-    this.iconPositionTop = -10,
-    this.iconPositionLeft = -8,
+    this.iconRotationAngle = 0,
+    this.iconPositionTop = -8,
+    this.iconPositionLeft = 8,
     this.backgroundColor = const Color(0xff00E676),
     this.boxShadow = kDefaultBoxShadow,
     this.borderRadius = kDefaultBorderRadius,
@@ -112,17 +112,7 @@ class CustomSnackBarState extends State<XSnackBar> {
       width: double.infinity,
       child: Stack(
         children: [
-          Positioned(
-            top: widget.iconPositionTop,
-            left: widget.iconPositionLeft,
-            child: SizedBox(
-              height: 95,
-              child: Transform.rotate(
-                angle: widget.iconRotationAngle * pi / 180,
-                child: widget.icon,
-              ),
-            ),
-          ),
+
           Center(
             child: Padding(
               padding: widget.messagePadding,
