@@ -1,11 +1,28 @@
+import 'package:flutter/material.dart';
 import 'package:riverpod/riverpod.dart';
 
-final userProvider = StateNotifierProvider<User, String>((ref) => User());
+@immutable
+class User {
+  const User(this.email, this.name, this.photoUrl, {required this.id});
 
-class User extends StateNotifier<String> {
-  User() : super("");
+  final String id;
+  final String email;
+  final String name;
+  final String? photoUrl;
+}
 
-  update(value) {
-    state = value;
+class UserNotifier extends StateNotifier<User?> {
+  UserNotifier() : super(null);
+
+  void setUser(User user) {
+    state = user;
+  }
+
+  void clearUser() {
+    state = null;
   }
 }
+
+final userProvider = StateNotifierProvider<UserNotifier, User?>((ref) {
+  return UserNotifier();
+});
