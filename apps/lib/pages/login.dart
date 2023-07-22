@@ -1,11 +1,10 @@
-import 'package:TidalTech/styles/button.dart';
-import 'package:TidalTech/ui/snackbar.dart';
+import 'package:tidal_tech/styles/button.dart';
+import 'package:tidal_tech/ui/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:niku/namespace.dart' as n;
-import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../stores/stores.dart';

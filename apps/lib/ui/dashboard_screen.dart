@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:TidalTech/ui/widget/bottom_navigation.dart';
+import 'package:tidal_tech/ui/widget/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -24,6 +24,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // add background image
     return Scaffold(
       extendBody: true,
+      appBar: AppBar(
+        title: const Text('My Home'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              //
+            },
+            icon: const Icon(Icons.add),
+          ),
+          IconButton(
+            onPressed: () {
+              //
+            },
+            icon: Icon(
+              Icons.more_vert,
+            ),
+          ),
+        ],
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+      ),
       extendBodyBehindAppBar: true,
       body: Container(
         decoration: BoxDecoration(
@@ -39,14 +60,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
           // blur image
           decoration: widget.backgroundImage != null
               ? BoxDecoration(
-                  color: Colors.black.withOpacity(0.2),
+                  color: Colors.black.withOpacity(0), // brightness
                 )
               : null,
 
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 6.0, sigmaY: 6.0),
+            filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
             child: Container(
-              child: widget.child,
+              child: SafeArea(
+                child: widget.child,
+              ),
             ),
           ),
         ),

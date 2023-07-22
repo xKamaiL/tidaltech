@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 class BottomNavigationWidget extends StatefulWidget {
@@ -14,11 +16,12 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      elevation: 8,
+      elevation: 1,
+
       // more aquarium colors ?
       selectedItemColor: Colors.blueAccent,
-      unselectedItemColor: Color(0xff6c757d),
-      backgroundColor: Color(0xC81a1a1a),
+      unselectedItemColor: Colors.white.withOpacity(0.80),
+      backgroundColor: Colors.black.withOpacity(0.35),
       type: BottomNavigationBarType.fixed,
       items: const [
         BottomNavigationBarItem(

@@ -1,6 +1,6 @@
-import 'package:TidalTech/pages/ligting/lighting.dart';
-import 'package:TidalTech/stores/stores.dart';
-import 'package:TidalTech/ui/dashboard_screen.dart';
+import 'package:tidal_tech/pages/ligting/lighting.dart';
+import 'package:tidal_tech/stores/stores.dart';
+import 'package:tidal_tech/ui/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -17,7 +17,6 @@ final routerProvider = Provider<GoRouter>((ref) {
     redirect: router._redirectLogic,
     routes: router._routes,
     initialLocation: "/",
-
   );
 });
 
@@ -41,19 +40,25 @@ class RouterNotifier extends ChangeNotifier {
         ShellRoute(
           builder: (context, state, child) => DashboardScreen(
             child: child,
-            backgroundImage: "bg.jpeg",
+            backgroundImage: "hdlight.jpg",
           ),
           routes: [
             GoRoute(
               path: '/home',
-              pageBuilder: (context, state) =>
-                  MaterialPage(child: HomeIndexPage()),
+              pageBuilder: (_, state) => NoTransitionPage(
+                key: state.pageKey,
+                restorationId: state.pageKey.value,
+                child: HomeIndexPage(),
+              ),
             ),
             GoRoute(
-                path: "/lighting",
-                pageBuilder: (context, state) {
-                  return MaterialPage(child: LightingIndexPage());
-                }),
+              path: "/lighting",
+              pageBuilder: (_, state) => NoTransitionPage(
+                key: state.pageKey,
+                restorationId: state.pageKey.value,
+                child: const LightingIndexPage(),
+              ),
+            ),
             GoRoute(
                 path: "/scenes",
                 pageBuilder: (context, state) {
