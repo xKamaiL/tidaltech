@@ -5,14 +5,15 @@ class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
 
   @override
-  State<SplashPage> createState() => _SplashPagetate();
+  State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPagetate extends State<SplashPage> {
+class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 3), () {
+      print("go to home");
       context.go("/home");
     });
   }
