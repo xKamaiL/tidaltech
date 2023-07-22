@@ -20,7 +20,8 @@ class MyApp extends HookConsumerWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool isLoggedIn = ref.watch(userProvider) != null;
+    final user = ref.read(userProvider);
+    final isLoggedIn = user.;
     return SafeArea(
       child: VRouter(
         title: "Tidal Tech",
@@ -28,22 +29,29 @@ class MyApp extends HookConsumerWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
           useMaterial3: true,
         ),
+        beforeEnter: (vRedirector) async => {
+          // run every time before enter
+          // print("Init App")
+        },
+        mode: VRouterMode.history,
         routes: [
-          VWidget(path: "/login", widget: LoginPage()),
-          VGuard(
-            afterEnter: (context, from, to) => {
-              print("afterEnter"),
-              print(from),
-              print(to),
-            },
-            beforeEnter: (vRedirector) async =>
-                {isLoggedIn ? null : vRedirector.to("/login")},
-            stackedRoutes: [
-              VWidget(path: "/home", widget: const LandingPage()),
-              VWidget(path: "/devices", widget: const LandingPage()),
-              VWidget(path: "/profile", widget: const LandingPage()),
-            ],
-          ),
+          VWidget(path: "/login", widget: LoginPage(), stackedRoutes: [
+            VGuard(
+                beforeEnter: (vRedirector) async {
+                  print(user);
+                  if (!isLoggedIn) {
+                    vRedirector.to("/login");
+                    return;
+                  }
+                  return;
+                },
+                stackedRoutes: [
+                  VWidget(path: "/home", widget: const LandingPage()),
+                  VWidget(path: "/devices", widget: const LandingPage()),
+                  VWidget(path: "/profile", widget: const LandingPage()),
+                ])
+          ]),
+
           // :_ is a path parameters named _
           // .+ is a regexp to match any path
           VRouteRedirector(path: ':_(.+)', redirectTo: '/home')

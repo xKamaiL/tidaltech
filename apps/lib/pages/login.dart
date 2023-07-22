@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:niku/namespace.dart' as n;
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:vrouter/vrouter.dart';
 
 import '../stores/stores.dart';
 
@@ -69,6 +70,7 @@ class LoginPage extends HookConsumerWidget {
                       color: Colors.grey.shade800,
                     ),
                 )
+                ..textInputAction = TextInputAction.next
                 ..validator = (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter username';
@@ -87,6 +89,7 @@ class LoginPage extends HookConsumerWidget {
                     bottom: MediaQuery.of(context).viewInsets.bottom - 16 * 4)
                 ..rounded = 12
                 ..fontSize = 14
+                ..textInputAction = TextInputAction.go
                 ..useDecoration(
                   (p0) => p0
                     ..prefixIcon = Icon(
@@ -102,6 +105,12 @@ class LoginPage extends HookConsumerWidget {
                           color: Colors.grey.shade800,
                         )),
                 )
+                ..onEditingComplete = () {
+                  // submit form
+                  print("enter");
+                  // hide keyboard
+                  FocusManager.instance.primaryFocus?.unfocus();
+                }
                 ..bg = Colors.grey.shade100
                 ..color = Colors.grey.shade900
                 ..hintText = "Password"
@@ -127,7 +136,15 @@ class LoginPage extends HookConsumerWidget {
                     FocusManager.instance.primaryFocus?.unfocus();
 
                     loading.value = true;
-                    await Future.delayed(const Duration(seconds: 2));
+                    await ref.read(userProvider.notifier).login(
+                          username: username.text,
+                          password: password.text,
+                        );
+                    if (user != null) {
+                      print("go to home");
+                      context.vRouter.to("/home");
+                    }
+
                     loading.value = false;
                     // show alert message
                     showTopSnackBar(
@@ -161,7 +178,8 @@ class LoginPage extends HookConsumerWidget {
               ..mainCenter
               ..crossCenter
               ..gap = 16
-              ..p = 16,
+              ..px = 24
+              ..py = 16,
           ),
         ),
       ),

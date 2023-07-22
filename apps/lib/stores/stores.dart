@@ -21,6 +21,7 @@ class UserNotifier extends StateNotifier<User?> {
   void clearUser() {
     state = null;
   }
+  get isLogin => state != null;
 
   Future<void> login(
       {required String username, required String password}) async {
