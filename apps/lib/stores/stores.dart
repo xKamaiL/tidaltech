@@ -9,6 +9,8 @@ class User {
   final String email;
   final String name;
   final String? photoUrl;
+
+  final isLoading = false;
 }
 
 class UserNotifier extends StateNotifier<User?> {
@@ -21,12 +23,17 @@ class UserNotifier extends StateNotifier<User?> {
   void clearUser() {
     state = null;
   }
+
   get isLogin => state != null;
 
   Future<void> login(
       {required String username, required String password}) async {
     await Future.delayed(const Duration(seconds: 3));
     setUser(User("1", username, "John Doe", id: "1"));
+  }
+
+  Future<void> fetchUser() async {
+    await Future.delayed(const Duration(seconds: 2));
   }
 }
 

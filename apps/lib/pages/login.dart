@@ -2,11 +2,11 @@ import 'package:TidalTech/styles/button.dart';
 import 'package:TidalTech/ui/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:niku/namespace.dart' as n;
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
-import 'package:vrouter/vrouter.dart';
 
 import '../stores/stores.dart';
 
@@ -142,7 +142,7 @@ class LoginPage extends HookConsumerWidget {
                         );
                     if (user != null) {
                       print("go to home");
-                      context.vRouter.to("/home");
+                      context.go("/home");
                     }
 
                     loading.value = false;
@@ -173,6 +173,7 @@ class LoginPage extends HookConsumerWidget {
                 ..bg = Colors.grey.shade200
                 ..rounded = 16
                 ..width = 100,
+              n.Button("go home".n)..onPressed = () => context.go("/home"),
               // sign in with google
             ])
               ..mainCenter
