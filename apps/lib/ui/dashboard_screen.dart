@@ -36,7 +36,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
               : null,
         ),
         child: Container(
-          child: widget.child,
+          // blur image
+          decoration: widget.backgroundImage != null
+              ? BoxDecoration(
+                  color: Colors.black.withOpacity(0.2),
+                )
+              : null,
+
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 6.0, sigmaY: 6.0),
+            child: Container(
+              child: widget.child,
+            ),
+          ),
         ),
       ),
       bottomNavigationBar: SizedBox(
