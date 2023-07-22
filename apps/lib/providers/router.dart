@@ -1,4 +1,6 @@
+import 'package:TidalTech/pages/ligting/lighting.dart';
 import 'package:TidalTech/stores/stores.dart';
+import 'package:TidalTech/ui/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -15,6 +17,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     redirect: router._redirectLogic,
     routes: router._routes,
     initialLocation: "/",
+
   );
 });
 
@@ -35,10 +38,34 @@ class RouterNotifier extends ChangeNotifier {
           path: '/sign-in',
           pageBuilder: (context, state) => MaterialPage(child: LoginPage()),
         ),
-        GoRoute(
-          path: '/home',
-          pageBuilder: (context, state) => MaterialPage(child: HomeIndexPage()),
-        ),
+        ShellRoute(
+          builder: (context, state, child) => DashboardScreen(
+            child: child,
+            backgroundImage: "bg.jpeg",
+          ),
+          routes: [
+            GoRoute(
+              path: '/home',
+              pageBuilder: (context, state) =>
+                  MaterialPage(child: HomeIndexPage()),
+            ),
+            GoRoute(
+                path: "/lighting",
+                pageBuilder: (context, state) {
+                  return MaterialPage(child: LightingIndexPage());
+                }),
+            GoRoute(
+                path: "/scenes",
+                pageBuilder: (context, state) {
+                  return MaterialPage(child: Container());
+                }),
+            GoRoute(
+                path: "/setting",
+                pageBuilder: (context, state) {
+                  return MaterialPage(child: Container());
+                }),
+          ],
+        )
       ];
 
   String? _redirectLogic(BuildContext buildContext, GoRouterState state) {
@@ -47,8 +74,6 @@ class RouterNotifier extends ChangeNotifier {
     }
     final user = _ref.read(userProvider);
     final areWeOnSignInPage = state.path == '/sign-in';
-
-
 
     if (user == null && !areWeOnSignInPage) {
       return '/sign-in';

@@ -21,7 +21,7 @@ class MyApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'Tidal Tech',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.indigo,
       ),
       routerConfig: router,
       debugShowCheckedModeBanner: false,

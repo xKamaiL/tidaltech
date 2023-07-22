@@ -140,10 +140,7 @@ class LoginPage extends HookConsumerWidget {
                           username: username.text,
                           password: password.text,
                         );
-                    if (user != null) {
-                      print("go to home");
-                      context.go("/home");
-                    }
+
 
                     loading.value = false;
                     // show alert message
@@ -154,6 +151,7 @@ class LoginPage extends HookConsumerWidget {
                             "Good job, your release is successful. Have a nice day",
                       ),
                     );
+                    context.go("/home");
                   }
                 }
                 ..fullWidth,
