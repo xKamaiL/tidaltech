@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tidal_tech/providers/router.dart';
-import 'dart:io' as io;
-import 'package:window_manager/window_manager.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   runApp(
@@ -24,6 +23,7 @@ class MyApp extends ConsumerWidget {
       title: 'Tidal Tech',
       theme: ThemeData(
         primarySwatch: Colors.indigo,
+        fontFamily: GoogleFonts.notoSansThai().fontFamily,
       ),
       routerConfig: router,
       debugShowCheckedModeBanner: false,
@@ -31,3 +31,4 @@ class MyApp extends ConsumerWidget {
     );
   }
 }
+

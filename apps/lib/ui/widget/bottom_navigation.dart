@@ -20,6 +20,7 @@ class _BottomNavigationWidgetState
     final position = ref.watch(bottomBarProvider.select((value) => value));
     return BottomNavigationBar(
       currentIndex: position,
+      enableFeedback: true,
       elevation: 1,
       // more aquarium colors ?
       selectedItemColor: Colors.blueAccent,

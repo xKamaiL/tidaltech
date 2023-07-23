@@ -8,11 +8,11 @@ class XButtonStyle {
     Icon? icon,
   }) {
     return n.Button.elevated("".n)
-      ..fontSize = 20
+      ..fontSize = 18
       ..splash = Colors.indigo.withOpacity(0.1)
       ..bg = !loading ? Colors.indigo : Colors.indigo.withOpacity(0.5)
       ..px = 0
-      ..py = 18
+      ..py = 16
       ..elevation = 0
       ..fontWeight = FontWeight.w600
       ..color = Colors.white

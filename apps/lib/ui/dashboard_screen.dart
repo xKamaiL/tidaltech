@@ -24,27 +24,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // add background image
     return Scaffold(
       extendBody: true,
-      appBar: AppBar(
-        title: const Text('My Home'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              //
-            },
-            icon: const Icon(Icons.add),
-          ),
-          IconButton(
-            onPressed: () {
-              //
-            },
-            icon: Icon(
-              Icons.more_vert,
-            ),
-          ),
-        ],
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-      ),
       extendBodyBehindAppBar: true,
       body: Container(
         decoration: BoxDecoration(
@@ -66,18 +45,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-            child: Container(
-              child: SafeArea(
-                child: widget.child,
-              ),
+            child: SafeArea(
+              child: widget.child,
             ),
           ),
         ),
       ),
-      bottomNavigationBar: SizedBox(
-        height: 56.0,
-        child: BottomNavigationWidget(),
-      ),
+      bottomNavigationBar: const BottomNavigationWidget(),
     );
   }
 }
