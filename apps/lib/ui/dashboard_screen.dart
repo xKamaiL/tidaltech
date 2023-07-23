@@ -19,6 +19,8 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  static const blur = 7.0;
+
   @override
   Widget build(BuildContext context) {
     // add background image
@@ -44,7 +46,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               : null,
 
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+            filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
             child: SafeArea(
               child: widget.child,
             ),

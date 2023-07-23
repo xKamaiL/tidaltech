@@ -74,7 +74,9 @@ class Bar extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final v = useState<double>(0.5);
+    // random value
+
+    final v = useState<double>(Random().nextDouble()*1);
     return Padding(
       padding: const EdgeInsets.only(top: 30.0),
       child: RotatedBox(
