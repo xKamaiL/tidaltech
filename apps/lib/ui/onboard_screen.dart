@@ -18,18 +18,18 @@ class OnBoardScreen extends StatelessWidget {
         decoration: const BoxDecoration(
           image: DecorationImage(
             // load assets from network
-            image: ExactAssetImage("assets/hdlight.jpeg"),
+            image: ExactAssetImage("assets/hdlight.jpg"),
             fit: BoxFit.fill,
           ),
         ),
         child: Container(
           // blur image
           decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0), // brightness
+            color: Colors.black.withOpacity(0.3), // brightness
           ),
 
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+            filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
             child: SafeArea(
               child: child,
             ),

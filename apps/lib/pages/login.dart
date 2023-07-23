@@ -28,6 +28,7 @@ class LoginPage extends HookConsumerWidget {
     final user = ref.watch(userProvider);
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: SingleChildScrollView(
         child: Center(
           child: SizedBox(
@@ -48,6 +49,7 @@ class LoginPage extends HookConsumerWidget {
                 "Sign in to Apps".h4
                   ..bold
                   ..justify
+                  ..color = Colors.grey.shade100
                   ..mb = 16
                   // make it center
                   ..fullWidth
@@ -58,7 +60,7 @@ class LoginPage extends HookConsumerWidget {
                   ..scrollPhysics = const NeverScrollableScrollPhysics()
                   ..scrollPadding = EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom - 16 * 4)
-                  ..bg = Colors.grey.shade100
+                  ..bg = Colors.grey.shade100.withOpacity(0.4)
                   ..maxLines = 1
                   ..rounded = 12
                   ..fontSize = 14
@@ -109,7 +111,7 @@ class LoginPage extends HookConsumerWidget {
                     // hide keyboard
                     FocusManager.instance.primaryFocus?.unfocus();
                   }
-                  ..bg = Colors.grey.shade100
+                  ..bg = Colors.grey.shade100.withOpacity(0.4)
                   ..color = Colors.grey.shade900
                   ..hintText = "Password"
                   ..maxLines = 1

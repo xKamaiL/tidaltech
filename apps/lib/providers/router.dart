@@ -1,9 +1,12 @@
 import 'package:tidal_tech/pages/ligting/lighting.dart';
+import 'package:tidal_tech/pages/scenes/scenes.dart';
+import 'package:tidal_tech/pages/settings/settings.dart';
 import 'package:tidal_tech/stores/stores.dart';
 import 'package:tidal_tech/ui/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tidal_tech/ui/onboard_screen.dart';
 
 import '../pages/home/home.dart';
 import '../pages/login.dart';
@@ -33,9 +36,14 @@ class RouterNotifier extends ChangeNotifier {
           pageBuilder: (context, state) =>
               const MaterialPage(child: SplashPage()),
         ),
-        GoRoute(
-          path: '/sign-in',
-          pageBuilder: (context, state) => MaterialPage(child: LoginPage()),
+        ShellRoute(
+          routes: [
+            GoRoute(
+              path: '/sign-in',
+              pageBuilder: (context, state) => MaterialPage(child: LoginPage()),
+            ),
+          ],
+          builder: (context, state, child) => OnBoardScreen(child: child),
         ),
         ShellRoute(
           builder: (context, state, child) => DashboardScreen(
@@ -62,12 +70,20 @@ class RouterNotifier extends ChangeNotifier {
             GoRoute(
                 path: "/scenes",
                 pageBuilder: (context, state) {
-                  return MaterialPage(child: Container());
+                  return NoTransitionPage(
+                    key: state.pageKey,
+                    restorationId: state.pageKey.value,
+                    child: ScenesIndexPage(),
+                  );
                 }),
             GoRoute(
                 path: "/setting",
                 pageBuilder: (context, state) {
-                  return MaterialPage(child: Container());
+                  return NoTransitionPage(
+                    key: state.pageKey,
+                    restorationId: state.pageKey.value,
+                    child: SettingsIndexPage(),
+                  );
                 }),
           ],
         )
