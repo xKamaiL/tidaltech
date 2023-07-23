@@ -52,7 +52,7 @@ class SpectrumCard extends HookConsumerWidget {
                 Colors.lightBlue,
               ),
               Bar(
-                Colors.black26,
+                Colors.grey,
               ),
             ])
               ..spaceBetween
@@ -76,34 +76,42 @@ class Bar extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // random value
 
-    final v = useState<double>(Random().nextDouble()*1);
-    return Padding(
-      padding: const EdgeInsets.only(top: 30.0),
-      child: RotatedBox(
-        quarterTurns: 3,
-        child: SliderTheme(
-            data: SliderThemeData(
-              thumbColor: Colors.transparent,
-              overlayColor: Colors.transparent,
-              trackHeight: 24,
-              thumbShape: SliderComponentShape.noThumb,
-              overlayShape: RoundedRectangleSeekbarShape(
+    final v = useState<double>(Random().nextDouble() * 1);
+    final percent = (v.value * 100).toInt();
+    return Stack(children: [
+      Padding(
+        padding: const EdgeInsets.only(bottom: 18.0, top: 30),
+        child: RotatedBox(
+          quarterTurns: 3,
+          child: SliderTheme(
+              data: SliderThemeData(
+                thumbColor: Colors.transparent,
+                overlayColor: Colors.transparent,
+                trackHeight: 24,
+                thumbShape: SliderComponentShape.noThumb,
+                overlayShape: RoundedRectangleSeekbarShape(),
               ),
-            ),
-            child: Slider(
-              activeColor: color,
-              inactiveColor: color.withOpacity(0.35),
-              value: v.value,
-              onChanged: (vv) {
-                v.value = vv;
-              },
-              min: 0,
-            )),
+              child: Slider(
+                activeColor: color,
+                inactiveColor: color.withOpacity(0.35),
+                value: v.value,
+                onChanged: (vv) {
+                  v.value = vv;
+                },
+                min: 0,
+              )),
+        ),
       ),
-    );
+      Container(
+        padding: EdgeInsets.only(top: 10),
+        alignment: Alignment.bottomCenter,
+        child: n.Text("$percent%")
+          ..fontSize = 10
+          ..color = Colors.white,
+      ),
+    ]);
   }
 }
-
 
 class RoundedRectangleSeekbarShape extends SliderComponentShape {
   //The radius of the thumb
@@ -126,17 +134,17 @@ class RoundedRectangleSeekbarShape extends SliderComponentShape {
   @override
   void paint(PaintingContext context, Offset center,
       {required Animation<double> activationAnimation,
-        required Animation<double> enableAnimation,
-        bool? isDiscrete,
-        required TextPainter labelPainter,
-        required RenderBox parentBox,
-        required SliderThemeData sliderTheme,
-        double? value,
-        double? textScaleFactor,
-        Size? sizeWithOverflow,
-        TextDirection? textDirection,
-        Thumb? thumb,
-        bool? isPressed}) {
+      required Animation<double> enableAnimation,
+      bool? isDiscrete,
+      required TextPainter labelPainter,
+      required RenderBox parentBox,
+      required SliderThemeData sliderTheme,
+      double? value,
+      double? textScaleFactor,
+      Size? sizeWithOverflow,
+      TextDirection? textDirection,
+      Thumb? thumb,
+      bool? isPressed}) {
     final Canvas canvas = context.canvas;
 
     final rect = Rect.fromCircle(center: center, radius: thumbRadius);
