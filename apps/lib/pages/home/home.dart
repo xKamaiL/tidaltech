@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -6,8 +8,10 @@ import 'package:niku/namespace.dart' as n;
 class HomeIndexPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currentCount = (MediaQuery.of(context).size.width ~/ 250).toInt();
+
     return GridView.count(
-      crossAxisCount: 2,
+      crossAxisCount: max(currentCount, 2),
       // gap
       crossAxisSpacing: 10,
       mainAxisSpacing: 10,
