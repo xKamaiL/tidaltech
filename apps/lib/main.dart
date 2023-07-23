@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tidal_tech/providers/router.dart';
+import 'dart:io' as io;
+import 'package:window_manager/window_manager.dart';
 
 void main() async {
   runApp(

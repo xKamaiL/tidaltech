@@ -6,9 +6,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:niku/namespace.dart' as n;
 
 class HomeIndexPage extends HookConsumerWidget {
+  const HomeIndexPage({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentCount = (MediaQuery.of(context).size.width ~/ 250).toInt();
+    final currentCount = (MediaQuery.of(context).size.width ~/ 220).toInt();
 
     return GridView.count(
       crossAxisCount: max(currentCount, 2),

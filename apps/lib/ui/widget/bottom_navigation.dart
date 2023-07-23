@@ -2,22 +2,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tidal_tech/stores/bottom_bar.dart';
 
-class BottomNavigationWidget extends StatefulWidget {
+class BottomNavigationWidget extends ConsumerStatefulWidget {
   const BottomNavigationWidget({Key? key}) : super(key: key);
 
   @override
-  State<BottomNavigationWidget> createState() => _BottomNavigationWidgetState();
+  ConsumerState<BottomNavigationWidget> createState() =>
+      _BottomNavigationWidgetState();
 }
 
-class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
-  int _currentIndex = 0;
-
+class _BottomNavigationWidgetState
+    extends ConsumerState<BottomNavigationWidget> {
   @override
   Widget build(BuildContext context) {
+    final position = ref.watch(bottomBarProvider.select((value) => value));
     return BottomNavigationBar(
+      currentIndex: position,
       elevation: 1,
-
       // more aquarium colors ?
       selectedItemColor: Colors.blueAccent,
       unselectedItemColor: Colors.white.withOpacity(0.80),
@@ -46,6 +49,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   }
 
   void onTabTapped(int index) {
+    ref.read(bottomBarProvider.notifier).setPosition(index);
     switch (index) {
       case 0:
         context.go("/home");
