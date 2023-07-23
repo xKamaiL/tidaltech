@@ -11,8 +11,9 @@ class XButtonStyle {
       ..fontSize = 20
       ..splash = Colors.indigo.withOpacity(0.1)
       ..bg = !loading ? Colors.indigo : Colors.indigo.withOpacity(0.5)
-      ..px = 16
-      ..py = 10
+      ..px = 0
+      ..py = 18
+      ..elevation = 0
       ..fontWeight = FontWeight.w600
       ..color = Colors.white
       ..icon = loading

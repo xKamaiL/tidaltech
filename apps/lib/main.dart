@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tidal_tech/providers/router.dart';
 
-void main() {
+void main() async {
   runApp(
     const ProviderScope(
       overrides: [],

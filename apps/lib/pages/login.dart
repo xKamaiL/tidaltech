@@ -62,12 +62,11 @@ class LoginPage extends HookConsumerWidget {
                 ..noUnderline
                 ..color = Colors.grey.shade800
                 ..hintText = "Username"
-                ..useDecoration(
-                  (p0) => p0
-                    ..prefixIcon = Icon(
-                      Icons.person,
-                      color: Colors.grey.shade800,
-                    ),
+                ..textAlignVertical = TextAlignVertical.center
+                ..isCollapsed = true
+                ..prefixIcon = Icon(
+                  Icons.person,
+                  color: Colors.grey.shade800,
                 )
                 ..textInputAction = TextInputAction.next
                 ..validator = (value) {
@@ -89,24 +88,21 @@ class LoginPage extends HookConsumerWidget {
                 ..rounded = 12
                 ..fontSize = 14
                 ..textInputAction = TextInputAction.go
-                ..useDecoration(
-                  (p0) => p0
-                    ..prefixIcon = Icon(
-                      Icons.lock,
-                      color: Colors.grey.shade800,
-                    )
-                    ..suffixIcon = IconButton(
-                        onPressed: () => {
-                              isShowPassword.value = !isShowPassword.value,
-                            },
-                        icon: Icon(
-                          Icons.visibility,
-                          color: Colors.grey.shade800,
-                        )),
+                ..isCollapsed = true
+                ..textAlignVertical = TextAlignVertical.center
+                ..prefixIcon = Icon(
+                  Icons.lock,
+                  color: Colors.grey.shade800,
                 )
+                ..suffixIcon = IconButton(
+                    onPressed: () => {
+                          isShowPassword.value = !isShowPassword.value,
+                        },
+                    icon: Icon(
+                      Icons.visibility,
+                      color: Colors.grey.shade800,
+                    ))
                 ..onEditingComplete = () {
-                  // submit form
-                  print("enter");
                   // hide keyboard
                   FocusManager.instance.primaryFocus?.unfocus();
                 }
@@ -139,7 +135,6 @@ class LoginPage extends HookConsumerWidget {
                           username: username.text,
                           password: password.text,
                         );
-
 
                     loading.value = false;
                     // show alert message
