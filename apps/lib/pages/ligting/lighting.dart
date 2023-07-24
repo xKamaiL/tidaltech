@@ -35,14 +35,59 @@ class LightingIndexPage extends HookConsumerWidget {
           padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
           child: n.Column([
             ModeSelection(),
-            Panel(child: SpectrumCard()),
-            Panel(child: TimeSelection()),
-            Panel(child: TimeSelection()),
+            if (mode == LightingMode.custom) ...renderCustom(),
+            if (mode == LightingMode.preset) ...renderPreset(),
           ])
             ..gap = 8,
         ),
       ),
     );
+  }
+
+  List<Widget> renderCustom() {
+    return [
+      Panel(child: SpectrumCard()),
+      Panel(child: TimeSelection()),
+      Panel(child: TimeSelection()),
+    ];
+  }
+
+  List<Widget> renderPreset() {
+    return [
+      ListView.separated(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemBuilder: (BuildContext context, int index) {
+          return Panel(
+            child: n.Column([
+              n.Row([
+                n.Text("Preset $index")..color = Colors.white,
+                n.Icon(Icons.edit)..color = Colors.white,
+              ])
+                ..mainAxisAlignment = MainAxisAlignment.spaceBetween
+                ..gap = 8,
+              // description
+              n.Text(
+                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl sed aliquam ultricies, nunc nisl ultricies nisl, sed aliquam nisl nisl sed.")
+                ..color = Colors.white.withOpacity(0.8),
+              n.Row([
+                n.Button("Apply".n)
+                  ..bg = Colors.blue
+                  ..color = Colors.white,
+              ])
+                ..mainAxisAlignment = MainAxisAlignment.end,
+            ])
+              ..gap = 8,
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return const SizedBox(
+            height: 8,
+          );
+        },
+        itemCount: 10,
+      )
+    ];
   }
 }
 
