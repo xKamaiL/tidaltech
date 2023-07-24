@@ -15,7 +15,7 @@ class Panel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 0),
-      color: Colors.black.withOpacity(0.45),
+      color: Colors.black.withOpacity(0.4),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
