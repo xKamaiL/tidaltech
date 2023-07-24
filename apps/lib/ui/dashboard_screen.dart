@@ -19,7 +19,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  static const blur = 7.0;
+  static const blur = 5.0;
 
   @override
   Widget build(BuildContext context) {
