@@ -14,7 +14,7 @@ class SpectrumCard extends HookConsumerWidget {
       child: Stack(
         children: [
           n.Padding(
-            child: n.Text("Spectrum Colors")
+            child: n.Text("Customize")
               ..fontSize = 24
               ..bold
               ..color = Colors.white,
