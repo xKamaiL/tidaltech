@@ -14,6 +14,9 @@ class ClockWidget extends HookConsumerWidget {
       stream: Stream.periodic(const Duration(seconds: 1)),
       builder: (context, snap) {
         return Panel(
+          onPressed: () => {
+            //
+          },
           child: n.Column([
             n.Row([
               n.Icon(Icons.access_time_rounded)

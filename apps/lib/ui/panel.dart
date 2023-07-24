@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:niku/namespace.dart' as n;
 
 class Panel extends StatelessWidget {
   final String? title;
 
-  final Icon? icon;
+  final IconData? icon;
 
   final Color? color;
 
   final Widget child;
+
+  final void Function()? onPressed;
 
   const Panel({
     Key? key,
@@ -15,6 +18,7 @@ class Panel extends StatelessWidget {
     this.title,
     this.icon,
     this.color,
+    this.onPressed,
   }) : super(key: key);
 
   @override
@@ -26,15 +30,47 @@ class Panel extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       elevation: 0,
-      child: Padding(
-        padding: const EdgeInsets.only(
-          left: 16,
-          right: 16,
-          top: 8,
-          bottom: 8,
+      child: InkWell(
+        onTap: onPressed,
+        child: Padding(
+          padding: const EdgeInsets.only(
+            left: 16,
+            right: 16,
+            top: 8,
+            bottom: 8,
+          ),
+          child: onPressed != null
+              ? GestureDetector(
+                  onTap: onPressed,
+                  child: renderChild(),
+                )
+              : renderChild(),
         ),
-        child: child,
       ),
     );
+  }
+
+  Widget renderChild() {
+    if (title != null && icon != null) {
+      return n.Column([
+        n.Row([
+          n.Icon(icon)
+            ..color = color ?? Colors.white.withOpacity(0.65)
+            ..size = 14,
+          n.Text(title)
+            ..color = color ?? Colors.white.withOpacity(0.65)
+            ..fontSize = 14
+            ..textAlign = TextAlign.center
+            ..bold
+        ])
+          ..mb = 4
+          ..mainAxisAlignment = MainAxisAlignment.start
+          ..crossAxisAlignment = CrossAxisAlignment.center
+          ..gap = 4,
+        child,
+      ]);
+    }
+
+    return child;
   }
 }

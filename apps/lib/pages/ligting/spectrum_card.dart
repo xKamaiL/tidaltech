@@ -9,60 +9,39 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 class SpectrumCard extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return AspectRatio(
-      aspectRatio: 1,
-      child: Stack(
-        children: [
-          n.Padding(
-            child: n.Text("Customize")
-              ..fontSize = 24
-              ..bold
-              ..color = Colors.white,
-          )..p = 8,
-          n.Padding(
-            child: n.Row(const [
-              Bar(
-                Colors.pink,
-              ),
-              Bar(
-                Colors.purple,
-              ),
-              Bar(
-                Colors.indigo,
-              ),
-              Bar(
-                Colors.blueAccent,
-              ),
-              Bar(
-                Colors.lightBlue,
-              ),
-              Bar(
-                Colors.lightBlueAccent,
-              ),
-              Bar(
-                Colors.green,
-              ),
-              Bar(
-                Colors.grey,
-              ),
-              Bar(
-                Colors.red,
-              ),
-              Bar(
-                Colors.lightBlue,
-              ),
-              Bar(
-                Colors.grey,
-              ),
-            ])
-              ..spaceBetween
-              ..p = 0
-              ..gap = 0,
-          )
-            ..p = 8
-            ..mt = 12
-        ],
-      ),
+    return Stack(
+      children: [
+        n.Padding(
+          child: n.Text("Customize")
+            ..fontSize = 24
+            ..bold
+            ..color = Colors.white,
+        )..p = 8,
+        n.Padding(
+          child: n.Column(const [
+            Bar(
+              Colors.pink,
+            ),
+            Bar(
+              Colors.purple,
+            ),
+            Bar(
+              Colors.indigo,
+            ),
+            Bar(
+              Colors.blueAccent,
+            ),
+            Bar(
+              Colors.lightBlue,
+            ),
+          ])
+            ..spaceBetween
+            ..p = 0
+            ..gap = 0,
+        )
+          ..p = 8
+          ..mt = 12
+      ],
     );
   }
 }
@@ -78,29 +57,26 @@ class Bar extends HookConsumerWidget {
 
     final v = useState<double>(Random().nextDouble() * 1);
     final percent = (v.value * 100).toInt();
-    return Stack(children: [
+    return Stack(alignment: Alignment.bottomCenter, children: [
       Padding(
-        padding: const EdgeInsets.only(bottom: 18.0, top: 30),
-        child: RotatedBox(
-          quarterTurns: 3,
-          child: SliderTheme(
-              data: SliderThemeData(
-                thumbColor: Colors.transparent,
-                overlayColor: Colors.transparent,
-                trackHeight: 24,
-                thumbShape: SliderComponentShape.noThumb,
-                overlayShape: RoundedRectangleSeekbarShape(),
-              ),
-              child: Slider(
-                activeColor: color,
-                inactiveColor: color.withOpacity(0.35),
-                value: v.value,
-                onChanged: (vv) {
-                  v.value = vv;
-                },
-                min: 0,
-              )),
-        ),
+        padding: const EdgeInsets.only(bottom: 0, top: 24),
+        child: SliderTheme(
+            data: SliderThemeData(
+              thumbColor: Colors.transparent,
+              overlayColor: Colors.transparent,
+              trackHeight: 24,
+              thumbShape: SliderComponentShape.noThumb,
+              overlayShape: RoundedRectangleSeekbarShape(),
+            ),
+            child: Slider(
+              activeColor: color,
+              inactiveColor: color.withOpacity(0.35),
+              value: v.value,
+              onChanged: (vv) {
+                v.value = vv;
+              },
+              min: 0,
+            )),
       ),
       Container(
         padding: EdgeInsets.only(top: 10),

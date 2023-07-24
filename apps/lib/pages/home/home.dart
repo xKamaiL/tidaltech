@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import 'package:niku/namespace.dart' as n;
 import 'package:responsive_grid/responsive_grid.dart';
@@ -12,7 +11,7 @@ import 'package:tidal_tech/pages/home/moonlight_widget.dart';
 import 'package:tidal_tech/pages/home/on_hour_widget.dart';
 import 'package:tidal_tech/pages/home/sunrise_widget.dart';
 import 'package:tidal_tech/pages/home/water_temp_widget.dart';
-import 'package:tidal_tech/ui/info_title.dart';
+import 'package:tidal_tech/ui/widget/scene_card.dart';
 
 class HomeIndexPage extends HookConsumerWidget {
   const HomeIndexPage({super.key});
@@ -37,17 +36,42 @@ class HomeIndexPage extends HookConsumerWidget {
         centerTitle: false,
       ),
       backgroundColor: Colors.transparent,
-      body: ResponsiveGridList(
-        desiredItemWidth: 150,
-        minSpacing: 8,
-        children: [
-          ClockWidget(),
-          MoonLightWidget(),
-          OnHourWidget(),
-          WaterTemperature(),
-          SunriseWidget(),
-          HistoryWidget(),
-        ],
+      body: Container(
+        child: ResponsiveGridList(
+          desiredItemWidth: 150,
+          minSpacing: 8,
+          children: [
+            ClockWidget(),
+            MoonLightWidget(),
+            OnHourWidget(),
+            WaterTemperature(),
+            SunriseWidget(),
+            HistoryWidget(),
+            n.Text("Scenes")
+              ..color = Colors.white
+              ..bold
+              ..fontSize = 24,
+            n.Box(),
+            SceneCard(
+                scene: Scene(
+                  title: "Morning",
+                  icon: Icons.wb_sunny_outlined,
+                ),
+                onTap: () {
+                  //
+                }),
+            SceneCard(
+              scene: Scene(
+                title: "Thunderstorm",
+                icon: Icons.thunderstorm_outlined,
+              ),
+              onTap: () {
+                //
+              },
+              active: true,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -124,10 +124,10 @@ class ModeSelection extends HookConsumerWidget {
                     duration: Duration(milliseconds: 250),
                     child: Align(
                       child: n.Row([
-                        n.Icon(Icons.edit)
+                        n.Icon(Icons.color_lens_sharp)
                           ..color = Colors.white
                           ..size = 14.0,
-                        n.Text("Custom")
+                        n.Text("Ambient Mode")
                           ..textAlign = TextAlign.center
                           ..color = Colors.white
                       ])
@@ -164,10 +164,10 @@ class ModeSelection extends HookConsumerWidget {
                     duration: Duration(milliseconds: 250),
                     child: Align(
                       child: n.Row([
-                        n.Icon(Icons.list)
+                        n.Icon(Icons.water)
                           ..color = Colors.white
                           ..size = 16.0,
-                        n.Text("Preset")
+                        n.Text("Feed Mode")
                           ..textAlign = TextAlign.center
                           ..color = Colors.white
                       ])
