@@ -33,15 +33,15 @@ class OnHourWidget extends HookConsumerWidget {
               ..gap = 4,
             n.Column([
               n.Text("6 Hours")
-                ..fontSize = 32
+                ..fontSize = 28
                 ..textAlign = TextAlign.left
                 ..bold
                 ..color = Colors.white,
               n.Text("24 Minutes")
-                ..fontSize = 24
+                ..fontSize = 22
                 ..textAlign = TextAlign.left
                 ..bold
-                ..color = Colors.white.withOpacity(0.9),
+                ..color = Colors.white.withOpacity(0.95),
             ]),
             n.Text("continuously")
               ..fontSize = 14
