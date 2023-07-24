@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
 class Panel extends StatelessWidget {
-  const Panel({
-    Key? key,
-    required this.child,
-  }) : super(key: key);
+  final String? title = null;
+  final Icon? icon = null;
+  final Color? color = null;
+
+
 
   final Widget child;
+
+  const Panel({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
