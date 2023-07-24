@@ -8,13 +8,13 @@ class TimeSelection extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return n.Column([
       n.Padding(
-        child: n.Text("Intensity")
+        child: n.Text("Intensity Days")
           ..fontSize = 24
           ..bold
           ..color = Colors.white,
       )..p = 8,
-      Container(
-        height: 225,
+      SizedBox(
+        height: 180,
         child: n.ListView(
             scrollDirection: Axis.horizontal,
             children: List.generate(
@@ -38,16 +38,20 @@ class IntensitySelector extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final intensity = useState(0.5);
+    final intensity = useState(0);
     return (Center(
       child: n.Column([
         n.Text(h)
           ..fontSize = 12
+          ..bold
+          ..mt = 8
           ..color = Colors.white,
-        n.Text(intensity.value.toString())
+        n.Text("${intensity.value}%")
           ..fontSize = 12
-          ..color = Colors.white,
-      ]),
+          ..color = Colors.lightBlueAccent,
+      ])
+        ..py = 4
+        ..spaceBetween,
     ));
   }
 }
