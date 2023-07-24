@@ -49,45 +49,52 @@ class ModeSelection extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final mode =
-        ref.watch(lightingModeProvider);
+    final mode = ref.watch(lightingModeProvider);
 
     return Container(
         child: n.Row([
-          Expanded(
-            child: GestureDetector(
-              child: SizedBox(
-                height: 37,
-                width: double.infinity,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16),
-                      bottomLeft: Radius.circular(16),
-                    ),
-                    color: Colors.black
-                        .withOpacity(mode == LightingMode.custom ? 0.4 : 0.2),
-                  ),
-                  child: Align(
-                    child: n.Text("Custom")
-                      ..textAlign = TextAlign.center
-                      ..color = Colors.white,
-                  ),
-                ),
-              ),
-              onTap: () {
-                ref
-                    .read(lightingModeProvider.notifier)
-                    .setMode(LightingMode.custom);
-              },
-            ),
-          ),
       Expanded(
         child: GestureDetector(
           child: SizedBox(
             height: 37,
             width: double.infinity,
-            child: DecoratedBox(
+            child: AnimatedContainer(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  bottomLeft: Radius.circular(16),
+                ),
+                color: Colors.black
+                    .withOpacity(mode == LightingMode.custom ? 0.4 : 0.2),
+              ),
+              duration: Duration(milliseconds: 250),
+              child: Align(
+                child: n.Row([
+                  n.Icon(Icons.edit)
+                    ..color = Colors.white
+                    ..size = 14.0,
+                  n.Text("Custom")
+                    ..textAlign = TextAlign.center
+                    ..color = Colors.white
+                ])
+                  ..mainAxisAlignment = MainAxisAlignment.center
+                  ..gap = 4,
+              ),
+            ),
+          ),
+          onTap: () {
+            ref
+                .read(lightingModeProvider.notifier)
+                .setMode(LightingMode.custom);
+          },
+        ),
+      ),
+      Expanded(
+        child: GestureDetector(
+          child: SizedBox(
+            height: 37,
+            width: double.infinity,
+            child: AnimatedContainer(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(16),
@@ -96,10 +103,18 @@ class ModeSelection extends HookConsumerWidget {
                 color: Colors.black
                     .withOpacity(mode == LightingMode.preset ? 0.4 : 0.2),
               ),
+              duration: Duration(milliseconds: 250),
               child: Align(
-                child: n.Text("Preset")
-                  ..textAlign = TextAlign.center
-                  ..color = Colors.white,
+                child: n.Row([
+                  n.Icon(Icons.list)
+                    ..color = Colors.white
+                    ..size = 16.0,
+                  n.Text("Preset")
+                    ..textAlign = TextAlign.center
+                    ..color = Colors.white
+                ])
+                  ..mainAxisAlignment = MainAxisAlignment.center
+                  ..gap = 4,
               ),
             ),
           ),
