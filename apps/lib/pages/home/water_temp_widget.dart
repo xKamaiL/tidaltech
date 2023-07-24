@@ -31,52 +31,43 @@ class WaterTemperature extends HookConsumerWidget {
               ..mainAxisAlignment = MainAxisAlignment.start
               ..crossAxisAlignment = CrossAxisAlignment.center
               ..gap = 4,
-            n.Box()..h = 8,
-            n.Row([
-              n.Text("Temp")
-                ..fontSize = 18
-                ..textAlign = TextAlign.left
-                ..bold
-                ..color = Colors.white.withOpacity(0.85),
-              n.Text("26.5 °C")
-                ..fontSize = 18
-                ..textAlign = TextAlign.right
-                ..bold
-                ..color = Colors.white.withOpacity(0.95)
+            n.Column([
+              Info(label: "Temp", value: "26.5 °C"),
+              Info(label: "Quality", value: "pH 8.1"),
+              Info(label: "Salinity", value: "1.025"),
             ])
-              ..mainAxisAlignment = MainAxisAlignment.spaceBetween,
-            n.Box()..h = 8,
-            n.Row([
-              n.Text("Quality")
-                ..fontSize = 18
-                ..textAlign = TextAlign.left
-                ..bold
-                ..color = Colors.white.withOpacity(0.85),
-              n.Text("pH 8.1")
-                ..fontSize = 18
-                ..textAlign = TextAlign.right
-                ..bold
-                ..color = Colors.white.withOpacity(0.95)
-            ])
-              ..mainAxisAlignment = MainAxisAlignment.spaceBetween,
-            n.Box()..h = 8,
-            n.Row([
-              n.Text("Salinity")
-                ..fontSize = 18
-                ..textAlign = TextAlign.left
-                ..bold
-                ..color = Colors.white.withOpacity(0.85),
-              n.Text("1.025")
-                ..fontSize = 18
-                ..textAlign = TextAlign.right
-                ..bold
-                ..color = Colors.white.withOpacity(0.95)
-            ])
-              ..mainAxisAlignment = MainAxisAlignment.spaceBetween,
-            n.Box()..h = 8,
-          ]),
+              ..gap = 4,
+            n.Box(),
+          ])
+            ..gap = 4
+            ..spaceBetween
+            ..crossAxisAlignment = CrossAxisAlignment.center,
         ));
       },
     );
+  }
+}
+
+class Info extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const Info({super.key, required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return n.Row([
+      n.Text(label)
+        ..fontSize = 18
+        ..textAlign = TextAlign.left
+        ..bold
+        ..color = Colors.white.withOpacity(0.85),
+      n.Text(value)
+        ..fontSize = 18
+        ..textAlign = TextAlign.right
+        ..bold
+        ..color = Colors.white.withOpacity(0.95)
+    ])
+      ..spaceBetween;
   }
 }

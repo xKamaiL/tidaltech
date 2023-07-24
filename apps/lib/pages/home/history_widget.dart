@@ -14,31 +14,34 @@ class HistoryWidget extends HookConsumerWidget {
       stream: Stream.periodic(const Duration(seconds: 1)),
       builder: (context, snap) {
         return Panel(
-            child: n.Column([
-          n.Row([
-            n.Icon(Icons.history)
-              ..color = Colors.white.withOpacity(0.65)
-              ..size = 14,
-            n.Text("Historical")
-              ..color = Colors.white.withOpacity(0.65)
+          child: n.Column([
+            n.Row([
+              n.Icon(Icons.history)
+                ..color = Colors.white.withOpacity(0.65)
+                ..size = 14,
+              n.Text("Historical")
+                ..color = Colors.white.withOpacity(0.65)
+                ..fontSize = 14
+                ..textAlign = TextAlign.center
+                ..bold
+            ])
+              ..mb = 4
+              ..mainAxisAlignment = MainAxisAlignment.start
+              ..crossAxisAlignment = CrossAxisAlignment.center
+              ..gap = 4,
+            n.Text('Data is not available')
               ..fontSize = 14
               ..textAlign = TextAlign.center
               ..bold
+              ..wFull
+              ..my = 39
+              ..color = Colors.white.withOpacity(0.5),
+            n.Text(DateFormat('EEEE, d MMMM yyyy').format(DateTime.now()))
+              ..color = Colors.white.withOpacity(0.75)
           ])
-            ..mb = 4
-            ..mainAxisAlignment = MainAxisAlignment.start
-            ..crossAxisAlignment = CrossAxisAlignment.center
-            ..gap = 4,
-          n.Box()..h = 24,
-          n.Text('Data is not available')
-            ..fontSize = 16
-            ..textAlign = TextAlign.left
-            ..bold
-            ..color = Colors.white.withOpacity(0.5),
-          n.Box()..h = 24,
-          n.Text(DateFormat('EEEE, d MMMM yyyy').format(DateTime.now()))
-            ..color = Colors.white.withOpacity(0.75)
-        ]));
+            ..gap = 4
+            ..spaceBetween,
+        );
       },
     );
   }
