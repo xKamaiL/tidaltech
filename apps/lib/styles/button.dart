@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:niku/namespace.dart' as n;
+import 'package:tidal_tech/theme/colors.dart';
 
 class XButtonStyle {
   static confirm({
@@ -9,8 +10,8 @@ class XButtonStyle {
   }) {
     return n.Button.elevated("".n)
       ..fontSize = 18
-      ..splash = Colors.indigo.withOpacity(0.1)
-      ..bg = !loading ? Colors.blue : Colors.blue.withOpacity(0.5)
+      ..splash = ThemeColors.primary.withOpacity(0.1)
+      ..bg = !loading ? ThemeColors.primary : ThemeColors.primary.withOpacity(0.5)
       ..px = 0
       ..py = 16
       ..elevation = 0

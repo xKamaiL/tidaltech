@@ -1,4 +1,5 @@
 import 'package:tidal_tech/styles/button.dart';
+import 'package:tidal_tech/theme/colors.dart';
 import 'package:tidal_tech/ui/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -43,12 +44,12 @@ class LoginPage extends HookConsumerWidget {
                   ..height = 100
                   ..rounded = 10
                   ..useCircleProgress(
-                    color: Colors.blue.shade900,
+                    color: ThemeColors.foreground,
                   ),
                 "Sign in to Apps".h4
                   ..bold
                   ..justify
-                  ..color = Colors.grey.shade900
+                  ..color = ThemeColors.foreground
                   ..mb = 16
                   // make it center
                   ..fullWidth
@@ -59,18 +60,18 @@ class LoginPage extends HookConsumerWidget {
                   ..scrollPhysics = const NeverScrollableScrollPhysics()
                   ..scrollPadding = EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom - 16 * 4)
-                  ..bg = Colors.grey.shade200
                   ..maxLines = 1
                   ..rounded = 12
                   ..fontSize = 14
                   ..noUnderline
-                  ..color = Colors.grey.shade800
+                  ..bg = ThemeColors.zinc.shade100
+                  ..color = ThemeColors.foreground
                   ..hintText = "Username"
                   ..textAlignVertical = TextAlignVertical.center
                   ..isCollapsed = true
-                  ..prefixIcon = Icon(
+                  ..prefixIcon = const Icon(
                     Icons.person,
-                    color: Colors.grey.shade800,
+                    color: ThemeColors.foreground,
                   )
                   ..textInputAction = TextInputAction.next
                   ..validator = (value) {
@@ -94,24 +95,24 @@ class LoginPage extends HookConsumerWidget {
                   ..textInputAction = TextInputAction.go
                   ..isCollapsed = true
                   ..textAlignVertical = TextAlignVertical.center
-                  ..prefixIcon = Icon(
+                  ..prefixIcon = const Icon(
                     Icons.lock,
-                    color: Colors.grey.shade800,
+                    color: ThemeColors.foreground,
                   )
                   ..suffixIcon = IconButton(
                       onPressed: () => {
                             isShowPassword.value = !isShowPassword.value,
                           },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.visibility,
-                        color: Colors.grey.shade800,
+                        color: ThemeColors.foreground,
                       ))
                   ..onEditingComplete = () {
                     // hide keyboard
                     FocusManager.instance.primaryFocus?.unfocus();
                   }
-                  ..bg = Colors.grey.shade200
-                  ..color = Colors.grey.shade900
+                  ..bg = ThemeColors.zinc.shade100
+                  ..color = ThemeColors.foreground
                   ..hintText = "Password"
                   ..maxLines = 1
                   ..asPassword = !isShowPassword.value
@@ -165,7 +166,7 @@ class LoginPage extends HookConsumerWidget {
                   ..fontSize = 14,
                 n.Box()
                   ..height = 100
-                  ..bg = Colors.grey.shade200
+                  ..bg = ThemeColors.zinc.shade100
                   ..rounded = 16
                   ..width = 100,
                 // sign in with google

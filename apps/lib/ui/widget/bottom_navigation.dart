@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tidal_tech/stores/bottom_bar.dart';
+import 'package:tidal_tech/theme/colors.dart';
 
 class BottomNavigationWidget extends ConsumerStatefulWidget {
   const BottomNavigationWidget({Key? key}) : super(key: key);
@@ -26,10 +27,11 @@ class _BottomNavigationWidgetState
       enableFeedback: true,
       elevation: 1,
       // more aquarium colors ?
-      selectedItemColor: isHomePage ? Colors.white : Colors.blueAccent,
+      selectedItemColor:
+          isHomePage ? Colors.white : ThemeColors.primary,
       selectedFontSize: 12,
       unselectedItemColor:
-          !isHomePage ? Colors.grey.shade500 : Colors.white.withOpacity(0.80),
+          !isHomePage ? ThemeColors.zinc.shade500 : Colors.white.withOpacity(0.80),
       backgroundColor:
           !isHomePage ? Colors.white : Colors.black.withOpacity(0.35),
       type: BottomNavigationBarType.fixed,
