@@ -46,6 +46,8 @@ dependencies:
   fl_chart: ^0.63.0
   intl: ^0.18.1
   responsive_grid: ^2.4.1
+  indexed: ^0.0.8
+  syncfusion_flutter_sliders: ^22.1.39
 
 dev_dependencies:
   flutter_test:
