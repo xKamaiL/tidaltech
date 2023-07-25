@@ -21,6 +21,7 @@ class DashboardScreen extends HookConsumerWidget {
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: !isHome
           ? SafeArea(child: child)
           : Container(

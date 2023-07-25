@@ -17,9 +17,12 @@ class LightingIndexPage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lighting'),
+        title: n.Text("Lighting")
+          ..color = Colors.grey.shade900
+          ..fontSize = 18.0
+          ..bold,
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         automaticallyImplyLeading: true,
         centerTitle: false,
         actions: [

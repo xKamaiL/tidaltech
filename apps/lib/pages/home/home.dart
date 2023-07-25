@@ -20,7 +20,9 @@ class HomeIndexPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: n.Text('Home'),
+        title: n.Text('Home')
+          ..bold
+          ..fontSize = 18.0,
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
