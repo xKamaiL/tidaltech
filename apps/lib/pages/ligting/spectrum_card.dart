@@ -5,26 +5,55 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:niku/namespace.dart' as n;
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
+import 'package:tidal_tech/theme/colors.dart';
+import 'package:syncfusion_flutter_core/theme.dart';
 
 class SpectrumCard extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return n.Column([
-      n.Text("Spectrum")
-        ..fontSize = 18
-        ..color = Colors.white
-        ..fontWeight = FontWeight.bold,
-      n.Row(List.generate(
-          7, (index) => n.Text("${index * 4}:00")..color = Colors.white))
-        ..spaceBetween
+    return Container(
+      // rounded
+      width: double.infinity,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: ThemeColors.zinc.shade100),
+      child: n.Column([
+        n.Row([
+          n.Text("Time: 4:30")
+            ..fontSize = 16
+            ..fontWeight = FontWeight.w600,
+          n.Text("Adjust colors")
+            ..fontSize = 16
+            ..color = ThemeColors.foreground
+        ])
+          ..crossAxisAlignment = CrossAxisAlignment.center
+          ..spaceBetween
+          ..px = 16,
+        n.Row(const [
+          Bar(Colors.white),
+        ]),
+        n.Column([
+          n.Row(const [
+            Bar(Color(0xFF4169E1)),
+            Bar(Color(0xFF0000FF)),
+          ]),
+          n.Row(const [
+            Bar(Color(0xFFfdf4dc)),
+            Bar(Color(0xFF9e00ff)),
+          ]),
+          n.Row(const [
+            Bar(Colors.red),
+            Bar(Colors.green),
+          ]),
+        ])
+      ])
         ..wFull
+        ..py = 16
+        ..crossAxisAlignment = CrossAxisAlignment.start
+        ..mainAxisAlignment = MainAxisAlignment.start
         ..gap = 4,
-    ])
-      ..wFull
-      ..crossAxisAlignment = CrossAxisAlignment.start
-      ..mainAxisAlignment = MainAxisAlignment.start
-      ..pb = 16
-      ..gap = 4;
+    );
   }
 }
 
@@ -36,38 +65,30 @@ class Bar extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // random value
-
-    final v = useState<double>(Random().nextDouble() * 1);
-    final percent = (v.value * 100).toInt();
-    return Stack(alignment: Alignment.bottomCenter, children: [
-      Padding(
-        padding: const EdgeInsets.only(bottom: 0, top: 24),
-        child: SliderTheme(
-            data: SliderThemeData(
-              thumbColor: Colors.transparent,
-              overlayColor: Colors.transparent,
-              trackHeight: 24,
-              thumbShape: SliderComponentShape.noThumb,
-              overlayShape: RoundedRectangleSeekbarShape(),
-            ),
-            child: Slider(
-              activeColor: color,
-              inactiveColor: color.withOpacity(0.35),
-              value: v.value,
-              onChanged: (vv) {
-                v.value = vv;
-              },
-              min: 0,
-            )),
+    final _value = useState<double>(Random().nextDouble() * 100);
+    return Expanded(
+      child: SfSliderTheme(
+        data: SfSliderThemeData(),
+        child: SfSlider(
+          min: 0.0,
+          max: 100.0,
+          value: _value.value,
+          enableTooltip: true,
+          minorTicksPerInterval: 1,
+          activeColor: color,
+          inactiveColor: color.withOpacity(0.3),
+          stepSize: 1,
+          tooltipShape: SfRectangularTooltipShape(),
+          tooltipTextFormatterCallback:
+              (dynamic actualValue, String formattedText) {
+            return '$formattedText%';
+          },
+          onChanged: (dynamic value) {
+            _value.value = value;
+          },
+        ),
       ),
-      Container(
-        padding: EdgeInsets.only(top: 10),
-        alignment: Alignment.bottomCenter,
-        child: n.Text("$percent%")
-          ..fontSize = 10
-          ..color = Colors.white,
-      ),
-    ]);
+    );
   }
 }
 
@@ -124,7 +145,7 @@ class RoundedRectangleSeekbarShape extends SliderComponentShape {
       ..strokeWidth = thickness
       ..style = PaintingStyle.stroke;
 
-    // canvas.drawRRect(roundedRectangle, fillPaint);
-    // canvas.drawRRect(roundedRectangle, borderPaint);
+    canvas.drawRRect(roundedRectangle, fillPaint);
+    canvas.drawRRect(roundedRectangle, borderPaint);
   }
 }
