@@ -33,7 +33,6 @@ class LoginPage extends HookConsumerWidget {
         child: Center(
           child: SizedBox(
             width: 414,
-
             child: Form(
               key: _formKey,
               child: n.Column([
@@ -167,10 +166,9 @@ class LoginPage extends HookConsumerWidget {
                   ..color = Colors.grey.shade100,
                 n.Box()
                   ..height = 100
-                  ..bg = Colors.grey.shade200
+                  ..bg = Colors.grey.shade200.withOpacity(0.5)
                   ..rounded = 16
                   ..width = 100,
-                n.Button("go home".n)..onPressed = () => context.go("/home"),
                 // sign in with google
               ])
                 ..mainCenter
