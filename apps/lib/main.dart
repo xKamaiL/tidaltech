@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tidal_tech/providers/router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tidal_tech/theme/colors.dart';
 
 void main() async {
   runApp(
@@ -22,8 +23,9 @@ class MyApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'Tidal Tech',
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
+        primarySwatch: ThemeColors.primary,
         fontFamily: GoogleFonts.notoSansThai().fontFamily,
+        scaffoldBackgroundColor: ThemeColors.white,
       ),
       routerConfig: router,
       debugShowCheckedModeBanner: false,
