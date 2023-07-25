@@ -47,8 +47,7 @@ class RouterNotifier extends ChangeNotifier {
         ),
         ShellRoute(
           builder: (context, state, child) => DashboardScreen(
-            child: child,
-            backgroundImage: "hdlight.jpg",
+           child,
           ),
           routes: [
             GoRoute(

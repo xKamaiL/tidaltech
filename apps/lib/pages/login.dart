@@ -43,12 +43,12 @@ class LoginPage extends HookConsumerWidget {
                   ..height = 100
                   ..rounded = 10
                   ..useCircleProgress(
-                    color: Colors.indigo.shade100,
+                    color: Colors.blue.shade900,
                   ),
                 "Sign in to Apps".h4
                   ..bold
                   ..justify
-                  ..color = Colors.grey.shade100
+                  ..color = Colors.grey.shade900
                   ..mb = 16
                   // make it center
                   ..fullWidth
@@ -59,7 +59,7 @@ class LoginPage extends HookConsumerWidget {
                   ..scrollPhysics = const NeverScrollableScrollPhysics()
                   ..scrollPadding = EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom - 16 * 4)
-                  ..bg = Colors.grey.shade100.withOpacity(0.5)
+                  ..bg = Colors.grey.shade200
                   ..maxLines = 1
                   ..rounded = 12
                   ..fontSize = 14
@@ -110,7 +110,7 @@ class LoginPage extends HookConsumerWidget {
                     // hide keyboard
                     FocusManager.instance.primaryFocus?.unfocus();
                   }
-                  ..bg = Colors.grey.shade100.withOpacity(0.5)
+                  ..bg = Colors.grey.shade200
                   ..color = Colors.grey.shade900
                   ..hintText = "Password"
                   ..maxLines = 1
@@ -162,11 +162,10 @@ class LoginPage extends HookConsumerWidget {
                 n.Text("Or sign in with")
                   ..center
                   ..fullWidth
-                  ..fontSize = 14
-                  ..color = Colors.grey.shade100,
+                  ..fontSize = 14,
                 n.Box()
                   ..height = 100
-                  ..bg = Colors.grey.shade200.withOpacity(0.5)
+                  ..bg = Colors.grey.shade200
                   ..rounded = 16
                   ..width = 100,
                 // sign in with google

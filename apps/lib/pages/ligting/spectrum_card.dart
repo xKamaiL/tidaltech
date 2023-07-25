@@ -9,40 +9,22 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 class SpectrumCard extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Stack(
-      children: [
-        n.Padding(
-          child: n.Text("Customize")
-            ..fontSize = 24
-            ..bold
-            ..color = Colors.white,
-        )..p = 8,
-        n.Padding(
-          child: n.Column(const [
-            Bar(
-              Colors.pink,
-            ),
-            Bar(
-              Colors.purple,
-            ),
-            Bar(
-              Colors.indigo,
-            ),
-            Bar(
-              Colors.blueAccent,
-            ),
-            Bar(
-              Colors.lightBlue,
-            ),
-          ])
-            ..spaceBetween
-            ..p = 0
-            ..gap = 0,
-        )
-          ..p = 8
-          ..mt = 12
-      ],
-    );
+    return n.Column([
+      n.Text("Spectrum")
+        ..fontSize = 18
+        ..color = Colors.white
+        ..fontWeight = FontWeight.bold,
+      n.Row(List.generate(
+          7, (index) => n.Text("${index * 4}:00")..color = Colors.white))
+        ..spaceBetween
+        ..wFull
+        ..gap = 4,
+    ])
+      ..wFull
+      ..crossAxisAlignment = CrossAxisAlignment.start
+      ..mainAxisAlignment = MainAxisAlignment.start
+      ..pb = 16
+      ..gap = 4;
   }
 }
 

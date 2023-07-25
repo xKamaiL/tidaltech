@@ -18,14 +18,20 @@ class _BottomNavigationWidgetState
   @override
   Widget build(BuildContext context) {
     final position = ref.watch(bottomBarProvider.select((value) => value));
+
+    final isHomePage = position == 0;
+
     return BottomNavigationBar(
       currentIndex: position,
       enableFeedback: true,
       elevation: 1,
       // more aquarium colors ?
-      selectedItemColor: Colors.blueAccent,
-      unselectedItemColor: Colors.white.withOpacity(0.80),
-      backgroundColor: Colors.black.withOpacity(0.35),
+      selectedItemColor: isHomePage ? Colors.white : Colors.blueAccent,
+      selectedFontSize: 12,
+      unselectedItemColor:
+          !isHomePage ? Colors.grey.shade500 : Colors.white.withOpacity(0.80),
+      backgroundColor:
+          !isHomePage ? Colors.white : Colors.black.withOpacity(0.35),
       type: BottomNavigationBarType.fixed,
       items: const [
         BottomNavigationBarItem(

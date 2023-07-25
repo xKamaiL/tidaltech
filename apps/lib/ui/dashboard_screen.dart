@@ -1,58 +1,51 @@
 import 'dart:ui';
 
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tidal_tech/stores/bottom_bar.dart';
 import 'package:tidal_tech/ui/widget/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 
-class DashboardScreen extends StatefulWidget {
+class DashboardScreen extends HookConsumerWidget {
   final Widget child;
-
-  // background image
-  final String? backgroundImage;
-
-  const DashboardScreen({Key? key, required this.child, this.backgroundImage})
-      : super(key: key);
-
-  static const routeName = '/dashboard';
-
-  @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
-}
-
-class _DashboardScreenState extends State<DashboardScreen> {
   static const blur = 5.0;
 
+  const DashboardScreen(this.child, {super.key});
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final position = ref.watch(bottomBarProvider.select((value) => value));
+
+    final isHome = position == 0;
+
     // add background image
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
-      body: Container(
-        decoration: BoxDecoration(
-          image: widget.backgroundImage != null
-              ? DecorationImage(
-                  // load assets from network
-                  image: ExactAssetImage("assets/${widget.backgroundImage}"),
-                  fit: BoxFit.fill,
-                )
-              : null,
-        ),
-        child: Container(
-          // blur image
-          decoration: widget.backgroundImage != null
-              ? BoxDecoration(
+      body: !isHome
+          ? SafeArea(child: child)
+          : Container(
+              decoration: BoxDecoration(
+                image: isHome
+                    ? const DecorationImage(
+                        image: ExactAssetImage("assets/hdlight.jpg"),
+                        fit: BoxFit.fill,
+                      )
+                    : null,
+              ),
+              child: Container(
+                // blur image
+                decoration: BoxDecoration(
                   color: Colors.black.withOpacity(0), // brightness
-                )
-              : null,
+                ),
 
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-            child: SafeArea(
-              child: widget.child,
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+                  child: SafeArea(
+                    child: child,
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
       bottomNavigationBar: const BottomNavigationWidget(),
     );
   }

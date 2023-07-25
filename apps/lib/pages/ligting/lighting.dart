@@ -19,7 +19,7 @@ class LightingIndexPage extends HookConsumerWidget {
       appBar: AppBar(
         title: const Text('Lighting'),
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         automaticallyImplyLeading: true,
         centerTitle: false,
         actions: [
@@ -47,8 +47,6 @@ class LightingIndexPage extends HookConsumerWidget {
   List<Widget> renderCustom() {
     return [
       Panel(child: SpectrumCard()),
-      Panel(child: TimeSelection()),
-      Panel(child: TimeSelection()),
     ];
   }
 
