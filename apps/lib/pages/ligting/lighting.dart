@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:niku/namespace.dart' as n;
-import 'package:tidal_tech/pages/ligting/spectrum_card.dart';
+import 'package:tidal_tech/pages/ligting/feeder/index.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'package:tidal_tech/pages/ligting/time_selection.dart';
 import 'package:tidal_tech/stores/lighting.dart';
+import 'package:tidal_tech/theme/colors.dart';
 import 'package:tidal_tech/ui/panel.dart';
 
 class LightingIndexPage extends HookConsumerWidget {
@@ -25,9 +26,10 @@ class LightingIndexPage extends HookConsumerWidget {
         backgroundColor: Colors.transparent,
         automaticallyImplyLeading: true,
         centerTitle: false,
+        actionsIconTheme: IconThemeData(color: Colors.grey.shade900),
         actions: [
           n.IconButton(
-            Icons.add,
+            Icons.menu,
             onPressed: () {},
           ),
         ],
@@ -38,8 +40,8 @@ class LightingIndexPage extends HookConsumerWidget {
           padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
           child: n.Column([
             ModeSelection(),
-            if (mode == LightingMode.custom) ...renderCustom(),
-            if (mode == LightingMode.preset) ...renderPreset(),
+            if (mode == LightingMode.feed) ...renderCustom(),
+            if (mode == LightingMode.ambient) ...renderPreset(),
           ])
             ..gap = 8,
         ),
@@ -47,12 +49,14 @@ class LightingIndexPage extends HookConsumerWidget {
     );
   }
 
+  // feeder mode
   List<Widget> renderCustom() {
     return [
-      Panel(child: SpectrumCard()),
+      const FeederControl(),
     ];
   }
 
+  // ambient mode
   List<Widget> renderPreset() {
     return [
       ListView.separated(
@@ -101,8 +105,8 @@ class ModeSelection extends HookConsumerWidget {
 
     return Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: Colors.black.withOpacity(0.4),
+          borderRadius: BorderRadius.circular(16),
+          color: ThemeColors.zinc.shade100,
         ),
         child: n.Row([
           Expanded(
@@ -115,22 +119,24 @@ class ModeSelection extends HookConsumerWidget {
                   width: double.infinity,
                   child: AnimatedContainer(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(8),
-                        bottomLeft: Radius.circular(8),
-                      ),
-                      color: Colors.black
-                          .withOpacity(mode == LightingMode.custom ? 0.4 : 0),
+                      borderRadius: const BorderRadius.all(Radius.circular(16)),
+                      color: Colors.white
+                          .withOpacity(mode == LightingMode.feed ? 1 : 0),
                     ),
-                    duration: Duration(milliseconds: 250),
+                    duration: const Duration(milliseconds: 250),
                     child: Align(
                       child: n.Row([
-                        n.Icon(Icons.color_lens_sharp)
-                          ..color = Colors.white
+                        n.Icon(Icons.water)
+                          ..color = mode == LightingMode.feed
+                              ? ThemeColors.foreground
+                              : ThemeColors.zinc.shade500
                           ..size = 14.0,
-                        n.Text("Ambient Mode")
+                        n.Text("Feed Mode")
+                          ..fontWeight = FontWeight.w500
                           ..textAlign = TextAlign.center
-                          ..color = Colors.white
+                          ..color = mode == LightingMode.feed
+                              ? ThemeColors.foreground
+                              : ThemeColors.zinc.shade500
                       ])
                         ..mainAxisAlignment = MainAxisAlignment.center
                         ..gap = 4,
@@ -141,7 +147,7 @@ class ModeSelection extends HookConsumerWidget {
               onTap: () {
                 ref
                     .read(lightingModeProvider.notifier)
-                    .setMode(LightingMode.custom);
+                    .setMode(LightingMode.feed);
               },
             ),
           ),
@@ -155,22 +161,23 @@ class ModeSelection extends HookConsumerWidget {
                   width: double.infinity,
                   child: AnimatedContainer(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(8),
-                        bottomRight: Radius.circular(8),
-                      ),
-                      color: Colors.black
-                          .withOpacity(mode == LightingMode.preset ? 0.4 : 0),
+                      borderRadius: const BorderRadius.all(Radius.circular(16)),
+                      color: Colors.white
+                          .withOpacity(mode == LightingMode.ambient ? 1 : 0),
                     ),
                     duration: Duration(milliseconds: 250),
                     child: Align(
                       child: n.Row([
-                        n.Icon(Icons.water)
-                          ..color = Colors.white
+                        n.Icon(Icons.color_lens_sharp)
+                          ..color = mode == LightingMode.ambient
+                              ? ThemeColors.foreground
+                              : ThemeColors.zinc.shade500
                           ..size = 16.0,
-                        n.Text("Feed Mode")
+                        n.Text("Ambient Mode")
                           ..textAlign = TextAlign.center
-                          ..color = Colors.white
+                          ..color = mode == LightingMode.ambient
+                              ? ThemeColors.foreground
+                              : ThemeColors.zinc.shade500
                       ])
                         ..mainAxisAlignment = MainAxisAlignment.center
                         ..gap = 4,
@@ -181,7 +188,7 @@ class ModeSelection extends HookConsumerWidget {
               onTap: () {
                 ref
                     .read(lightingModeProvider.notifier)
-                    .setMode(LightingMode.preset);
+                    .setMode(LightingMode.ambient);
               },
             ),
           ),
