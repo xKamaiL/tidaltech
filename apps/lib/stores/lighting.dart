@@ -1,9 +1,9 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-enum LightingMode { custom, preset }
+enum LightingMode { ambient, feed }
 
 final lightingModeProvider = StateNotifierProvider<LightingModeProvider, LightingMode>(
-    (ref) => LightingModeProvider(LightingMode.custom));
+    (ref) => LightingModeProvider(LightingMode.feed));
 
 class LightingModeProvider extends StateNotifier<LightingMode> {
   LightingModeProvider(super.state);
