@@ -16,14 +16,17 @@ class SpectrumCard extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final editingTimePoint = false;
-    if (editingTimePoint == null) {
+    final tp = ref.watch(timePointEditingProvider);
+    if (tp == null) {
       return n.Box(
         n.Text("Please select time point above")
           ..color = ThemeColors.mutedForeground
           ..mt = 16,
       )..p = 16;
     }
+    // access to timePoint real values
+
+
     return Container(
       // rounded
       width: double.infinity,
@@ -32,7 +35,7 @@ class SpectrumCard extends HookConsumerWidget {
           color: ThemeColors.zinc.shade100),
       child: n.Column([
         n.Row([
-          n.Text("Time: 4:30")
+          n.Text("Time: ${tp.toString()}")
             ..fontSize = 16
             ..fontWeight = FontWeight.w600,
           n.Text("Adjust colors")

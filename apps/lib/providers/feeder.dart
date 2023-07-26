@@ -61,6 +61,9 @@ class TimePoint {
 
   @override
   String toString() {
+    if (minute < 10) {
+      return "$hour:0$minute";
+    }
     return "$hour:$minute";
   }
 

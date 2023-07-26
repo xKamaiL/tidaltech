@@ -108,8 +108,6 @@ class TimeSchedulePainter extends CustomPainter {
     }
   }
 
-
-
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
@@ -147,7 +145,7 @@ class SliderDots extends HookConsumerWidget {
         hour: newMinutes ~/ 60,
         minute: newMinutes % 60,
       );
-
+      ref.read(timePointEditingProvider.notifier).set(newPoint);
       ref.read(timePointsNotifier.notifier).update(active.value!, newPoint);
     }
 
@@ -155,8 +153,6 @@ class SliderDots extends HookConsumerWidget {
       required double maxWidth,
       required double tapPosition,
     }) {
-      final maxArea = maxWidth * 0.5;
-
       if (points.isEmpty) {
         return;
       }
@@ -167,25 +163,24 @@ class SliderDots extends HookConsumerWidget {
         final x = (point.minutes()) * maxWidth / max;
         if ((tapPosition - x).abs() < buttonSize) {
           ref.read(timePointEditingProvider.notifier).set(point);
-          debugPrint("selected $point");
           active.value = i;
-          break;
+          return;
         }
       }
+      if (active.value == null) {
+        ref.read(timePointEditingProvider.notifier).remove();
+        return;
+      }
+      // if active value is still active
 
-      // if ((tapPosition - x!).abs() < maxArea) {
-      //   setState(() {
-      //     activeSliderNumber = 0;
-      //   });
-      // } else if ((tapPosition - y!).abs() < maxArea) {
-      //   setState(() {
-      //     activeSliderNumber = 1;
-      //   });
-      // } else if ((tapPosition - z!).abs() < maxArea) {
-      //   setState(() {
-      //     activeSliderNumber = 2;
-      //   });
-      // }
+      final point = points[active.value!];
+      final newMinutes = (tapPosition / maxWidth * max).round();
+      final newPoint = point.copyWith(
+        hour: newMinutes ~/ 60,
+        minute: newMinutes % 60,
+      );
+
+      ref.read(timePointsNotifier.notifier).update(active.value!, newPoint);
     }
 
     return Column(
@@ -211,7 +206,7 @@ class SliderDots extends HookConsumerWidget {
                     left: (point.minutes()) * maxWidth / max,
                     child: Container(
                       width: 10,
-                      height: 10,
+                      height: 20,
                       // shadow
                       decoration: const BoxDecoration(
                         boxShadow: [
@@ -221,17 +216,21 @@ class SliderDots extends HookConsumerWidget {
                             spreadRadius: 0,
                           ),
                         ],
-                        shape: BoxShape.circle,
                         color: ThemeColors.zinc,
                       ),
                     ),
                   ),
-                GestureDetector(
-                  onTapDown: (details) => selectSlider(
-                      maxWidth: maxWidth,
-                      tapPosition: details.localPosition.dx),
-                  onPanUpdate: (details) =>
-                      updateSlider(details.localPosition.dx, maxWidth),
+                SizedBox.expand(
+                  child: GestureDetector(
+                    onTapDown: (details) => selectSlider(
+                        maxWidth: maxWidth,
+                        tapPosition: details.localPosition.dx),
+                    onPanUpdate: (details) =>
+                        updateSlider(details.localPosition.dx, maxWidth),
+                    onPanStart: (details) {
+                      debugPrint("+");
+                    },
+                  ),
                 ),
               ],
             );

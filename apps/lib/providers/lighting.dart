@@ -63,6 +63,15 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
       ...state.sublist(i + 1),
     ];
   }
+
+  TimePoint? findById(int id) {
+    try {
+      final tp = state[id-1];
+      return tp;
+    } catch (e) {
+      return null;
+    }
+  }
 }
 
 const defaultTimePointIntensity = <Map<LED, ColorPoint>>[
