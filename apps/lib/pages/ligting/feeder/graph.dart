@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:tidal_tech/providers/feeder.dart';
+import 'package:tidal_tech/providers/lighting.dart';
 import 'package:tidal_tech/theme/colors.dart';
 import 'package:niku/namespace.dart' as n;
 
@@ -11,7 +13,9 @@ class TimeScheduleGraph extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _value = useState(0.0);
+    final points = ref.watch(
+      timePointsNotifier,
+    );
     return Column(
       children: [
         SizedBox(
@@ -30,7 +34,9 @@ class TimeScheduleGraph extends HookConsumerWidget {
                   top: 1,
                 ),
                 child: CustomPaint(
-                  painter: TimeSchedulePainter(),
+                  painter: TimeSchedulePainter(
+                    points: points,
+                  ),
                 ),
               ),
             ),
@@ -39,20 +45,29 @@ class TimeScheduleGraph extends HookConsumerWidget {
         n.Box(
           //
           SliderDots(),
-        )..bg = ThemeColors.zinc.shade100,
+        )
+          ..bg = ThemeColors.zinc.shade100
+          ..mt = 4,
       ],
     );
   }
 }
 
 class TimeSchedulePainter extends CustomPainter {
+  final List<TimePoint> points;
+
+  TimeSchedulePainter({
+    required this.points,
+  });
+
   // 24:00
   // 1 h = 60
   // 1,440 parts
+  // but divided by 4
   static const _parts = 1440;
-  
-  void _drawGrids(Canvas canvas, Size size){
-    final m = size.width / _parts;
+
+  void _drawGrids(Canvas canvas, Size size) {
+    final m = size.width / (_parts / 4);
     final grid = Paint()
       ..color = ThemeColors.zinc.shade300.withOpacity(0.3)
       ..strokeWidth = 1
@@ -72,46 +87,34 @@ class TimeSchedulePainter extends CustomPainter {
       );
     }
   }
+
   @override
   void paint(Canvas canvas, Size size) {
-    final m = size.width / _parts;
     _drawGrids(canvas, size);
-    
-
-    final paint = Paint()
-      ..color = const Color(0xFF4169E1)
-      ..strokeWidth = 3
-      ..style = PaintingStyle.stroke;
-    // start from 0 and move to 4:00
-    // 240 min
-
-    final path = Path()
-      ..moveTo(0, size.height)
-      ..lineTo(m * 240, size.height)
-      ..lineTo(m * 240, size.height * 0.4)
-      ..lineTo(m * (240 + 240), 0) // 8:00 100%
-      ..lineTo(m * (240 + 240 + (8 * 60)), 0)
-      ..lineTo(size.width, size.height); // 18:00 100%
-
-    final redPath = Path()
-      ..moveTo(0, size.height)
-      ..lineTo(m * 240, size.height)
-      ..lineTo(m * 240, size.height * (1 - 0.2))
-      ..lineTo(m * (240 + 240), size.height * (1 - 0.8)) // 8:00 100%
-      ..lineTo(m * (240 + 240 + (8 * 60)), size.height * (1 - 0.8))
-      ..lineTo(size.width, size.height); // 18:00 100%
-
-
-    canvas.drawPath(path, paint);
-    canvas.drawPath(redPath, paint..color = const Color(0xFFFF0000));
-
+    _drawTimePoints(canvas, size);
   }
+
+  void _drawTimePoints(Canvas canvas, Size size) {
+    final m = size.width / (_parts);
+    for (var point in points) {
+      final x = (point.minutes()) * m;
+      // random y
+      final y = size.height * (1 - 0.0);
+      final paint = Paint()
+        ..color = ThemeColors.zinc.shade500
+        ..strokeWidth = 2
+        ..style = PaintingStyle.fill;
+      canvas.drawCircle(Offset(x, y), 5, paint);
+    }
+  }
+
+
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-class SliderDots extends StatefulWidget {
+class SliderDots extends HookConsumerWidget {
   const SliderDots({
     Key? key,
   }) : super(key: key);
@@ -119,61 +122,72 @@ class SliderDots extends StatefulWidget {
   static const double min = 0;
   static const double max = 1440;
 
+  static const buttonSize = 10;
+
   @override
-  State<SliderDots> createState() => _SliderDotsState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final active = useState<int?>(null);
 
-class _SliderDotsState extends State<SliderDots> {
-  //* Update sldier
-  void _updateSlider(double dx, double maxWidth) {
-    final tapPosition = dx;
+    final points = ref.watch(
+      timePointsNotifier,
+    );
 
-    //* update logic
-    if (tapPosition <= 0 || tapPosition >= maxWidth) {
-      return;
+    void updateSlider(double dx, double maxWidth) {
+      final tapPosition = dx;
+      if (tapPosition <= 0 || tapPosition >= maxWidth) {
+        return;
+      }
+      if (active.value == null) {
+        return;
+      }
+
+      final point = points[active.value!];
+      final newMinutes = (tapPosition / maxWidth * max).round();
+      final newPoint = point.copyWith(
+        hour: newMinutes ~/ 60,
+        minute: newMinutes % 60,
+      );
+
+      ref.read(timePointsNotifier.notifier).update(active.value!, newPoint);
     }
-  }
 
-  //round number
-  double dp(double val, {int places = 2}) {
-    num mod = pow(10.0, places);
-    return ((val * mod).round().toDouble() / mod);
-  }
+    void selectSlider({
+      required double maxWidth,
+      required double tapPosition,
+    }) {
+      final maxArea = maxWidth * 0.5;
 
-  //* calculate slider value
-  double _generateSliderValue({
-    required double maxWidth,
-    required double x,
-  }) {
-    // x is slider original position on width:maxWidth
-    return (SliderDots.max - SliderDots.min) * (x / maxWidth) + SliderDots.min;
-  }
+      if (points.isEmpty) {
+        return;
+      }
 
-  //* select ActiveSlider, fixed overLap issue
-  //* slider Selector logic
-  void _selectSlider({
-    required double maxWidth,
-    required double tapPosition,
-  }) {
-    final maxArea = maxWidth * 0.5;
+      // for loop with index
+      for (var i = 0; i < points.length; i++) {
+        final point = points[i];
+        final x = (point.minutes()) * maxWidth / max;
+        if ((tapPosition - x).abs() < buttonSize) {
+          ref.read(timePointEditingProvider.notifier).set(point);
+          debugPrint("selected $point");
+          active.value = i;
+          break;
+        }
+      }
 
-    // if ((tapPosition - x!).abs() < maxArea) {
-    //   setState(() {
-    //     activeSliderNumber = 0;
-    //   });
-    // } else if ((tapPosition - y!).abs() < maxArea) {
-    //   setState(() {
-    //     activeSliderNumber = 1;
-    //   });
-    // } else if ((tapPosition - z!).abs() < maxArea) {
-    //   setState(() {
-    //     activeSliderNumber = 2;
-    //   });
-    // }
-  }
+      // if ((tapPosition - x!).abs() < maxArea) {
+      //   setState(() {
+      //     activeSliderNumber = 0;
+      //   });
+      // } else if ((tapPosition - y!).abs() < maxArea) {
+      //   setState(() {
+      //     activeSliderNumber = 1;
+      //   });
+      // } else if ((tapPosition - z!).abs() < maxArea) {
+      //   setState(() {
+      //     activeSliderNumber = 2;
+      //   });
+      // }
+    }
 
-  @override
-  Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -184,52 +198,40 @@ class _SliderDotsState extends State<SliderDots> {
             return Stack(
               alignment: Alignment.center,
               children: [
-                Divider(
+                const Divider(
                   endIndent: 10,
                   indent: 10,
                   color: ThemeColors.mutedForeground,
                   thickness: 0.1,
                 ),
-                Positioned(
-                  left: maxWidth * 0.2,
-                  child: Container(
-                    width: 20,
-                    height: 20,
-                    // shadow
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
+
+                // loop TimePoint here
+                for (var point in points)
+                  Positioned(
+                    left: (point.minutes()) * maxWidth / max,
+                    child: Container(
+                      width: 10,
+                      height: 10,
+                      // shadow
+                      decoration: const BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: ThemeColors.zinc,
+                            blurRadius: 0,
+                            spreadRadius: 0,
+                          ),
+                        ],
+                        shape: BoxShape.circle,
+                        color: ThemeColors.zinc,
+                      ),
                     ),
                   ),
-                ),
-                Positioned(
-                  left: maxWidth * 0.95,
-                  child: Container(
-                    width: 20,
-                    height: 20,
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  left: maxWidth * 0.5,
-                  child: Container(
-                    width: 20,
-                    height: 20,
-                    decoration: const BoxDecoration(
-                      color: Colors.blueAccent,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
                 GestureDetector(
-                  onTapDown: (details) => _selectSlider(
+                  onTapDown: (details) => selectSlider(
                       maxWidth: maxWidth,
                       tapPosition: details.localPosition.dx),
                   onPanUpdate: (details) =>
-                      _updateSlider(details.localPosition.dx, maxWidth),
+                      updateSlider(details.localPosition.dx, maxWidth),
                 ),
               ],
             );

@@ -45,6 +45,7 @@ class HourMinute {
 
 @immutable
 class TimePoint {
+  final int id;
   final int hour;
   final int minute;
 
@@ -52,6 +53,7 @@ class TimePoint {
   final List<Map<LED, ColorPoint>> colors;
 
   const TimePoint(
+    this.id,
     this.hour,
     this.minute,
     this.colors,
@@ -63,11 +65,13 @@ class TimePoint {
   }
 
   TimePoint copyWith({
+    int? id,
     int? hour,
     int? minute,
     List<Map<LED, ColorPoint>>? colors,
   }) {
     return TimePoint(
+      id ?? this.id,
       hour ?? this.hour,
       minute ?? this.minute,
       colors ?? this.colors,

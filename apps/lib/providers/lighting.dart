@@ -20,6 +20,7 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
     if (state.isEmpty) {
       state = [
         TimePoint(
+          1,
           0,
           0,
           defaultTimePointIntensity,
@@ -44,12 +45,23 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
     state = [
       ...state,
       TimePoint(
+        state.length + 1,
         hour,
         minute,
         defaultTimePointIntensity,
       ),
     ];
     return;
+  }
+
+  void update(int i, TimePoint tp) {
+    // optimize ?
+
+    state = [
+      ...state.sublist(0, i),
+      tp,
+      ...state.sublist(i + 1),
+    ];
   }
 }
 
