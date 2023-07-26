@@ -50,7 +50,7 @@ class TimePoint {
   final int minute;
 
   // [ LED:{ColorPoint}, LED:{ColorPoint} ]
-  final List<Map<LED, ColorPoint>> colors;
+  final Map<LED, ColorPoint> colors;
 
   const TimePoint(
     this.id,
@@ -71,7 +71,7 @@ class TimePoint {
     int? id,
     int? hour,
     int? minute,
-    List<Map<LED, ColorPoint>>? colors,
+    Map<LED, ColorPoint>? colors,
   }) {
     return TimePoint(
       id ?? this.id,
@@ -96,4 +96,8 @@ class ColorPoint {
   final int intensity;
 
   const ColorPoint(this.led, this.intensity);
+
+  copyWith({required int intensity}) {
+    return ColorPoint(led, intensity);
+  }
 }

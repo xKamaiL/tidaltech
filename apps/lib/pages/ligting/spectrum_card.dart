@@ -26,6 +26,13 @@ class SpectrumCard extends HookConsumerWidget {
     }
     // access to timePoint real values
 
+    final whiteValue = tp.colors[LED.white]!.intensity;
+    final blueValue = tp.colors[LED.blue]!.intensity;
+    final royalBlueValue = tp.colors[LED.royalBlue]!.intensity;
+    final warmWhiteValue = tp.colors[LED.warmWhite]!.intensity;
+    final ultraVioletValue = tp.colors[LED.ultraViolet]!.intensity;
+    final redValue = tp.colors[LED.red]!.intensity;
+    final greenValue = tp.colors[LED.green]!.intensity;
 
     return Container(
       // rounded
@@ -45,21 +52,41 @@ class SpectrumCard extends HookConsumerWidget {
           ..crossAxisAlignment = CrossAxisAlignment.center
           ..spaceBetween
           ..px = 16,
-        n.Row(const [
-          Bar(LED.white),
+        n.Row([
+          Bar(LED.white, whiteValue, (dynamic value) {
+            ref.read(timePointEditingProvider.notifier).updateWhite(value);
+          }),
         ]),
         n.Column([
-          n.Row(const [
-            Bar(LED.blue),
-            Bar(LED.royalBlue),
+          n.Row([
+            Bar(LED.blue, blueValue, (dynamic value) {
+              ref.read(timePointEditingProvider.notifier).updateBlue(value);
+            }),
+            Bar(LED.royalBlue, royalBlueValue, (dynamic value) {
+              ref
+                  .read(timePointEditingProvider.notifier)
+                  .updateRoyalBlue(value);
+            }),
           ]),
-          n.Row(const [
-            Bar(LED.warmWhite),
-            Bar(LED.ultraViolet),
+          n.Row([
+            Bar(LED.warmWhite, warmWhiteValue, (dynamic value) {
+              ref
+                  .read(timePointEditingProvider.notifier)
+                  .updateWarmWhite(value);
+            }),
+            Bar(LED.ultraViolet, ultraVioletValue, (dynamic value) {
+              ref
+                  .read(timePointEditingProvider.notifier)
+                  .updateUltraViolet(value);
+            }),
           ]),
-          n.Row(const [
-            Bar(LED.red),
-            Bar(LED.green),
+          n.Row([
+            Bar(LED.red, redValue, (dynamic value) {
+              ref.read(timePointEditingProvider.notifier).updateRed(value);
+            }),
+            Bar(LED.green, greenValue, (dynamic value) {
+              ref.read(timePointEditingProvider.notifier).updateGreen(value);
+            }),
           ]),
         ])
       ])
@@ -74,20 +101,21 @@ class SpectrumCard extends HookConsumerWidget {
 
 class Bar extends HookConsumerWidget {
   final LED color;
+  final int value;
+  final ValueChanged<dynamic>? onChange;
 
-  const Bar(this.color, {super.key});
+  const Bar(this.color, this.value, this.onChange, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // random value
-    final _value = useState<double>(Random().nextDouble() * 100);
     return Expanded(
       child: SfSliderTheme(
         data: SfSliderThemeData(),
         child: SfSlider(
           min: 0.0,
           max: 100.0,
-          value: _value.value,
+          value: value,
           enableTooltip: true,
           minorTicksPerInterval: 1,
           activeColor: ledColor[color],
@@ -99,7 +127,7 @@ class Bar extends HookConsumerWidget {
             return '$formattedText%';
           },
           onChanged: (dynamic value) {
-            _value.value = value;
+            onChange!(value);
           },
         ),
       ),

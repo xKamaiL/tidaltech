@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -19,7 +20,7 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
   void addTimePoint() {
     if (state.isEmpty) {
       state = [
-        TimePoint(
+        const TimePoint(
           1,
           0,
           0,
@@ -66,33 +67,46 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
 
   TimePoint? findById(int id) {
     try {
-      final tp = state[id-1];
+      final tp = state[id - 1];
       return tp;
     } catch (e) {
       return null;
     }
   }
+
+  void updateColor(int hour, int minute, LED led, dynamic value) {
+    final tp = state.firstWhere(
+      (element) => element.hour == hour && element.minute == minute,
+    );
+    final newTp = tp.copyWith(
+      colors: {
+        ...tp.colors,
+        led: tp.colors[led]!.copyWith(intensity: value),
+      },
+    );
+    update(state.indexOf(tp), newTp);
+  }
 }
 
-const defaultTimePointIntensity = <Map<LED, ColorPoint>>[
-  {
-    LED.white: ColorPoint(LED.white, 0),
-    LED.blue: ColorPoint(LED.blue, 0),
-    LED.royalBlue: ColorPoint(LED.royalBlue, 0),
-    LED.warmWhite: ColorPoint(LED.warmWhite, 0),
-    LED.ultraViolet: ColorPoint(LED.ultraViolet, 0),
-    LED.red: ColorPoint(LED.red, 0),
-    LED.green: ColorPoint(LED.green, 0),
-  }
-];
+const Map<LED, ColorPoint> defaultTimePointIntensity = {
+  LED.white: ColorPoint(LED.white, 0),
+  LED.blue: ColorPoint(LED.blue, 0),
+  LED.royalBlue: ColorPoint(LED.royalBlue, 0),
+  LED.warmWhite: ColorPoint(LED.warmWhite, 0),
+  LED.ultraViolet: ColorPoint(LED.ultraViolet, 0),
+  LED.red: ColorPoint(LED.red, 0),
+  LED.green: ColorPoint(LED.green, 0),
+};
 
 final timePointEditingProvider =
     StateNotifierProvider<TimePointEditing, TimePoint?>(
-  (ref) => TimePointEditing(),
+  (ref) => TimePointEditing(ref),
 );
 
 class TimePointEditing extends StateNotifier<TimePoint?> {
-  TimePointEditing() : super(null);
+  final Ref ref;
+
+  TimePointEditing(this.ref) : super(null);
 
   set(TimePoint tp) {
     state = tp;
@@ -100,5 +114,52 @@ class TimePointEditing extends StateNotifier<TimePoint?> {
 
   remove() {
     state = null;
+  }
+
+  void updateBlue(double value) {
+    _updateColor(LED.blue, value.round());
+  }
+
+  void updateRoyalBlue(double value) {
+    _updateColor(LED.royalBlue, value.round());
+  }
+
+  void updateWhite(double value) {
+    _updateColor(LED.white, value.round());
+  }
+
+  void updateWarmWhite(double value) {
+    _updateColor(LED.warmWhite, value.round());
+  }
+
+  void updateUltraViolet(double value) {
+    _updateColor(LED.ultraViolet, value.round());
+  }
+
+  void updateRed(double value) {
+    _updateColor(LED.red, value.round());
+  }
+
+  void updateGreen(double value) {
+    _updateColor(LED.green, value.round());
+  }
+
+  void _updateColor(LED led, int v) {
+    if (state == null) return;
+
+    // update editing state
+    state = state!.copyWith(
+      colors: {
+        ...state!.colors,
+        led: state!.colors[led]!.copyWith(intensity: v),
+      },
+    );
+    // update
+    ref.read(timePointsNotifier.notifier).updateColor(
+      state!.hour,
+      state!.minute,
+      led,
+      v,
+    );
   }
 }
