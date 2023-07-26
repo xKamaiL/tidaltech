@@ -29,10 +29,10 @@ class TimeScheduleGraph extends HookConsumerWidget {
               borderRadius: BorderRadius.circular(8),
             ),
             child: Container(
-              color: ThemeColors.zinc.shade100,
+              color: ThemeColors.zinc.shade900,
               child: Padding(
                 padding: const EdgeInsets.only(
-                  top: 1,
+                  top: 12,
                 ),
                 child: CustomPaint(
                   painter: TimeSchedulePainter(
@@ -70,7 +70,7 @@ class TimeSchedulePainter extends CustomPainter {
   void _drawGrids(Canvas canvas, Size size) {
     final m = size.width / (_parts / 4);
     final grid = Paint()
-      ..color = ThemeColors.zinc.shade300.withOpacity(0.3)
+      ..color = ThemeColors.zinc.shade100.withOpacity(0.1)
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
     // draw a grids line for every 60 min
@@ -95,7 +95,7 @@ class TimeSchedulePainter extends CustomPainter {
     _drawTimePoints(canvas, size);
   }
 
-  void _drawTimePoints(Canvas canvas, Size size) {
+  void _drawTimePoints(Canvas canvas, Size size) async {
     final m = size.width / (_parts);
     for (var point in points) {
       final x = (point.minutes()) * m;
@@ -113,9 +113,6 @@ class TimeSchedulePainter extends CustomPainter {
     // draw blue line connect between points
     final bluePoints =
         points.where((element) => element.colors[LED.blue]!.intensity > 0);
-
-    // sort by minutes
-
     _drawLine(
       canvas,
       size,
@@ -130,10 +127,111 @@ class TimeSchedulePainter extends CustomPainter {
         ),
       ledColor[LED.blue]!,
     );
+    final whitePoints =
+        points.where((element) => element.colors[LED.white]!.intensity > 0);
+    _drawLine(
+      canvas,
+      size,
+      whitePoints
+          .map(
+            (e) => CoordinateAndIntensity(
+                e.minutes(), e.colors[LED.white]!.intensity),
+          )
+          .toList()
+        ..sort(
+          (a, b) => a.x.compareTo(b.x),
+        ),
+      ledColor[LED.white]!,
+    );
+
+    final royalBluePoints =
+        points.where((element) => element.colors[LED.royalBlue]!.intensity > 0);
+    _drawLine(
+      canvas,
+      size,
+      royalBluePoints
+          .map(
+            (e) => CoordinateAndIntensity(
+                e.minutes(), e.colors[LED.royalBlue]!.intensity),
+          )
+          .toList()
+        ..sort(
+          (a, b) => a.x.compareTo(b.x),
+        ),
+      ledColor[LED.royalBlue]!,
+    );
+    final warmWhitePoints =
+        points.where((element) => element.colors[LED.warmWhite]!.intensity > 0);
+    _drawLine(
+      canvas,
+      size,
+      warmWhitePoints
+          .map(
+            (e) => CoordinateAndIntensity(
+                e.minutes(), e.colors[LED.warmWhite]!.intensity),
+          )
+          .toList()
+        ..sort(
+          (a, b) => a.x.compareTo(b.x),
+        ),
+      ledColor[LED.warmWhite]!,
+    );
+    final ultraVioletPoints = points
+        .where((element) => element.colors[LED.ultraViolet]!.intensity > 0);
+    _drawLine(
+      canvas,
+      size,
+      ultraVioletPoints
+          .map(
+            (e) => CoordinateAndIntensity(
+                e.minutes(), e.colors[LED.ultraViolet]!.intensity),
+          )
+          .toList()
+        ..sort(
+          (a, b) => a.x.compareTo(b.x),
+        ),
+      ledColor[LED.ultraViolet]!,
+    );
+
+    final redPoints =
+        points.where((element) => element.colors[LED.red]!.intensity > 0);
+    _drawLine(
+      canvas,
+      size,
+      redPoints
+          .map(
+            (e) => CoordinateAndIntensity(
+                e.minutes(), e.colors[LED.red]!.intensity),
+          )
+          .toList()
+        ..sort(
+          (a, b) => a.x.compareTo(b.x),
+        ),
+      ledColor[LED.red]!,
+    );
+
+    final greenPoints =
+        points.where((element) => element.colors[LED.green]!.intensity > 0);
+    _drawLine(
+      canvas,
+      size,
+      greenPoints
+          .map(
+            (e) => CoordinateAndIntensity(
+                e.minutes(), e.colors[LED.green]!.intensity),
+          )
+          .toList()
+        ..sort(
+          (a, b) => a.x.compareTo(b.x),
+        ),
+      ledColor[LED.green]!,
+    );
+
+    //
   }
 
-  void _drawLine(Canvas canvas, Size size, List<CoordinateAndIntensity> points,
-      Color color) {
+  Future _drawLine(Canvas canvas, Size size,
+      List<CoordinateAndIntensity> points, Color color) async {
     final m = size.width / (_parts);
     final path = Path()..moveTo(0, size.height);
     for (var i = 0; i < points.length; i++) {

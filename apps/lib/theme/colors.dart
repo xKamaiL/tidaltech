@@ -43,4 +43,6 @@ class ThemeColors {
     800: Color(0xFF1e40af),
     900: Color(0xFF1e3a8a),
   });
+
+  static const danger = Color(0xFFef4444);
 }

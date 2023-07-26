@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -10,6 +11,10 @@ class TimeScheduleControl extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final points = ref.watch(
+      timePointsNotifier,
+    );
+    final selected = ref.watch(timePointEditingProvider);
     return n.Box(
       n.Row([
         n.Row([
@@ -25,13 +30,57 @@ class TimeScheduleControl extends HookConsumerWidget {
             ..m = 0
             ..bg = ThemeColors.white,
           n.Button(
-            n.Icon(Icons.remove)..color = ThemeColors.foreground,
+            n.Icon(Icons.remove)
+              ..color = selected != null
+                  ? ThemeColors.danger
+                  : ThemeColors.zinc.shade200.withOpacity(0),
           )
-            ..color = ThemeColors.foreground
+            ..onPressed = () {
+              if (points.isEmpty) {
+                return;
+              }
+              if (selected == null) {
+                return;
+              }
+              // open confirmation dialog
+              n.showNikuDialog(
+                context: context,
+                builder: (context) {
+                  return CupertinoAlertDialog(
+                    title: const Text("Delete time schedule point?"),
+                    content: const Text(
+                        "Are you sure you want to delete this time?"),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("Cancel"),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          ref
+                              .read(timePointsNotifier.notifier)
+                              .delete(selected);
+                          ref.read(timePointEditingProvider.notifier).remove();
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("Delete"),
+                      ),
+                    ],
+                  );
+                },
+              );
+            }
+            ..color = selected == null
+                ? ThemeColors.mutedForeground
+                : ThemeColors.foreground
             ..rounded = 8
             ..p = 0
             ..m = 0
-            ..bg = ThemeColors.white,
+            ..bg = selected != null
+                ? ThemeColors.white
+                : ThemeColors.zinc.shade200.withOpacity(0),
         ])
           ..gap = 4,
         n.Row([

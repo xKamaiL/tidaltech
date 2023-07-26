@@ -11,11 +11,12 @@ import 'package:tidal_tech/stores/lighting.dart';
 // our TodosNotifier class.
 final timePointsNotifier =
     StateNotifierProvider<TimePointsNotifier, List<TimePoint>>((ref) {
-  return TimePointsNotifier();
+  return TimePointsNotifier(ref);
 });
 
 class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
-  TimePointsNotifier() : super([]);
+  final Ref ref;
+  TimePointsNotifier( this.ref) : super([]);
 
   void addTimePoint() {
     if (state.isEmpty) {
@@ -52,6 +53,9 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
         defaultTimePointIntensity,
       ),
     ];
+
+
+
     return;
   }
 
@@ -85,6 +89,11 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
       },
     );
     update(state.indexOf(tp), newTp);
+  }
+
+  void delete(TimePoint? tp) {
+    if (tp == null) return;
+    state = state.where((element) => element.minutes() != tp.minutes()).toList();
   }
 }
 
@@ -156,10 +165,10 @@ class TimePointEditing extends StateNotifier<TimePoint?> {
     );
     // update
     ref.read(timePointsNotifier.notifier).updateColor(
-      state!.hour,
-      state!.minute,
-      led,
-      v,
-    );
+          state!.hour,
+          state!.minute,
+          led,
+          v,
+        );
   }
 }
