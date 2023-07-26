@@ -64,3 +64,20 @@ const defaultTimePointIntensity = <Map<LED, ColorPoint>>[
     LED.green: ColorPoint(LED.green, 0),
   }
 ];
+
+final timePointEditingProvider =
+    StateNotifierProvider<TimePointEditing, TimePoint?>(
+  (ref) => TimePointEditing(),
+);
+
+class TimePointEditing extends StateNotifier<TimePoint?> {
+  TimePointEditing() : super(null);
+
+  set(TimePoint tp) {
+    state = tp;
+  }
+
+  remove() {
+    state = null;
+  }
+}
