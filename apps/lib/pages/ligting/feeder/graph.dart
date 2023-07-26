@@ -47,7 +47,7 @@ class TimeScheduleGraph extends HookConsumerWidget {
           SliderDots(),
         )
           ..bg = ThemeColors.zinc.shade100
-          ..mt = 4,
+          ..mt = 8,
       ],
     );
   }
@@ -140,7 +140,11 @@ class SliderDots extends HookConsumerWidget {
       }
 
       final point = points[active.value!];
-      final newMinutes = (tapPosition / maxWidth * max).round();
+      int newMinutes = (tapPosition / maxWidth * max).round();
+      // adjust new Minutes to something nearly every 5 minutes
+      if (newMinutes % 5 != 0) {
+        newMinutes -= newMinutes % 5;
+      }
       final newPoint = point.copyWith(
         hour: newMinutes ~/ 60,
         minute: newMinutes % 60,
@@ -153,7 +157,12 @@ class SliderDots extends HookConsumerWidget {
       required double maxWidth,
       required double tapPosition,
     }) {
+      // if points is empty
       if (points.isEmpty) {
+        return;
+      }
+      // if tapPosition is out of bound
+      if (tapPosition <= 0 || tapPosition >= maxWidth) {
         return;
       }
 
@@ -171,8 +180,10 @@ class SliderDots extends HookConsumerWidget {
         ref.read(timePointEditingProvider.notifier).remove();
         return;
       }
-      // if active value is still active
 
+      return;
+      // we disable this feature for now
+      // if active value is still active
       final point = points[active.value!];
       final newMinutes = (tapPosition / maxWidth * max).round();
       final newPoint = point.copyWith(
@@ -189,34 +200,41 @@ class SliderDots extends HookConsumerWidget {
         SizedBox(
           height: 50,
           child: LayoutBuilder(builder: (context, constraints) {
-            final maxWidth = constraints.maxWidth - 10;
+            final maxWidth = constraints.maxWidth;
             return Stack(
               alignment: Alignment.center,
               children: [
                 const Divider(
-                  endIndent: 10,
-                  indent: 10,
+                  endIndent: 0,
+                  indent: 0,
                   color: ThemeColors.mutedForeground,
                   thickness: 0.1,
                 ),
 
                 // loop TimePoint here
-                for (var point in points)
+                for (var i = 0; i < points.length; i++)
                   Positioned(
-                    left: (point.minutes()) * maxWidth / max,
+                    // -5 because we want to center the dot
+                    left: ((points[i].minutes()) * maxWidth / max) - 5,
                     child: Container(
                       width: 10,
-                      height: 20,
+                      height: 30,
+
                       // shadow
-                      decoration: const BoxDecoration(
-                        boxShadow: [
+                      decoration: BoxDecoration(
+                        boxShadow: const [
                           BoxShadow(
-                            color: ThemeColors.zinc,
-                            blurRadius: 0,
-                            spreadRadius: 0,
+                            color: ThemeColors.white,
+                            blurRadius: 100,
+                            spreadRadius: 5,
                           ),
                         ],
-                        color: ThemeColors.zinc,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(8),
+                        ),
+                        color: active.value == i
+                            ? ThemeColors.primary
+                            : ThemeColors.zinc.shade500,
                       ),
                     ),
                   ),
@@ -228,7 +246,7 @@ class SliderDots extends HookConsumerWidget {
                     onPanUpdate: (details) =>
                         updateSlider(details.localPosition.dx, maxWidth),
                     onPanStart: (details) {
-                      debugPrint("+");
+                      updateSlider(details.localPosition.dx, maxWidth);
                     },
                   ),
                 ),
