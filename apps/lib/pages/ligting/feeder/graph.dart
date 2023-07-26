@@ -112,13 +112,22 @@ class TimeSchedulePainter extends CustomPainter {
 
     // draw blue line connect between points
     final bluePoints =
-    points.where((element) => element.colors[LED.blue]!.intensity > 0);
+        points.where((element) => element.colors[LED.blue]!.intensity > 0);
+
+    // sort by minutes
+
     _drawLine(
       canvas,
       size,
-      bluePoints.map((e) =>
-          CoordinateAndIntensity(e.minutes(), e.colors[LED.blue]!.intensity))
-          .toList(),
+      bluePoints
+          .map(
+            (e) => CoordinateAndIntensity(
+                e.minutes(), e.colors[LED.blue]!.intensity),
+          )
+          .toList()
+        ..sort(
+          (a, b) => a.x.compareTo(b.x),
+        ),
       ledColor[LED.blue]!,
     );
   }
@@ -126,13 +135,13 @@ class TimeSchedulePainter extends CustomPainter {
   void _drawLine(Canvas canvas, Size size, List<CoordinateAndIntensity> points,
       Color color) {
     final m = size.width / (_parts);
-    final path = Path()
-      ..moveTo(0, size.height);
+    final path = Path()..moveTo(0, size.height);
     for (var i = 0; i < points.length; i++) {
       final x = points[i].x * m;
       final y = size.height * (1 - points[i].intensity / 100);
       path.lineTo(x, y);
     }
+    path.lineTo(size.width, size.height);
     final paint = Paint()
       ..color = color
       ..strokeWidth = 2
@@ -143,7 +152,6 @@ class TimeSchedulePainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
-
 
 class CoordinateAndIntensity {
   final int x;
