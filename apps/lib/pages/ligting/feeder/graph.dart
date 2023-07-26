@@ -80,13 +80,7 @@ class TimeSchedulePainter extends CustomPainter {
       }
     }
     // draw a grids line every 20 percents (vertical)
-    for (var i = 0; i < 10; i++) {
-      canvas.drawLine(
-        Offset(0, size.height * (i / 10)),
-        Offset(size.width, size.height * (i / 10)),
-        grid,
-      );
-    }
+
   }
 
   @override
