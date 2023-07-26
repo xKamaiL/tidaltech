@@ -51,7 +51,7 @@ class TimePoint {
   // [ LED:{ColorPoint}, LED:{ColorPoint} ]
   final List<Map<LED, ColorPoint>> colors;
 
-  TimePoint(
+  const TimePoint(
     this.hour,
     this.minute,
     this.colors,
