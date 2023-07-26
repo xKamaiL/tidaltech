@@ -1,90 +1,66 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tidal_tech/pages/ligting/lighting.dart';
 import 'package:tidal_tech/providers/feeder.dart';
 import 'package:tidal_tech/stores/lighting.dart';
 
-final lightingProvider =
-    StateNotifierProvider<LightingNotifier, LightingSetting>((ref) {
-  return LightingNotifier(LightingSetting(
-    LightingMode.feed,
-    FeederConfig([]),
-    null,
-  ));
+// Finally, we are using StateNotifierProvider to allow the UI to interact with
+// our TodosNotifier class.
+final timePointsNotifier =
+    StateNotifierProvider<TimePointsNotifier, List<TimePoint>>((ref) {
+  return TimePointsNotifier();
 });
 
-@immutable
-class LightingSetting {
-  const LightingSetting(this.currentMode, this.feederConfig, this.selectedTime);
+class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
+  TimePointsNotifier() : super([]);
 
-  // config from database
-  final LightingMode currentMode;
-  final FeederConfig feederConfig;
+  void addTimePoint() {
+    if (state.isEmpty) {
+      state = [
+        TimePoint(
+          0,
+          0,
+          defaultTimePointIntensity,
+        )
+      ];
+      return;
+    }
 
-  // current selected time point
-  final HourMinute? selectedTime;
+    // limit to 10 time points
+    if (state.length > 10) {
+      return;
+    }
 
-  // copy with new value
-  // since this is immutable class
-  copyWith({
-    LightingMode? currentMode,
-    FeederConfig? feederConfig,
-    HourMinute? selectedTime,
-  }) {
-    return LightingSetting(
-      currentMode ?? this.currentMode,
-      feederConfig ?? this.feederConfig,
-      selectedTime ?? this.selectedTime,
-    );
+    int minutes = state.last.minutes();
+
+    if (minutes == 1440) return;
+
+    minutes += 60;
+
+    final hour = (minutes / 60).floor();
+    final minute = minutes % 60;
+    state = [
+      ...state,
+      TimePoint(
+        hour,
+        minute,
+        defaultTimePointIntensity,
+      ),
+    ];
+    return;
   }
 }
 
-class LightingNotifier extends StateNotifier<LightingSetting> {
-  LightingNotifier(super.state);
-
-  void update() {
-    state = state;
+const defaultTimePointIntensity = <Map<LED, ColorPoint>>[
+  {
+    LED.white: ColorPoint(LED.white, 0),
+    LED.blue: ColorPoint(LED.blue, 0),
+    LED.royalBlue: ColorPoint(LED.royalBlue, 0),
+    LED.warmWhite: ColorPoint(LED.warmWhite, 0),
+    LED.ultraViolet: ColorPoint(LED.ultraViolet, 0),
+    LED.red: ColorPoint(LED.red, 0),
+    LED.green: ColorPoint(LED.green, 0),
   }
-
-  TimePoint? getEditingTimePoint() {
-    if (state.selectedTime == null) {
-      return null;
-    }
-    // find TimePoint by hh:mm
-    // or return null if not found
-    for (var point in state.feederConfig.points) {
-      if (point.hour == state.selectedTime!.hour &&
-          point.minute == state.selectedTime!.minute) {
-        return point;
-      }
-    }
-    return null;
-  }
-
-  void selectEditTime(HourMinute time) {
-    state = state.copyWith(selectedTime: time);
-  }
-
-  void changeMode(LightingMode mode) {
-    state = state.copyWith(currentMode: mode);
-  }
-
-  void changeFeederConfig(FeederConfig config) {
-    state = state.copyWith(feederConfig: config);
-  }
-
-  get feederConfig => state.feederConfig;
-
-  void addTimePoint(TimePoint point) {
-    state.feederConfig.points.add(point);
-    state = state;
-  }
-
-  void removeTimePoint(TimePoint point) {
-    // remove time point by hh:mm
-    state.feederConfig.points.removeWhere((element) {
-      return element.hour == point.hour && element.minute == point.minute;
-    });
-    state = state;
-  }
-}
+];

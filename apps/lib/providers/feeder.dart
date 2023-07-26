@@ -28,9 +28,7 @@ const Map<LED, Color> ledColor = {
 class FeederConfig {
   final List<TimePoint> points;
 
-  FeederConfig(this.points) : super();
-
-//
+  const FeederConfig(this.points) : super();
 }
 
 class HourMinute {
@@ -45,40 +43,38 @@ class HourMinute {
   }
 }
 
+@immutable
 class TimePoint {
   final int hour;
   final int minute;
 
   // [ LED:{ColorPoint}, LED:{ColorPoint} ]
-  late final List<Map<LED, ColorPoint>> colors;
+  final List<Map<LED, ColorPoint>> colors;
 
   TimePoint(
     this.hour,
-    this.minute, {
-    this.colors = const [],
-  }) {
-    init();
-  }
-
-  void init() {
-    colors = <Map<LED, ColorPoint>>[
-      {
-        LED.white: const ColorPoint(LED.white, 0),
-        LED.blue: const ColorPoint(LED.blue, 0),
-        LED.royalBlue: const ColorPoint(LED.royalBlue, 0),
-        LED.warmWhite: const ColorPoint(LED.warmWhite, 0),
-        LED.ultraViolet: const ColorPoint(LED.ultraViolet, 0),
-        LED.red: const ColorPoint(LED.red, 0),
-        LED.green: const ColorPoint(LED.green, 0),
-      }
-    ];
-  }
+    this.minute,
+    this.colors,
+  );
 
   @override
   String toString() {
     return "$hour:$minute";
   }
 
+  TimePoint copyWith({
+    int? hour,
+    int? minute,
+    List<Map<LED, ColorPoint>>? colors,
+  }) {
+    return TimePoint(
+      hour ?? this.hour,
+      minute ?? this.minute,
+      colors ?? this.colors,
+    );
+  }
+
+  // get full minutes
   int minutes() {
     return hour * 60 + minute;
   }
