@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:tidal_tech/providers/lighting.dart';
 import 'package:tidal_tech/theme/colors.dart';
 import 'package:niku/namespace.dart' as n;
 
@@ -15,6 +16,9 @@ class TimeScheduleControl extends HookConsumerWidget {
           n.Button(
             n.Icon(Icons.add)..color = ThemeColors.foreground,
           )
+            ..onPressed = () {
+              ref.read(timePointsNotifier.notifier).addTimePoint();
+            }
             ..color = ThemeColors.foreground
             ..rounded = 8
             ..p = 0
