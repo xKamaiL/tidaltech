@@ -101,10 +101,9 @@ class TimeSchedulePainter extends CustomPainter {
       ..lineTo(m * (240 + 240 + (8 * 60)), size.height * (1 - 0.8))
       ..lineTo(size.width, size.height); // 18:00 100%
 
+
     canvas.drawPath(path, paint);
     canvas.drawPath(redPath, paint..color = const Color(0xFFFF0000));
-
-
 
   }
 
