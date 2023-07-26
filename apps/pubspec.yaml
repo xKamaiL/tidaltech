@@ -48,6 +48,7 @@ dependencies:
   responsive_grid: ^2.4.1
   indexed: ^0.0.8
   syncfusion_flutter_sliders: ^22.1.39
+  flutter_colorpicker: ^1.0.3
 
 dev_dependencies:
   flutter_test:

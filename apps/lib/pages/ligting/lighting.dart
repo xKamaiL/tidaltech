@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:niku/namespace.dart' as n;
+import 'package:tidal_tech/pages/ligting/ambient/color_picker.dart';
 import 'package:tidal_tech/pages/ligting/feeder/index.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -59,39 +60,7 @@ class LightingIndexPage extends HookConsumerWidget {
   // ambient mode
   List<Widget> renderPreset() {
     return [
-      ListView.separated(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemBuilder: (BuildContext context, int index) {
-          return Panel(
-            child: n.Column([
-              n.Row([
-                n.Text("Preset $index")..color = Colors.white,
-                n.Icon(Icons.edit)..color = Colors.white,
-              ])
-                ..mainAxisAlignment = MainAxisAlignment.spaceBetween
-                ..gap = 8,
-              // description
-              n.Text(
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl sed aliquam ultricies, nunc nisl ultricies nisl, sed aliquam nisl nisl sed.")
-                ..color = Colors.white.withOpacity(0.8),
-              n.Row([
-                n.Button("Apply".n)
-                  ..bg = Colors.blue
-                  ..color = Colors.white,
-              ])
-                ..mainAxisAlignment = MainAxisAlignment.end,
-            ])
-              ..gap = 8,
-          );
-        },
-        separatorBuilder: (BuildContext context, int index) {
-          return const SizedBox(
-            height: 8,
-          );
-        },
-        itemCount: 10,
-      )
+      ColorPicker(),
     ];
   }
 }
