@@ -107,9 +107,47 @@ class TimeSchedulePainter extends CustomPainter {
         ..style = PaintingStyle.fill;
       canvas.drawCircle(Offset(x, y), 5, paint);
     }
+
+    // paralell task
+
+    // draw blue line connect between points
+    final bluePoints =
+    points.where((element) => element.colors[LED.blue]!.intensity > 0);
+    _drawLine(
+      canvas,
+      size,
+      bluePoints.map((e) =>
+          CoordinateAndIntensity(e.minutes(), e.colors[LED.blue]!.intensity))
+          .toList(),
+      ledColor[LED.blue]!,
+    );
+  }
+
+  void _drawLine(Canvas canvas, Size size, List<CoordinateAndIntensity> points,
+      Color color) {
+    final m = size.width / (_parts);
+    final path = Path()
+      ..moveTo(0, size.height);
+    for (var i = 0; i < points.length; i++) {
+      final x = points[i].x * m;
+      final y = size.height * (1 - points[i].intensity / 100);
+      path.lineTo(x, y);
+    }
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 2
+      ..style = PaintingStyle.stroke;
+    canvas.drawPath(path, paint);
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
+
+class CoordinateAndIntensity {
+  final int x;
+  final int intensity;
+
+  CoordinateAndIntensity(this.x, this.intensity);
+}
