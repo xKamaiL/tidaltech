@@ -21,8 +21,8 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
     if (state.isEmpty) {
       state = [
         const TimePoint(
-          1,
           0,
+          1, // 1:00
           0,
           defaultTimePointIntensity,
         )
@@ -46,7 +46,7 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
     state = [
       ...state,
       TimePoint(
-        state.length + 1,
+        state.length,
         hour,
         minute,
         defaultTimePointIntensity,

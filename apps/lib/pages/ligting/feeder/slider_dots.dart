@@ -147,7 +147,7 @@ class SliderDots extends HookConsumerWidget {
                         borderRadius: const BorderRadius.all(
                           Radius.circular(8),
                         ),
-                        color: active == i + 1
+                        color: active == i
                             ? ThemeColors.primary
                             : ThemeColors.zinc.shade500,
                       ),
