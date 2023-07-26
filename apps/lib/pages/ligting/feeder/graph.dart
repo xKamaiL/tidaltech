@@ -130,6 +130,30 @@ class SliderDots extends HookConsumerWidget {
       timePointsNotifier,
     );
 
+    void normalizeSlider() {
+      // find time point that duplicate
+      for (var i = 0; i < points.length; i++) {
+        final point = points[i];
+        for (var j = 0; j < points.length; j++) {
+          final point2 = points[j];
+          if (i == j) {
+            continue;
+          }
+          if (point.hour == point2.hour && point.minute == point2.minute) {
+            int minutes = point.minutes();
+            minutes += 30;
+            // adjust +- 30 minutes
+            final newPoint = point.copyWith(
+              hour: minutes ~/ 60,
+              minute: minutes % 60,
+            );
+            ref.read(timePointsNotifier.notifier).update(i, newPoint);
+            return;
+          }
+        }
+      }
+    }
+
     void updateSlider(double dx, double maxWidth) {
       final tapPosition = dx;
       if (tapPosition <= 0 || tapPosition >= maxWidth) {
@@ -140,15 +164,18 @@ class SliderDots extends HookConsumerWidget {
       }
 
       final point = points[active.value!];
-      int newMinutes = (tapPosition / maxWidth * max).round();
+      int newFullMinutes = (tapPosition / maxWidth * max).round();
       // adjust new Minutes to something nearly every 5 minutes
-      if (newMinutes % 5 != 0) {
-        newMinutes -= newMinutes % 5;
+      if (newFullMinutes % 5 != 0) {
+        newFullMinutes -= newFullMinutes % 5;
       }
+
+      // copy old
       final newPoint = point.copyWith(
-        hour: newMinutes ~/ 60,
-        minute: newMinutes % 60,
+        hour: newFullMinutes ~/ 60,
+        minute: newFullMinutes % 60,
       );
+
       ref.read(timePointEditingProvider.notifier).set(newPoint);
       ref.read(timePointsNotifier.notifier).update(active.value!, newPoint);
     }
@@ -215,9 +242,9 @@ class SliderDots extends HookConsumerWidget {
                 for (var i = 0; i < points.length; i++)
                   Positioned(
                     // -5 because we want to center the dot
-                    left: ((points[i].minutes()) * maxWidth / max) - 5,
+                    left: ((points[i].minutes()) * maxWidth / max) - 6,
                     child: Container(
-                      width: 10,
+                      width: 12,
                       height: 30,
 
                       // shadow
@@ -247,6 +274,9 @@ class SliderDots extends HookConsumerWidget {
                         updateSlider(details.localPosition.dx, maxWidth),
                     onPanStart: (details) {
                       updateSlider(details.localPosition.dx, maxWidth);
+                    },
+                    onPanEnd: (details) {
+                      normalizeSlider();
                     },
                   ),
                 ),

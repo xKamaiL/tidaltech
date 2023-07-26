@@ -43,8 +43,8 @@ class SpectrumCard extends HookConsumerWidget {
       child: n.Column([
         n.Row([
           n.Text("Time: ${tp.toString()}")
-            ..fontSize = 16
-            ..fontWeight = FontWeight.w600,
+            ..fontSize = 18
+            ..bold,
           n.Text("Adjust colors")
             ..fontSize = 16
             ..color = ThemeColors.foreground

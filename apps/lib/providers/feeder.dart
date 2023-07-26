@@ -83,7 +83,7 @@ class TimePoint {
 
   // get full minutes
   int minutes() {
-    return hour * 60 + minute;
+    return (hour * 60) + minute;
   }
 
   int hours() {
