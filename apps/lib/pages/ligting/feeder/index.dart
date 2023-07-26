@@ -12,13 +12,13 @@ class FeederControl extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return n.Column([
-      FeederTimeHeader(),
-      const TimeScheduleGraph(),
-      TimeScheduleControl(),
-      SpectrumCard(),
-    ])
-      ..mt = 4
-      ..gap = 8;
+    return Column(
+      children: [
+        FeederTimeHeader(),
+        TimeScheduleGraph(),
+        TimeScheduleControl(),
+        SpectrumCard(),
+      ],
+    );
   }
 }

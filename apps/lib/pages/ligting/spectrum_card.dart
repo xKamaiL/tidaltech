@@ -6,12 +6,21 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:niku/namespace.dart' as n;
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
+import 'package:tidal_tech/providers/feeder.dart';
+import 'package:tidal_tech/providers/lighting.dart';
 import 'package:tidal_tech/theme/colors.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 
 class SpectrumCard extends HookConsumerWidget {
+  const SpectrumCard({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final editingTimePoint = ref.read(lightingProvider.notifier
+        .select((value) => value.getEditingTimePoint()));
+    if (editingTimePoint == null) {
+      return Container(child: Text("wifi is not connected"));
+    }
     return Container(
       // rounded
       width: double.infinity,
@@ -31,20 +40,20 @@ class SpectrumCard extends HookConsumerWidget {
           ..spaceBetween
           ..px = 16,
         n.Row(const [
-          Bar(Colors.white),
+          Bar(LED.white),
         ]),
         n.Column([
           n.Row(const [
-            Bar(Color(0xFF4169E1)),
-            Bar(Color(0xFF0000FF)),
+            Bar(LED.blue),
+            Bar(LED.royalBlue),
           ]),
           n.Row(const [
-            Bar(Color(0xFFfdf4dc)),
-            Bar(Color(0xFF9e00ff)),
+            Bar(LED.warmWhite),
+            Bar(LED.ultraViolet),
           ]),
           n.Row(const [
-            Bar(Colors.red),
-            Bar(Colors.green),
+            Bar(LED.red),
+            Bar(LED.green),
           ]),
         ])
       ])
@@ -58,7 +67,7 @@ class SpectrumCard extends HookConsumerWidget {
 }
 
 class Bar extends HookConsumerWidget {
-  final Color color;
+  final LED color;
 
   const Bar(this.color, {super.key});
 
@@ -75,8 +84,8 @@ class Bar extends HookConsumerWidget {
           value: _value.value,
           enableTooltip: true,
           minorTicksPerInterval: 1,
-          activeColor: color,
-          inactiveColor: color.withOpacity(0.3),
+          activeColor: ledColor[color],
+          inactiveColor: ledColor[color]!.withOpacity(0.3),
           stepSize: 1,
           tooltipShape: SfRectangularTooltipShape(),
           tooltipTextFormatterCallback:

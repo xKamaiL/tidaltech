@@ -12,10 +12,23 @@ enum LED {
   green,
 }
 
-class FeederConfig {
-  late final List<TimePoint> points;
+// ledColor Map config
+const Map<LED, Color> ledColor = {
+  LED.white: Colors.white,
+  LED.blue: Color(0xFF4169E1),
+  LED.royalBlue: Color(0xFF0000FF),
+  LED.warmWhite: Color(0xFFfdf4dc),
+  LED.ultraViolet: Color(0xFF9e00ff),
+  LED.red: Colors.red,
+  LED.green: Colors.green,
+};
+// how to access this config?
+//
 
-  FeederConfig() : super();
+class FeederConfig {
+  final List<TimePoint> points;
+
+  FeederConfig(this.points) : super();
 
 //
 }

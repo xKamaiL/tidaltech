@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tidal_tech/pages/ligting/lighting.dart';
 import 'package:tidal_tech/providers/feeder.dart';
@@ -5,18 +6,37 @@ import 'package:tidal_tech/stores/lighting.dart';
 
 final lightingProvider =
     StateNotifierProvider<LightingNotifier, LightingSetting>((ref) {
-  return LightingNotifier(LightingSetting());
+  return LightingNotifier(LightingSetting(
+    LightingMode.feed,
+    FeederConfig([]),
+    null,
+  ));
 });
 
+@immutable
 class LightingSetting {
-  LightingSetting();
+  const LightingSetting(this.currentMode, this.feederConfig, this.selectedTime);
 
   // config from database
-  late LightingMode currentMode;
-  late FeederConfig feederConfig;
+  final LightingMode currentMode;
+  final FeederConfig feederConfig;
 
   // current selected time point
-  late HourMinute? selectedTime;
+  final HourMinute? selectedTime;
+
+  // copy with new value
+  // since this is immutable class
+  copyWith({
+    LightingMode? currentMode,
+    FeederConfig? feederConfig,
+    HourMinute? selectedTime,
+  }) {
+    return LightingSetting(
+      currentMode ?? this.currentMode,
+      feederConfig ?? this.feederConfig,
+      selectedTime ?? this.selectedTime,
+    );
+  }
 }
 
 class LightingNotifier extends StateNotifier<LightingSetting> {
@@ -42,18 +62,15 @@ class LightingNotifier extends StateNotifier<LightingSetting> {
   }
 
   void selectEditTime(HourMinute time) {
-    state.selectedTime = time;
-    state = state;
+    state = state.copyWith(selectedTime: time);
   }
 
   void changeMode(LightingMode mode) {
-    state.currentMode = mode;
-    state = state;
+    state = state.copyWith(currentMode: mode);
   }
 
   void changeFeederConfig(FeederConfig config) {
-    state.feederConfig = config;
-    state = state;
+    state = state.copyWith(feederConfig: config);
   }
 
   get feederConfig => state.feederConfig;

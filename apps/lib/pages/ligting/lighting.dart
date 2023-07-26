@@ -104,96 +104,95 @@ class ModeSelection extends HookConsumerWidget {
     final mode = ref.watch(lightingModeProvider);
 
     return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: ThemeColors.zinc.shade100,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: ThemeColors.zinc.shade100,
+      ),
+      child: n.Row([
+        Expanded(
+          child: GestureDetector(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0, top: 6.0, bottom: 6.0),
+              child: SizedBox(
+                height: 38,
+                width: double.infinity,
+                child: AnimatedContainer(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(16)),
+                    color: Colors.white
+                        .withOpacity(mode == LightingMode.feed ? 1 : 0),
+                  ),
+                  duration: const Duration(milliseconds: 250),
+                  child: Align(
+                    child: n.Row([
+                      n.Icon(Icons.water)
+                        ..color = mode == LightingMode.feed
+                            ? ThemeColors.foreground
+                            : ThemeColors.zinc.shade500
+                        ..size = 14.0,
+                      n.Text("Feed Mode")
+                        ..fontWeight = FontWeight.w500
+                        ..textAlign = TextAlign.center
+                        ..color = mode == LightingMode.feed
+                            ? ThemeColors.foreground
+                            : ThemeColors.zinc.shade500
+                    ])
+                      ..mainAxisAlignment = MainAxisAlignment.center
+                      ..gap = 4,
+                  ),
+                ),
+              ),
+            ),
+            onTap: () {
+              ref
+                  .read(lightingModeProvider.notifier)
+                  .setMode(LightingMode.feed);
+            },
+          ),
         ),
-        child: n.Row([
-          Expanded(
-            child: GestureDetector(
-              child: Padding(
-                padding:
-                    const EdgeInsets.only(left: 8.0, top: 6.0, bottom: 6.0),
-                child: SizedBox(
-                  height: 38,
-                  width: double.infinity,
-                  child: AnimatedContainer(
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(16)),
-                      color: Colors.white
-                          .withOpacity(mode == LightingMode.feed ? 1 : 0),
-                    ),
-                    duration: const Duration(milliseconds: 250),
-                    child: Align(
-                      child: n.Row([
-                        n.Icon(Icons.water)
-                          ..color = mode == LightingMode.feed
-                              ? ThemeColors.foreground
-                              : ThemeColors.zinc.shade500
-                          ..size = 14.0,
-                        n.Text("Feed Mode")
-                          ..fontWeight = FontWeight.w500
-                          ..textAlign = TextAlign.center
-                          ..color = mode == LightingMode.feed
-                              ? ThemeColors.foreground
-                              : ThemeColors.zinc.shade500
-                      ])
-                        ..mainAxisAlignment = MainAxisAlignment.center
-                        ..gap = 4,
-                    ),
+        Expanded(
+          child: GestureDetector(
+            child: Padding(
+              padding: const EdgeInsets.only(right: 8.0, top: 6.0, bottom: 6.0),
+              child: SizedBox(
+                height: 38,
+                width: double.infinity,
+                child: AnimatedContainer(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(16)),
+                    color: Colors.white
+                        .withOpacity(mode == LightingMode.ambient ? 1 : 0),
+                  ),
+                  duration: const Duration(milliseconds: 250),
+                  child: Align(
+                    child: n.Row([
+                      n.Icon(Icons.color_lens_sharp)
+                        ..color = mode == LightingMode.ambient
+                            ? ThemeColors.foreground
+                            : ThemeColors.zinc.shade500
+                        ..size = 16.0,
+                      n.Text("Ambient Mode")
+                        ..textAlign = TextAlign.center
+                        ..color = mode == LightingMode.ambient
+                            ? ThemeColors.foreground
+                            : ThemeColors.zinc.shade500
+                    ])
+                      ..mainAxisAlignment = MainAxisAlignment.center
+                      ..gap = 4,
                   ),
                 ),
               ),
-              onTap: () {
-                ref
-                    .read(lightingModeProvider.notifier)
-                    .setMode(LightingMode.feed);
-              },
             ),
+            onTap: () {
+              ref
+                  .read(lightingModeProvider.notifier)
+                  .setMode(LightingMode.ambient);
+            },
           ),
-          Expanded(
-            child: GestureDetector(
-              child: Padding(
-                padding:
-                    const EdgeInsets.only(right: 8.0, top: 6.0, bottom: 6.0),
-                child: SizedBox(
-                  height: 38,
-                  width: double.infinity,
-                  child: AnimatedContainer(
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(16)),
-                      color: Colors.white
-                          .withOpacity(mode == LightingMode.ambient ? 1 : 0),
-                    ),
-                    duration: Duration(milliseconds: 250),
-                    child: Align(
-                      child: n.Row([
-                        n.Icon(Icons.color_lens_sharp)
-                          ..color = mode == LightingMode.ambient
-                              ? ThemeColors.foreground
-                              : ThemeColors.zinc.shade500
-                          ..size = 16.0,
-                        n.Text("Ambient Mode")
-                          ..textAlign = TextAlign.center
-                          ..color = mode == LightingMode.ambient
-                              ? ThemeColors.foreground
-                              : ThemeColors.zinc.shade500
-                      ])
-                        ..mainAxisAlignment = MainAxisAlignment.center
-                        ..gap = 4,
-                    ),
-                  ),
-                ),
-              ),
-              onTap: () {
-                ref
-                    .read(lightingModeProvider.notifier)
-                    .setMode(LightingMode.ambient);
-              },
-            ),
-          ),
-        ])
-          ..crossAxisAlignment = CrossAxisAlignment.center
-          ..crossAxisAlignment = CrossAxisAlignment.center);
+        ),
+      ])
+        ..crossAxisAlignment = CrossAxisAlignment.center
+        ..crossAxisAlignment = CrossAxisAlignment.center,
+    );
   }
 }
