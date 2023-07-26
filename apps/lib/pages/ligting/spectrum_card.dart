@@ -16,10 +16,13 @@ class SpectrumCard extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final editingTimePoint = ref.read(lightingProvider.notifier
-        .select((value) => value.getEditingTimePoint()));
+    final editingTimePoint = false;
     if (editingTimePoint == null) {
-      return Container(child: Text("wifi is not connected"));
+      return n.Box(
+        n.Text("Please select time point above")
+          ..color = ThemeColors.mutedForeground
+          ..mt = 16,
+      )..p = 16;
     }
     return Container(
       // rounded
