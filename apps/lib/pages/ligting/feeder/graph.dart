@@ -96,10 +96,11 @@ class TimeSchedulePainter extends CustomPainter {
       // random y
       final y = size.height * (1 - 0.0);
       final paint = Paint()
-        ..color = ThemeColors.zinc.shade500
+
+        ..color = ThemeColors.zinc.shade600
         ..strokeWidth = 2
         ..style = PaintingStyle.fill;
-      canvas.drawCircle(Offset(x, y), 5, paint);
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
     }
 
     // paralell task
