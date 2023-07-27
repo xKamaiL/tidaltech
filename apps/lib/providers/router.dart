@@ -97,6 +97,7 @@ class RouterNotifier extends ChangeNotifier {
 
   String? _redirectLogic(BuildContext buildContext, GoRouterState state) {
     if (state.path == null) {
+      print("path is null");
       return null;
     }
     if (state.path == "/") {
