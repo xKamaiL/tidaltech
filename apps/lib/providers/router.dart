@@ -1,6 +1,7 @@
 import 'package:tidal_tech/pages/ligting/lighting.dart';
 import 'package:tidal_tech/pages/scenes/scenes.dart';
 import 'package:tidal_tech/pages/settings/settings.dart';
+import 'package:tidal_tech/stores/bottom_bar.dart';
 import 'package:tidal_tech/stores/stores.dart';
 import 'package:tidal_tech/ui/dashboard_screen.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,7 @@ class RouterNotifier extends ChangeNotifier {
 
   RouterNotifier(this._ref) {
     _ref.listen(userProvider, (_, __) => notifyListeners());
+    _ref.listen(bottomBarProvider, (_, __) => notifyListeners());
   }
 
   List<RouteBase> get _routes => [
@@ -39,6 +41,7 @@ class RouterNotifier extends ChangeNotifier {
         ShellRoute(
           routes: [
             GoRoute(
+              name: "sign-in",
               path: '/sign-in',
               pageBuilder: (context, state) => MaterialPage(child: LoginPage()),
             ),
@@ -47,10 +50,11 @@ class RouterNotifier extends ChangeNotifier {
         ),
         ShellRoute(
           builder: (context, state, child) => DashboardScreen(
-           child,
+            child,
           ),
           routes: [
             GoRoute(
+              name: "home",
               path: '/home',
               pageBuilder: (_, state) => NoTransitionPage(
                 key: state.pageKey,
@@ -59,6 +63,7 @@ class RouterNotifier extends ChangeNotifier {
               ),
             ),
             GoRoute(
+              name: "lighting",
               path: "/lighting",
               pageBuilder: (_, state) => NoTransitionPage(
                 key: state.pageKey,
@@ -67,6 +72,7 @@ class RouterNotifier extends ChangeNotifier {
               ),
             ),
             GoRoute(
+                name: "scenes",
                 path: "/scenes",
                 pageBuilder: (context, state) {
                   return NoTransitionPage(
@@ -76,6 +82,7 @@ class RouterNotifier extends ChangeNotifier {
                   );
                 }),
             GoRoute(
+                name: "setting",
                 path: "/setting",
                 pageBuilder: (context, state) {
                   return NoTransitionPage(
@@ -89,6 +96,9 @@ class RouterNotifier extends ChangeNotifier {
       ];
 
   String? _redirectLogic(BuildContext buildContext, GoRouterState state) {
+    if (state.path == null) {
+      return null;
+    }
     if (state.path == "/") {
       return null;
     }
