@@ -1,4 +1,5 @@
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tidal_tech/stores/bottom_bar.dart';
 import 'package:tidal_tech/styles/button.dart';
 import 'package:tidal_tech/theme/colors.dart';
 import 'package:tidal_tech/ui/snackbar.dart';
@@ -155,6 +156,7 @@ class LoginPage extends HookConsumerWidget {
                               "Good job, your release is successful. Have a nice day",
                         ),
                       );
+                      ref.read(bottomBarProvider.notifier).setPosition(0);
                       context.go("/home");
                     }
                   }
