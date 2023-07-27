@@ -21,7 +21,7 @@ class SpectrumCard extends HookConsumerWidget {
       return n.Box(
         n.Text("Please select time point above")
           ..color = ThemeColors.mutedForeground
-          ..mt = 16,
+          ..my = 64,
       )..p = 16;
     }
     // access to timePoint real values

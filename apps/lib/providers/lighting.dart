@@ -10,7 +10,8 @@ final timePointsNotifier =
 
 class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
   final Ref ref;
-  TimePointsNotifier( this.ref) : super([]);
+
+  TimePointsNotifier(this.ref) : super([]);
 
   void addTimePoint() {
     if (state.isEmpty) {
@@ -22,6 +23,9 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
           defaultTimePointIntensity,
         )
       ];
+      // prefer to select the first time point
+      // for better ux
+      ref.read(timePointEditingProvider.notifier).set(state[0]);
       return;
     }
 
@@ -47,8 +51,6 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
         state.last.colors, // copy from last time point
       ),
     ];
-
-
 
     return;
   }
@@ -87,7 +89,8 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
 
   void delete(TimePoint? tp) {
     if (tp == null) return;
-    state = state.where((element) => element.minutes() != tp.minutes()).toList();
+    state =
+        state.where((element) => element.minutes() != tp.minutes()).toList();
   }
 }
 
