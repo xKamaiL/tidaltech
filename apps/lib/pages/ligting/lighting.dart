@@ -17,6 +17,9 @@ class LightingIndexPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final mode = ref.watch(lightingModeProvider);
 
+    final tabController = useTabController(
+        initialLength: 2, initialIndex: mode == LightingMode.feed ? 0 : 1);
+
     return Scaffold(
       appBar: AppBar(
         title: n.Text("Lighting")
@@ -36,16 +39,26 @@ class LightingIndexPage extends HookConsumerWidget {
         ],
       ),
       backgroundColor: Colors.transparent,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
-          child: n.Column([
-            ModeSelection(),
-            if (mode == LightingMode.feed) ...renderCustom(),
-            if (mode == LightingMode.ambient) ...renderPreset(),
-          ])
-            ..gap = 8,
-        ),
+      body: Padding(
+        padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+        child: n.Column([
+          ModeSelection(tabController),
+          Expanded(
+            child: TabBarView(
+              physics: NeverScrollableScrollPhysics(),
+              controller: tabController,
+              children: [
+                SingleChildScrollView(
+                  child: n.Column(renderCustom()),
+                ),
+                SingleChildScrollView(
+                  child: n.Column(renderPreset()),
+                ),
+              ],
+            ),
+          )
+        ])
+          ..gap = 8,
       ),
     );
   }
@@ -66,7 +79,9 @@ class LightingIndexPage extends HookConsumerWidget {
 }
 
 class ModeSelection extends HookConsumerWidget {
-  const ModeSelection({Key? key}) : super(key: key);
+  final TabController tabController;
+
+  const ModeSelection(this.tabController, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -113,6 +128,7 @@ class ModeSelection extends HookConsumerWidget {
               ),
             ),
             onTap: () {
+              tabController.animateTo(0);
               ref
                   .read(lightingModeProvider.notifier)
                   .setMode(LightingMode.feed);
@@ -153,6 +169,7 @@ class ModeSelection extends HookConsumerWidget {
               ),
             ),
             onTap: () {
+              tabController.animateTo(1);
               ref
                   .read(lightingModeProvider.notifier)
                   .setMode(LightingMode.ambient);
