@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 // tailwind colors
 class ThemeColors {
+  static const transparent = Colors.transparent;
   static const white = Color(0xFFFFFFFF);
   static const MaterialColor zinc = MaterialColor(0xFF71717a, <int, Color>{
     50: Color(0xFFfafafa),
