@@ -45,7 +45,7 @@ class SpectrumCard extends HookConsumerWidget {
           n.Text("Time: ${tp.toString()}")
             ..fontSize = 18
             ..bold,
-          n.Text("Adjust colors")
+          n.Text("Same colors")
             ..fontSize = 16
             ..color = ThemeColors.foreground
         ])
