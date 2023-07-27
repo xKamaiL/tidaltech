@@ -1,3 +1,4 @@
+import 'package:google_fonts/google_fonts.dart';
 import 'package:tidal_tech/styles/button.dart';
 import 'package:tidal_tech/theme/colors.dart';
 import 'package:tidal_tech/ui/snackbar.dart';
@@ -48,10 +49,11 @@ class LoginPage extends HookConsumerWidget {
                     color: ThemeColors.foreground,
                   ),
                 n.RichText(
-                  n.TextSpan("Tidal tech")
+                  n.TextSpan("Tidal Tech")
                     ..color = ThemeColors.primary
                     ..fontSize = 32
-                    ..fontWeight = FontWeight.bold,
+                    ..fontFamily = "NotoSansThai_regular"
+                    ..fontWeight = FontWeight.w600,
                 )
                   ..wFull
                   ..mb = 24
@@ -73,7 +75,7 @@ class LoginPage extends HookConsumerWidget {
                   ..isCollapsed = true
                   ..prefixIcon = const Icon(
                     Icons.person,
-                    color: ThemeColors.mutedForeground,
+                    color: ThemeColors.foreground,
                   )
                   ..textInputAction = TextInputAction.next
                   ..validator = (value) {
@@ -99,15 +101,16 @@ class LoginPage extends HookConsumerWidget {
                   ..textAlignVertical = TextAlignVertical.center
                   ..prefixIcon = const Icon(
                     Icons.lock,
-                    color: ThemeColors.mutedForeground,
+                    color: ThemeColors.foreground,
                   )
                   ..suffixIcon = IconButton(
                       onPressed: () => {
                             isShowPassword.value = !isShowPassword.value,
                           },
+                      splashRadius: 20,
                       icon: const Icon(
                         Icons.visibility,
-                        color: ThemeColors.mutedForeground,
+                        color: ThemeColors.foreground,
                       ))
                   ..onEditingComplete = () {
                     // hide keyboard

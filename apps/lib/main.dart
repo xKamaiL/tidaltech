@@ -25,6 +25,7 @@ class MyApp extends ConsumerWidget {
       theme: ThemeData(
         primarySwatch: ThemeColors.primary,
         fontFamily: GoogleFonts.notoSansThai().fontFamily,
+        fontFamilyFallback: ["NotoSansThai_regular", "sans-serif"],
         scaffoldBackgroundColor: ThemeColors.white,
       ),
       routerConfig: router,
@@ -33,4 +34,3 @@ class MyApp extends ConsumerWidget {
     );
   }
 }
-
