@@ -11,7 +11,7 @@ class ScenesIndexPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Scenes'),
+        title: const Text('Scenes'),
         elevation: 0,
         backgroundColor: Colors.transparent,
         centerTitle: false,
