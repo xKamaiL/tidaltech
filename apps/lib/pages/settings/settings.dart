@@ -17,25 +17,28 @@ class SettingsIndexPage extends HookConsumerWidget {
           ..fontSize = 18.0
           ..bold,
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: ThemeColors.white,
         automaticallyImplyLeading: true,
         centerTitle: false,
         actionsIconTheme: IconThemeData(color: Colors.grey.shade900),
       ),
-      backgroundColor: Colors.transparent,
+      backgroundColor: ThemeColors.muted,
       body: n.Column([
         // avatar
         //
-        Container(
-          height: 80,
-          width: 80,
-          decoration: BoxDecoration(
-            color: Colors.grey.shade900,
-            borderRadius: BorderRadius.circular(100),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
+          child: Container(
+            height: 80,
+            width: 80,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade900,
+              borderRadius: BorderRadius.circular(100),
+            ),
+            child: n.Icon(Icons.person)
+              ..color = Colors.white
+              ..size = 50,
           ),
-          child: n.Icon(Icons.person)
-            ..color = Colors.white
-            ..size = 50,
         ),
         Expanded(
           child: SingleChildScrollView(
@@ -51,6 +54,7 @@ class SettingsIndexPage extends HookConsumerWidget {
                 trailing: n.Icon(Icons.arrow_forward_ios_rounded)
                   ..color = Colors.grey.shade900,
                 onTap: () {},
+                tileColor: ThemeColors.white,
               )
             ]),
           ),
@@ -58,8 +62,9 @@ class SettingsIndexPage extends HookConsumerWidget {
 
         n.ListTile(
           title: n.Text("Sign out")
-            ..color = Colors.grey.shade900
+            ..color = ThemeColors.danger
             ..fontSize = 16.0
+            ..center
             ..bold,
           onTap: () {
             ref.read(userProvider.notifier).signOut();
@@ -67,7 +72,7 @@ class SettingsIndexPage extends HookConsumerWidget {
           },
         )
       ])
-        ..mb = 16
+        ..my = 16
         ..hFull
         ..gap = 16
         ..wFull
