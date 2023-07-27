@@ -35,6 +35,11 @@ class UserNotifier extends StateNotifier<User?> {
   Future<void> fetchUser() async {
     await Future.delayed(const Duration(seconds: 2));
   }
+
+  Future<void> signOut() async {
+    await Future.delayed(const Duration(seconds: 2));
+    clearUser();
+  }
 }
 
 final userProvider = StateNotifierProvider<UserNotifier, User?>((ref) {
