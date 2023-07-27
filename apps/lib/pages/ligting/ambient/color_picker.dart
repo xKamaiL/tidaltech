@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:niku/namespace.dart' as n;
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tidal_tech/theme/colors.dart';
 
 class ColorPicker extends HookConsumerWidget {
+  const ColorPicker({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final color = useState(ThemeColors.primary.shade500);

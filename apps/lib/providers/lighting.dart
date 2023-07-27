@@ -1,11 +1,5 @@
-import 'dart:developer';
-import 'dart:ffi';
-
-import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:tidal_tech/pages/ligting/lighting.dart';
 import 'package:tidal_tech/providers/feeder.dart';
-import 'package:tidal_tech/stores/lighting.dart';
 
 // Finally, we are using StateNotifierProvider to allow the UI to interact with
 // our TodosNotifier class.
