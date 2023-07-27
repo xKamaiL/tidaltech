@@ -1,0 +1,9 @@
+flutter_native_splash:
+  android: true
+  ios: true
+  web: false
+
+  color: "42a5f5"
+
+  image: assets/icon/icon_transparent.png
+  android_disable_fullscreen: true
