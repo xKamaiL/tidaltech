@@ -45,5 +45,16 @@ class ThemeColors {
     950: Color(0xFF1e1b4b),
   });
 
-  static const danger = Color(0xFFef4444);
+  static const danger = MaterialColor(0xFFef4444, <int, Color>{
+    50: Color(0xFFfef2f2),
+    100: Color(0xFFfee2e2),
+    200: Color(0xFFfecaca),
+    300: Color(0xFFfca5a5),
+    400: Color(0xFFf87171),
+    500: Color(0xFFef4444),
+    600: Color(0xFFdc2626),
+    700: Color(0xFFb91c1c),
+    800: Color(0xFF991b1b),
+    900: Color(0xFF7f1d1d),
+  });
 }
