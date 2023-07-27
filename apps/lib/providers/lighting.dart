@@ -44,7 +44,7 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
         state.length,
         hour,
         minute,
-        defaultTimePointIntensity,
+        state.last.colors, // copy from last time point
       ),
     ];
 
