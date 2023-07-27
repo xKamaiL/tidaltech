@@ -37,22 +37,24 @@ class LoginPage extends HookConsumerWidget {
             child: Form(
               key: _formKey,
               child: n.Column([
-                n.Box()..height = 32,
-                n.Image.network("https://placehold.co/100x100/png")
+                n.Image(
+                  const ExactAssetImage("assets/icon/icon_transparent.png"),
+                )
                   ..cover
-                  ..width = 100
-                  ..height = 100
+                  ..width = 150
+                  ..height = 150
                   ..rounded = 10
                   ..useCircleProgress(
                     color: ThemeColors.foreground,
                   ),
-                "Sign in to Apps".h4
-                  ..bold
-                  ..justify
-                  ..color = ThemeColors.foreground
-                  ..mb = 16
-                  // make it center
-                  ..fullWidth
+                n.RichText(
+                  n.TextSpan("Tidal tech")
+                    ..color = ThemeColors.primary
+                    ..fontSize = 32
+                    ..fontWeight = FontWeight.bold,
+                )
+                  ..wFull
+                  ..mb = 24
                   ..center,
                 n.TextFormField()
                   ..controller = username
@@ -71,7 +73,7 @@ class LoginPage extends HookConsumerWidget {
                   ..isCollapsed = true
                   ..prefixIcon = const Icon(
                     Icons.person,
-                    color: ThemeColors.foreground,
+                    color: ThemeColors.mutedForeground,
                   )
                   ..textInputAction = TextInputAction.next
                   ..validator = (value) {
@@ -97,7 +99,7 @@ class LoginPage extends HookConsumerWidget {
                   ..textAlignVertical = TextAlignVertical.center
                   ..prefixIcon = const Icon(
                     Icons.lock,
-                    color: ThemeColors.foreground,
+                    color: ThemeColors.mutedForeground,
                   )
                   ..suffixIcon = IconButton(
                       onPressed: () => {
@@ -105,7 +107,7 @@ class LoginPage extends HookConsumerWidget {
                           },
                       icon: const Icon(
                         Icons.visibility,
-                        color: ThemeColors.foreground,
+                        color: ThemeColors.mutedForeground,
                       ))
                   ..onEditingComplete = () {
                     // hide keyboard
@@ -160,7 +162,7 @@ class LoginPage extends HookConsumerWidget {
                   indent: 50,
                   endIndent: 50,
                 ),
-                n.Text("Or sign in with")
+                n.Text("Or sign in with google")
                   ..center
                   ..fullWidth
                   ..fontSize = 14,

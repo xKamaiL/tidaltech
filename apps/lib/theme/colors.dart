@@ -31,17 +31,18 @@ class ThemeColors {
     800: Color(0xFF1f2937),
     900: Color(0xFF111827),
   });
-  static const MaterialColor primary = MaterialColor(0xFF3b82f6, <int, Color>{
-    50: Color(0xFFeff6ff),
-    100: Color(0xFFdbeafe),
-    200: Color(0xFFbfdbfe),
-    300: Color(0xFF93c5fd),
-    400: Color(0xFF60a5fa),
-    500: Color(0xFF3b82f6),
-    600: Color(0xFF2563eb),
-    700: Color(0xFF1d4ed8),
-    800: Color(0xFF1e40af),
-    900: Color(0xFF1e3a8a),
+  static const MaterialColor primary = MaterialColor(0xFF6366f1, <int, Color>{
+    50: Color(0xFFeef2ff),
+    100: Color(0xFFe0e7ff),
+    200: Color(0xFFc7d2fe),
+    300: Color(0xFFa5b4fc),
+    400: Color(0xFF818cf8),
+    500: Color(0xFF6366f1),
+    600: Color(0xFF4f46e5),
+    700: Color(0xFF4338ca),
+    800: Color(0xFF3730a3),
+    900: Color(0xFF312e81),
+    950: Color(0xFF1e1b4b),
   });
 
   static const danger = Color(0xFFef4444);
