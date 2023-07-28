@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tidal_tech/providers/router.dart';
@@ -30,6 +31,8 @@ class MyApp extends ConsumerWidget {
         fontFamily: GoogleFonts.notoSansThai().fontFamily,
         fontFamilyFallback: ["NotoSansThai_regular", "sans-serif"],
         scaffoldBackgroundColor: ThemeColors.white,
+        appBarTheme: Theme.of(context).appBarTheme.copyWith(systemOverlayStyle: SystemUiOverlayStyle.light),
+
       ),
       routerConfig: router,
       debugShowCheckedModeBanner: false,

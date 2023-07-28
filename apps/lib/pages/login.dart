@@ -1,4 +1,3 @@
-import 'package:google_fonts/google_fonts.dart';
 import 'package:tidal_tech/stores/bottom_bar.dart';
 import 'package:tidal_tech/styles/button.dart';
 import 'package:tidal_tech/theme/colors.dart';
