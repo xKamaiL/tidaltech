@@ -15,8 +15,8 @@ enum LED {
 // ledColor Map config
 const Map<LED, Color> ledColor = {
   LED.white: Colors.white,
-  LED.blue: Color(0xFF4169E1),
-  LED.royalBlue: Color(0xFF0000FF),
+  LED.blue: Color(0xFF0000FF),
+  LED.royalBlue: Color(0xFF4169E1),
   LED.warmWhite: Color(0xFFfdf4dc),
   LED.ultraViolet: Color(0xFF9e00ff),
   LED.red: Colors.red,
