@@ -1,4 +1,4 @@
-package lighting
+package led
 
 // State of the lighting system.
 // The following LED colors are supported:

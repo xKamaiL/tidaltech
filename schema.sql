@@ -16,6 +16,7 @@ create table devices
     paired_user_id uuid references users (id) default null,
     pair_code      text not null,
     mode           smallint                   default 1,
+    led_states     jsonb                      default null,
     created_at     timestamptz                default now(),
     updated_at     timestamptz                default now()
 );
