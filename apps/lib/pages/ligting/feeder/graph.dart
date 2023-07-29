@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:tidal_tech/pages/ligting/feeder/line_chart.dart';
 import 'package:tidal_tech/pages/ligting/feeder/slider_dots.dart';
 import 'package:tidal_tech/providers/feeder.dart';
 import 'package:tidal_tech/providers/lighting.dart';
@@ -19,29 +20,9 @@ class TimeScheduleGraph extends HookConsumerWidget {
     );
     return Column(
       children: [
-        SizedBox(
-          // rounded
-          height: 150,
-          width: double.infinity,
-          child: Container(
-            // rounded corners
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Container(
-              color: ThemeColors.zinc.shade900,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: 12,
-                ),
-                child: CustomPaint(
-                  painter: TimeSchedulePainter(
-                    points: points,
-                  ),
-                ),
-              ),
-            ),
-          ),
+        const AspectRatio(
+          aspectRatio: 2,
+          child: ShowLineChart(),
         ),
         n.Box(
           //
@@ -80,7 +61,6 @@ class TimeSchedulePainter extends CustomPainter {
       }
     }
     // draw a grids line every 20 percents (vertical)
-
   }
 
   @override
@@ -96,7 +76,6 @@ class TimeSchedulePainter extends CustomPainter {
       // random y
       final y = size.height * (1 - 0.0);
       final paint = Paint()
-
         ..color = ThemeColors.zinc.shade600
         ..strokeWidth = 2
         ..style = PaintingStyle.fill;

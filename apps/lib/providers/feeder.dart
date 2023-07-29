@@ -3,13 +3,41 @@ import 'package:riverpod/riverpod.dart';
 
 // LED that available on the product
 enum LED {
-  white,
-  blue,
-  royalBlue,
-  warmWhite,
-  ultraViolet,
-  red,
-  green,
+  white, // 20
+  blue, // 2
+  royalBlue, // 36
+  warmWhite, // 2
+  ultraViolet, // 2
+  red, // 1
+  green, // 1
+}
+
+class ColorPriority {
+  static const total = 64;
+  final LED led;
+
+  ColorPriority(this.led);
+
+  double getOpacity() {
+    switch (led) {
+      case LED.white:
+        return 0.3125; // 5/16
+      case LED.blue:
+        return 0.03125; // 1/32
+      case LED.royalBlue:
+        return 0.5625; // 9/16
+      case LED.warmWhite:
+        return 0.03125; // 1/32
+      case LED.ultraViolet:
+        return 0.03125; // 1/32
+      case LED.red:
+        return 0.015625; // 1/64
+      case LED.green:
+        return 0.015625; // 1/64
+      default:
+        return 0;
+    }
+  }
 }
 
 // ledColor Map config
