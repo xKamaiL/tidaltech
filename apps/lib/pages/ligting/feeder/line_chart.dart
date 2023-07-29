@@ -27,7 +27,7 @@ class ShowLineChart extends HookConsumerWidget {
         lineBarsData: getLineBars(points),
         minX: 0,
         maxX: 1440,
-        clipData: FlClipData.none(),
+        clipData: const FlClipData.none(),
         maxY: 100,
         minY: 0,
         backgroundColor: ThemeColors.black,
@@ -50,6 +50,9 @@ class ShowLineChart extends HookConsumerWidget {
   }
 
   LineChartBarData drawLineFromColor(LED color, List<TimePoint> tps) {
+    tps.sort(
+          (a, b) => a.minutes().compareTo(b.minutes()),
+    );
     return LineChartBarData(
       isCurved: true,
       curveSmoothness: 0.35,
@@ -93,6 +96,7 @@ class ShowLineChart extends HookConsumerWidget {
       ),
       spots: [
         const FlSpot(0, 0),
+        // sort timePoint by minutes
         ...tps.map((tp) {
           return FlSpot(
             tp.minutes().toDouble(),
@@ -199,10 +203,12 @@ class ShowLineChart extends HookConsumerWidget {
     }
 
     if (events is FlPanUpdateEvent) {
+      debugPrint(events.details.globalPosition.toString());
       int minutes = events.details.globalPosition.dx.round();
       int hh = minutes ~/ 60;
       int mm = minutes % 60;
       debugPrint("hh:mm $hh:$mm");
+
       return;
     }
   }

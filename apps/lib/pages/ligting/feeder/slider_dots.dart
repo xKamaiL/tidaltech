@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:tidal_tech/providers/lighting.dart';
@@ -59,8 +60,14 @@ class SliderDots extends HookConsumerWidget {
       final point = points[active!];
       int newFullMinutes = (tapPosition / maxWidth * max).round();
       // adjust new Minutes to something nearly every 5 minutes
-      if (newFullMinutes % 5 != 0) {
+      // but if it's 0, we don't need to adjust
+      if (newFullMinutes % 5 != 0 && (newFullMinutes % 60) != 0) {
         newFullMinutes -= newFullMinutes % 5;
+      }
+      // if minutes is zero
+      // play haptic feedback
+      if (newFullMinutes % 60 == 0) {
+        HapticFeedback.mediumImpact();
       }
 
       // copy old
@@ -70,7 +77,7 @@ class SliderDots extends HookConsumerWidget {
       );
 
       ref.read(timePointEditingProvider.notifier).set(newPoint);
-      ref.read(timePointsNotifier.notifier).update(active!, newPoint);
+      ref.read(timePointsNotifier.notifier).update(active, newPoint);
     }
 
     void selectSlider({
@@ -91,6 +98,7 @@ class SliderDots extends HookConsumerWidget {
         final point = points[i];
         final x = (point.minutes()) * maxWidth / max;
         if ((tapPosition - x).abs() < buttonSize) {
+          HapticFeedback.selectionClick();
           ref.read(timePointEditingProvider.notifier).set(point);
           return;
         }
@@ -164,6 +172,7 @@ class SliderDots extends HookConsumerWidget {
                       updateSlider(details.localPosition.dx, maxWidth);
                     },
                     onPanEnd: (details) {
+                      HapticFeedback.heavyImpact();
                       normalizeSlider();
                     },
                   ),
