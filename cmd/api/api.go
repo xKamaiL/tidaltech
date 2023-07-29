@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net"
 
 	"github.com/moonrhythm/parapet"
 	"golang.org/x/exp/slog"
@@ -17,6 +18,7 @@ func main() {
 func run() error {
 	s := parapet.NewBackend()
 
-	slog.Info("starting server")
+	s.Addr = net.JoinHostPort("", "8080")
+	slog.Info("starting server", "addr", s.Addr)
 	return s.ListenAndServe()
 }
