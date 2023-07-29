@@ -61,13 +61,16 @@ class SliderDots extends HookConsumerWidget {
       int newFullMinutes = (tapPosition / maxWidth * max).round();
       // adjust new Minutes to something nearly every 5 minutes
       // but if it's 0, we don't need to adjust
-      if (newFullMinutes % 5 != 0 && (newFullMinutes % 60) != 0) {
+
+      if (newFullMinutes % 5 != 0) {
         newFullMinutes -= newFullMinutes % 5;
       }
       // if minutes is zero
       // play haptic feedback
       if (newFullMinutes % 60 == 0) {
         HapticFeedback.mediumImpact();
+        // can we lock the slider?
+        // ref.read(timePointEditingProvider.notifier).remove();
       }
 
       // copy old
@@ -166,8 +169,16 @@ class SliderDots extends HookConsumerWidget {
                     onTapDown: (details) => selectSlider(
                         maxWidth: maxWidth,
                         tapPosition: details.localPosition.dx),
-                    onPanUpdate: (details) =>
-                        updateSlider(details.localPosition.dx, maxWidth),
+                    onPanUpdate: (details) {
+                      debugPrint(details.delta.dx.toString());
+                      if (details.delta.dx == 0) {
+                        return;
+                      }
+                      // if (details.delta.dx.abs() > 3) {
+                      //   return;
+                      // }
+                      updateSlider(details.localPosition.dx, maxWidth);
+                    },
                     onPanStart: (details) {
                       updateSlider(details.localPosition.dx, maxWidth);
                     },
