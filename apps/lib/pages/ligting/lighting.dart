@@ -27,10 +27,10 @@ class LightingIndexPage extends HookConsumerWidget {
           ..fontSize = 18.0
           ..bold,
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         automaticallyImplyLeading: true,
         centerTitle: false,
-        actionsIconTheme: IconThemeData(color: Colors.grey.shade900),
+        actionsIconTheme: const IconThemeData(color: ThemeColors.foreground),
         actions: [
           n.IconButton(
             Icons.menu,

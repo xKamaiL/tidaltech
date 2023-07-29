@@ -1,3 +1,4 @@
+import 'package:tidal_tech/pages/ligting/feeder/profile/index.dart';
 import 'package:tidal_tech/pages/ligting/lighting.dart';
 import 'package:tidal_tech/pages/scenes/scenes.dart';
 import 'package:tidal_tech/pages/settings/settings.dart';
@@ -69,6 +70,15 @@ class RouterNotifier extends ChangeNotifier {
                 key: state.pageKey,
                 restorationId: state.pageKey.value,
                 child: const LightingIndexPage(),
+              ),
+            ),
+            GoRoute(
+              name: "lighting-feeder-profile",
+              path: "/lighting/feeder/profile",
+              pageBuilder: (_, state) => MaterialPage(
+                key: state.pageKey,
+                restorationId: state.pageKey.value,
+                child: const LightingFeederProfilePage(),
               ),
             ),
             GoRoute(
