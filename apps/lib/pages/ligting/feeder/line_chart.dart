@@ -1,6 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../../../providers/feeder.dart';
 import '../../../providers/lighting.dart';
@@ -19,9 +21,124 @@ class ShowLineChart extends HookConsumerWidget {
       timePointsNotifier,
     );
 
+    void handleTouch(FlTouchEvent events, LineTouchResponse? l) {
+      //
+      if (events is FlTapUpEvent && l != null && l.lineBarSpots != null) {
+        if (l.lineBarSpots!.isEmpty) return;
+        int minutes = l.lineBarSpots?[0].x.round() ?? 0;
+        if (minutes == 0) return;
+        try {
+          final tp =
+              points.firstWhere((element) => element.minutes() == minutes);
+          ref.read(timePointEditingProvider.notifier).set(tp);
+        } catch (e) {
+          return;
+        }
+        // for (var i = 0; i < l.lineBarSpots!.length; i++) {
+        //   print(l.lineBarSpots?[i].spotIndex);
+        // }
+        return;
+      }
+
+      if (events is FlPanStartEvent) {
+        debugPrint("start");
+        HapticFeedback.lightImpact();
+        return;
+      }
+
+      if (events is FlPanUpdateEvent) {
+        final point = ref.read(timePointEditingProvider);
+        if (point == null) return;
+
+        // sourceTimeStamp
+        // go left or right by 5 minutes
+        final dx = events.details.delta.dx;
+        if (dx == 0) return;
+
+        // 0.33 is not sensitive enough
+        if (dx.abs() < 2) return;
+
+        int newFullMinutes = point.minutes();
+        if (dx > 0) {
+          newFullMinutes += 10;
+        } else {
+          newFullMinutes -= 10;
+        }
+
+        // copy old
+        final newPoint = point.copyWith(
+          hour: newFullMinutes ~/ 60,
+          minute: newFullMinutes % 60,
+        );
+
+        ref.read(timePointEditingProvider.notifier).set(newPoint);
+        ref.read(timePointsNotifier.notifier).update(point.id, newPoint);
+
+        return;
+      }
+
+      if (events is FlPanEndEvent) {
+        HapticFeedback.mediumImpact();
+        return;
+      }
+    }
+
     return LineChart(
       LineChartData(
-        lineTouchData: lineTouchData1,
+        lineTouchData: LineTouchData(
+          enabled: true,
+          handleBuiltInTouches: true,
+          touchCallback: (FlTouchEvent events, LineTouchResponse? l) {
+            handleTouch(events, l);
+          },
+          getTouchedSpotIndicator:
+              (LineChartBarData barData, List<int> spotIndexes) {
+            return spotIndexes.map((spotIndex) {
+              return TouchedSpotIndicatorData(
+                const FlLine(
+                  color: ThemeColors.primary,
+                  strokeWidth: 8,
+                ),
+                FlDotData(
+                  show: true,
+                  getDotPainter: (spot, percent, barData, index) {
+                    return FlDotCirclePainter(
+                      radius: 10,
+                      color: barData.color ?? ThemeColors.primary,
+                      strokeWidth: 0,
+                    );
+                  },
+                ),
+              );
+            }).toList();
+          },
+          touchTooltipData: LineTouchTooltipData(
+            tooltipBgColor: ThemeColors.foreground,
+            tooltipHorizontalAlignment: FLHorizontalAlignment.left,
+            tooltipMargin: 16,
+            tooltipRoundedRadius: 16,
+            tooltipPadding: const EdgeInsets.symmetric(
+              horizontal: 8,
+              vertical: 4,
+            ),
+            tooltipHorizontalOffset: -10,
+            fitInsideVertically: true,
+            fitInsideHorizontally: true,
+            getTooltipItems: (touchedSpots) {
+              return touchedSpots.map((LineBarSpot touchedSpot) {
+                final textStyle = TextStyle(
+                  color: touchedSpot.bar.color ?? ThemeColors.primary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                );
+                return LineTooltipItem(
+                  '${touchedSpot.y.toInt()} %',
+                  textStyle,
+                );
+              }).toList();
+            },
+          ),
+        ),
         gridData: gridData,
         titlesData: titlesData1,
         lineBarsData: getLineBars(points),
@@ -51,11 +168,11 @@ class ShowLineChart extends HookConsumerWidget {
 
   LineChartBarData drawLineFromColor(LED color, List<TimePoint> tps) {
     tps.sort(
-          (a, b) => a.minutes().compareTo(b.minutes()),
+      (a, b) => a.minutes().compareTo(b.minutes()),
     );
     return LineChartBarData(
       isCurved: true,
-      curveSmoothness: 0.35,
+      curveSmoothness: 0.33,
       preventCurveOverShooting: true,
       preventCurveOvershootingThreshold: 0.01,
       gradient: LinearGradient(
@@ -109,60 +226,6 @@ class ShowLineChart extends HookConsumerWidget {
     );
   }
 
-  LineTouchData get lineTouchData1 => LineTouchData(
-      enabled: true,
-      handleBuiltInTouches: true,
-      touchCallback: (FlTouchEvent events, LineTouchResponse? l) {
-        handleTouch(events, l);
-      },
-      getTouchedSpotIndicator:
-          (LineChartBarData barData, List<int> spotIndexes) {
-        return spotIndexes.map((spotIndex) {
-          return TouchedSpotIndicatorData(
-            const FlLine(
-              color: ThemeColors.primary,
-              strokeWidth: 4,
-            ),
-            FlDotData(
-              show: true,
-              getDotPainter: (spot, percent, barData, index) {
-                return FlDotCirclePainter(
-                  radius: 4,
-                  color: barData.color ?? ThemeColors.primary,
-                  strokeWidth: 0,
-                );
-              },
-            ),
-          );
-        }).toList();
-      },
-      touchTooltipData: LineTouchTooltipData(
-        tooltipBgColor: ThemeColors.foreground,
-        tooltipHorizontalAlignment: FLHorizontalAlignment.left,
-        tooltipMargin: 16,
-        tooltipRoundedRadius: 16,
-        tooltipPadding: const EdgeInsets.symmetric(
-          horizontal: 8,
-          vertical: 4,
-        ),
-        tooltipHorizontalOffset: -10,
-        fitInsideVertically: true,
-        fitInsideHorizontally: true,
-        getTooltipItems: (touchedSpots) {
-          return touchedSpots.map((LineBarSpot touchedSpot) {
-            const textStyle = TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-            );
-            return LineTooltipItem(
-              '${touchedSpot.y.toInt()}',
-              textStyle,
-            );
-          }).toList();
-        },
-      ));
-
   FlTitlesData get titlesData1 => const FlTitlesData(
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(showTitles: false),
@@ -188,28 +251,4 @@ class ShowLineChart extends HookConsumerWidget {
         drawHorizontalLine: true,
         verticalInterval: 1440 / 24 * 4,
       );
-
-  void handleTouch(FlTouchEvent events, LineTouchResponse? l) {
-    //
-    if (events is FlTapUpEvent && l != null && l.lineBarSpots != null) {
-      // for (var i = 0; i < l.lineBarSpots!.length; i++) {
-      //   print(l.lineBarSpots?[i].spotIndex);
-      // }
-      return;
-    }
-    if (events is FlPanStartEvent) {
-      debugPrint("start");
-      return;
-    }
-
-    if (events is FlPanUpdateEvent) {
-      debugPrint(events.details.globalPosition.toString());
-      int minutes = events.details.globalPosition.dx.round();
-      int hh = minutes ~/ 60;
-      int mm = minutes % 60;
-      debugPrint("hh:mm $hh:$mm");
-
-      return;
-    }
-  }
 }
