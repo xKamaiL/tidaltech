@@ -1,7 +1,9 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:tidal_tech/pages/ligting/feeder/profile.dart';
 import 'package:tidal_tech/providers/lighting.dart';
 import 'package:tidal_tech/theme/colors.dart';
 import 'package:niku/namespace.dart' as n;
@@ -28,6 +30,7 @@ class TimeScheduleControl extends HookConsumerWidget {
             ..rounded = 8
             ..p = 0
             ..m = 0
+            ..splash = ThemeColors.mutedForeground.withOpacity(0.1)
             ..bg = ThemeColors.white,
           if (selected != null)
             n.Button(
@@ -50,8 +53,8 @@ class TimeScheduleControl extends HookConsumerWidget {
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          child: Text("Cancel"),
                           isDestructiveAction: true,
+                          child: const Text('Cancel'),
                         ),
                         CupertinoDialogAction(
                           onPressed: () {
@@ -63,22 +66,19 @@ class TimeScheduleControl extends HookConsumerWidget {
                                 .remove();
                             Navigator.of(context).pop();
                           },
-                          child: Text("Delete"),
+                          child: const Text('Delete'),
                         ),
                       ],
                     );
                   },
                 );
               }
-              ..color = selected == null
-                  ? ThemeColors.mutedForeground
-                  : ThemeColors.foreground
+              ..color = ThemeColors.mutedForeground
               ..rounded = 8
               ..p = 0
               ..m = 0
-              ..bg = selected != null
-                  ? ThemeColors.white
-                  : ThemeColors.zinc.shade200.withOpacity(0),
+              ..splash = ThemeColors.mutedForeground.withOpacity(0.1)
+              ..bg = ThemeColors.white,
         ])
           ..gap = 4,
         n.Row([
@@ -107,12 +107,18 @@ class TimeScheduleControl extends HookConsumerWidget {
           )
             ..onPressed = () {
               //
+              showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return ColorProfile();
+                  });
             }
             ..color = ThemeColors.foreground
             ..rounded = 8
             ..w = 40
             ..p = 0
             ..m = 0
+            ..splash = ThemeColors.mutedForeground.withOpacity(0.1)
             ..bg = ThemeColors.white,
         ])
           ..gap = 4
