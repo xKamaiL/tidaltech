@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+message Lighting {
+  Mode mode = 1;
+  oneof data {
+    TimePoints schedule = 2;
+    Effect effect = 3;
+    uint32 rgb = 4;
+  }
+}
+
+message TimePoints {
+  repeated TimePoint points = 1;
+}
+
+enum Mode {
+  MODE_UNSPECIFIED = 0;
+  MODE_MANUAL = 1;
+  MODE_SCHEDULE = 2;
+  MODE_EFFECT = 3;
+}
+
+enum LED {
+  LED_UNSPECIFIED = 0;
+  LED_WHITE = 1;
+  LED_WARM_WHITE = 2;
+  LED_RED = 3;
+  LED_GREEN = 4;
+  LED_BLUE = 5;
+  LED_ROYAL_BLUE = 6;
+  LED_ULTRA_VIOLET = 7;
+}
+
+// TimePoint store hh:mm
+// store minutes vs hh:mm
+message TimePoint {
+  uint32 hh = 1; // 5 bit
+  uint32 mm = 2; // 6 bit
+
+  // store brightness as 0-100
+  uint32 white = 3;
+  uint32 warm_white = 4;
+  uint32 red = 5;
+  uint32 green = 6;
+  uint32 blue = 7;
+  uint32 royal_blue = 8;
+  uint32 ultra_violet = 9;
+}
+
+message Effect {
+  uint32 duration = 1;
+  repeated TimePoint timeline = 2;
+}
