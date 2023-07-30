@@ -1,6 +1,4 @@
-import 'dart:math';
-
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:niku/namespace.dart' as n;
@@ -42,12 +40,55 @@ class SpectrumCard extends HookConsumerWidget {
           color: ThemeColors.zinc.shade100),
       child: n.Column([
         n.Row([
-          n.Text("Time: ${tp.toString()}")
-            ..fontSize = 18
-            ..bold,
-          n.Text("Same colors")
-            ..fontSize = 16
-            ..color = ThemeColors.foreground
+          n.Box(),
+          CupertinoButton(
+            onPressed: () {
+              //
+
+              showCupertinoModalPopup(
+                  context: context,
+                  builder: (builder) {
+                    return Container(
+                      height: 300,
+                      padding: const EdgeInsets.only(top: 0),
+                      margin: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom,
+                      ),
+                      color:
+                          CupertinoColors.systemBackground.resolveFrom(context),
+                      child: SafeArea(
+                        top: false,
+                        child: CupertinoDatePicker(
+                          initialDateTime:
+                              DateTime(0, 0, 0, tp.hour, tp.minute),
+                          mode: CupertinoDatePickerMode.time,
+                          use24hFormat: true,
+                          minuteInterval: 5,
+                          // This is called when the user changes the time.
+                          onDateTimeChanged: (DateTime newTime) {
+                            ref.read(timePointsNotifier.notifier).update(
+                                tp.id,
+                                tp.copyWith(
+                                  hour: newTime.hour,
+                                  minute: newTime.minute,
+                                ));
+                            ref
+                                .read(timePointEditingProvider.notifier)
+                                .set(tp.copyWith(
+                                  hour: newTime.hour,
+                                  minute: newTime.minute,
+                                ));
+                          },
+                        ),
+                      ),
+                    );
+                  });
+            },
+            padding: EdgeInsets.zero,
+            child: n.Text(tp.toString())
+              ..fontSize = 24
+              ..m = 0,
+          ),
         ])
           ..crossAxisAlignment = CrossAxisAlignment.center
           ..spaceBetween

@@ -18,7 +18,7 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
       state = [
         const TimePoint(
           0,
-          1, // 1:00
+          5, // 5:00
           0,
           defaultTimePointIntensity,
         )
@@ -38,7 +38,7 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
 
     if (minutes == 1440) return;
 
-    minutes += 60;
+    minutes += 60 * 3; // 3 hours
 
     final hour = (minutes / 60).floor();
     final minute = minutes % 60;
