@@ -158,6 +158,42 @@ class Bar extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final popup = useState(false);
+    final GlobalKey<TooltipState> tooltipkey = GlobalKey<TooltipState>();
+
+    return Expanded(
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: n.Text("$value%")
+              ..color = ThemeColors.zinc.shade500
+              ..ml = 8
+              ..fontSize = 12,
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: CupertinoSlider(
+              value: value.toDouble(),
+              onChanged: (double value) {
+                tooltipkey.currentState?.ensureTooltipVisible();
+                popup.value = true;
+                // setTimeout to hide popup
+                Future.delayed(const Duration(milliseconds: 500), () {
+                  popup.value = false;
+                });
+                onChange!(value);
+              },
+              max: 100,
+              min: 0,
+              activeColor: ledColor[color],
+              thumbColor: ledColor[color]!,
+            ),
+          ),
+        ],
+      ),
+    );
+
     // random value
     return Expanded(
       child: SfSliderTheme(
