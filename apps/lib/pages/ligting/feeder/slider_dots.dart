@@ -58,30 +58,35 @@ class SliderDots extends HookConsumerWidget {
         return;
       }
 
-      final point = points[active!];
-      int newFullMinutes = (tapPosition / maxWidth * max).round();
-      // adjust new Minutes to something nearly every 5 minutes
-      // but if it's 0, we don't need to adjust
+      try {
+        final point = points.firstWhere((element) => element.id == active);
 
-      if (newFullMinutes % 5 != 0) {
-        newFullMinutes -= newFullMinutes % 5;
+        final originDx = (point.minutes()) * maxWidth / max;
+        if ((tapPosition - originDx).abs() > buttonSize * 3.5) {
+          debugPrint("${(tapPosition - originDx).abs()}");
+          return;
+        }
+
+        int newMinutes = (tapPosition / maxWidth * max).round();
+        if (newMinutes % 5 != 0) {
+          if (newMinutes % 5 > 2.5) {
+            newMinutes += 5 - (newMinutes % 5);
+          } else {
+            newMinutes -= newMinutes % 5;
+          }
+        }
+
+        // copy old
+        final newPoint = point.copyWith(
+          hour: newMinutes ~/ 60,
+          minute: newMinutes % 60,
+        );
+
+        ref.read(timePointEditingProvider.notifier).set(newPoint);
+        ref.read(timePointsNotifier.notifier).update(active, newPoint);
+      } catch (e) {
+        return;
       }
-      // if minutes is zero
-      // play haptic feedback
-      if (newFullMinutes % 60 == 0) {
-        HapticFeedback.mediumImpact();
-        // can we lock the slider?
-        // ref.read(timePointEditingProvider.notifier).remove();
-      }
-
-      // copy old
-      final newPoint = point.copyWith(
-        hour: newFullMinutes ~/ 60,
-        minute: newFullMinutes % 60,
-      );
-
-      ref.read(timePointEditingProvider.notifier).set(newPoint);
-      ref.read(timePointsNotifier.notifier).update(active, newPoint);
     }
 
     void selectSlider({
@@ -102,23 +107,13 @@ class SliderDots extends HookConsumerWidget {
         final point = points[i];
         final x = (point.minutes()) * maxWidth / max;
         if ((tapPosition - x).abs() < buttonSize) {
-          HapticFeedback.selectionClick();
+          // HapticFeedback.selectionClick();
           ref.read(timePointEditingProvider.notifier).set(point);
           return;
         }
       }
 
       return;
-      // we disable this feature for now
-      // if active value is still active
-      final point = points[active!];
-      final newMinutes = (tapPosition / maxWidth * max).round();
-      final newPoint = point.copyWith(
-        hour: newMinutes ~/ 60,
-        minute: newMinutes % 60,
-      );
-
-      ref.read(timePointsNotifier.notifier).update(active!, newPoint);
     }
 
     return Column(
@@ -168,9 +163,10 @@ class SliderDots extends HookConsumerWidget {
                 SizedBox.expand(
                   child: GestureDetector(
                     onTapDown: (details) => selectSlider(
-                        maxWidth: maxWidth,
-                        tapPosition: details.localPosition.dx),
-                    onPanUpdate: (details) {
+                      maxWidth: maxWidth,
+                      tapPosition: details.localPosition.dx,
+                    ),
+                    onHorizontalDragUpdate: (details) {
                       if (details.delta.dx == 0) {
                         return;
                       }
@@ -179,12 +175,12 @@ class SliderDots extends HookConsumerWidget {
                       // }
                       updateSlider(details.localPosition.dx, maxWidth);
                     },
-                    onPanStart: (details) {
+                    onHorizontalDragStart: (details) {
                       updateSlider(details.localPosition.dx, maxWidth);
                     },
-                    onPanEnd: (details) {
-                      HapticFeedback.lightImpact();
-                      normalizeSlider();
+                    onHorizontalDragEnd: (details) {
+                      // HapticFeedback.lightImpact();
+                      // normalizeSlider();
                     },
                   ),
                 ),
