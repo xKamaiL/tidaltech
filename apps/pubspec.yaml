@@ -52,6 +52,7 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   flutter_native_splash: ^2.3.1
   flutter_statusbarcolor_ns: ^0.5.0
+  protobuf: ^3.0.0
 
 dev_dependencies:
   flutter_test:
