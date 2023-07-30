@@ -40,47 +40,8 @@ class ShowLineChart extends HookConsumerWidget {
         return;
       }
 
-      if (events is FlPanStartEvent) {
-        debugPrint("start");
-        HapticFeedback.lightImpact();
-        return;
-      }
 
-      if (events is FlPanUpdateEvent) {
-        final point = ref.read(timePointEditingProvider);
-        if (point == null) return;
 
-        // sourceTimeStamp
-        // go left or right by 5 minutes
-        final dx = events.details.delta.dx;
-        if (dx == 0) return;
-
-        // 0.33 is not sensitive enough
-        if (dx.abs() < 2) return;
-
-        int newFullMinutes = point.minutes();
-        if (dx > 0) {
-          newFullMinutes += 10;
-        } else {
-          newFullMinutes -= 10;
-        }
-
-        // copy old
-        final newPoint = point.copyWith(
-          hour: newFullMinutes ~/ 60,
-          minute: newFullMinutes % 60,
-        );
-
-        ref.read(timePointEditingProvider.notifier).set(newPoint);
-        ref.read(timePointsNotifier.notifier).update(point.id, newPoint);
-
-        return;
-      }
-
-      if (events is FlPanEndEvent) {
-        HapticFeedback.mediumImpact();
-        return;
-      }
     }
 
     return LineChart(
@@ -103,7 +64,7 @@ class ShowLineChart extends HookConsumerWidget {
                   show: true,
                   getDotPainter: (spot, percent, barData, index) {
                     return FlDotCirclePainter(
-                      radius: 10,
+                      radius: 6,
                       color: barData.color ?? ThemeColors.primary,
                       strokeWidth: 0,
                     );

@@ -35,12 +35,13 @@ class SliderDots extends HookConsumerWidget {
           }
           if (point.hour == point2.hour && point.minute == point2.minute) {
             int minutes = point.minutes();
-            minutes += 30;
+            minutes += 40;
             // adjust +- 30 minutes
             final newPoint = point.copyWith(
               hour: minutes ~/ 60,
               minute: minutes % 60,
             );
+            ref.read(timePointEditingProvider.notifier).set(newPoint);
             ref.read(timePointsNotifier.notifier).update(i, newPoint);
             return;
           }
@@ -158,7 +159,7 @@ class SliderDots extends HookConsumerWidget {
                         borderRadius: const BorderRadius.all(
                           Radius.circular(8),
                         ),
-                        color: active == i
+                        color: active == points[i].id
                             ? ThemeColors.primary
                             : ThemeColors.zinc.shade500,
                       ),
@@ -170,7 +171,6 @@ class SliderDots extends HookConsumerWidget {
                         maxWidth: maxWidth,
                         tapPosition: details.localPosition.dx),
                     onPanUpdate: (details) {
-                      debugPrint(details.delta.dx.toString());
                       if (details.delta.dx == 0) {
                         return;
                       }
@@ -183,7 +183,7 @@ class SliderDots extends HookConsumerWidget {
                       updateSlider(details.localPosition.dx, maxWidth);
                     },
                     onPanEnd: (details) {
-                      HapticFeedback.heavyImpact();
+                      HapticFeedback.lightImpact();
                       normalizeSlider();
                     },
                   ),

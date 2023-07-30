@@ -51,18 +51,28 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
         state.last.colors, // copy from last time point
       ),
     ];
+    // prefer to select the last time point
+    ref.read(timePointEditingProvider.notifier).set(state.last);
+
 
     return;
   }
 
-  void update(int i, TimePoint tp) {
+  void update(int id, TimePoint tp) {
     // optimize ?
+    if (state.length == 1) {
+      state = [tp];
+      return;
+    }
 
-    state = [
-      ...state.sublist(0, i),
-      tp,
-      ...state.sublist(i + 1),
-    ];
+    final newState = state.map((e) {
+      if (e.id == id) {
+        e = tp;
+      }
+      return e;
+    });
+
+    state = newState.toList();
   }
 
   TimePoint? findById(int id) {
