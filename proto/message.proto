@@ -1,18 +1,32 @@
 syntax = "proto3";
 
+// Lighting is the data that will be sent
+// to the device
 message Lighting {
+  // Mode specifies the mode of the lighting
   Mode mode = 1;
   oneof data {
+    // Schedule mode
     TimePoints schedule = 2;
+    // Effect mode
     Effect effect = 3;
+    // Manual mode
     uint32 rgb = 4;
   }
 }
 
+// TimePoints store a list of TimePoint
 message TimePoints {
   repeated TimePoint points = 1;
 }
+// Effect store a list of TimeStamp
+// and how long the effect should last
+message Effect {
+  uint32 duration = 1;
+  repeated TimeStamp timestamps = 2;
+}
 
+// Mode specifies the mode of the lighting
 enum Mode {
   MODE_UNSPECIFIED = 0;
   MODE_MANUAL = 1;
@@ -20,6 +34,7 @@ enum Mode {
   MODE_EFFECT = 3;
 }
 
+// LED specifies the LED
 enum LED {
   LED_UNSPECIFIED = 0;
   LED_WHITE = 1;
@@ -49,11 +64,6 @@ message Brightness {
   uint32 blue = 7;
   uint32 royal_blue = 8;
   uint32 ultra_violet = 9;
-}
-
-message Effect {
-  uint32 duration = 1;
-  repeated TimeStamp timestamps = 2;
 }
 
 
