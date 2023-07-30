@@ -36,8 +36,12 @@ enum LED {
 message TimePoint {
   uint32 hh = 1; // 5 bit
   uint32 mm = 2; // 6 bit
+  Brightness brightness = 3;
+}
 
-  // store brightness as 0-100
+// Brightness store 0-100 %
+// of each LED
+message Brightness {
   uint32 white = 3;
   uint32 warm_white = 4;
   uint32 red = 5;
@@ -49,5 +53,11 @@ message TimePoint {
 
 message Effect {
   uint32 duration = 1;
-  repeated TimePoint timeline = 2;
+  repeated TimeStamp timestamps = 2;
+}
+
+
+message TimeStamp {
+  uint32 seconds = 1;
+  Brightness brightness = 2;
 }
