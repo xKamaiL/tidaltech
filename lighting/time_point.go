@@ -5,11 +5,11 @@ import "github.com/xkamail/tidaltech/pkg/led"
 type TimePoint struct {
 	Hour   uint8 `json:"hour"`
 	Minute uint8 `json:"minute"`
-	// State is the state of the light at this time point
+	// Brightness is the brightness of the light at this time point
 	// 0 - off
 	// 100 - on
 	// default is off
-	State led.State `json:"state"`
+	Brightness led.Brightness `json:"brightness"`
 }
 
 // NewTimePoint with hour and minute

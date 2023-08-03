@@ -1,13 +1,13 @@
 package led
 
-// State of the lighting system.
+// Brightness of the lighting system.
 // The following LED colors are supported:
-type State struct {
-	White       uint8 `json:"white"`
-	RoyalBlue   uint8 `json:"royalBlue"`
-	Red         uint8 `json:"red"`
-	Green       uint8 `json:"green"`
-	WarmWhite   uint8 `json:"warmWhite"`
-	UltraViolet uint8 `json:"ultraViolet"`
-	Blue        uint8 `json:"blue"`
+type Brightness struct {
+	White       uint8
+	RoyalBlue   uint8
+	Red         uint8
+	Green       uint8
+	WarmWhite   uint8
+	UltraViolet uint8
+	Blue        uint8
 }

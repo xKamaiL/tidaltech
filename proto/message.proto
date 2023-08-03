@@ -1,5 +1,12 @@
 syntax = "proto3";
 
+message CommandResult {
+  bool ok = 1;
+  string error_code = 2;
+  string error_message = 3;
+}
+
+
 // Lighting is the data that will be sent
 // to the device
 message Lighting {
@@ -26,12 +33,24 @@ message Effect {
   repeated TimeStamp timestamps = 2;
 }
 
+enum CommandCode {
+  COMMAND_CODE_UNSPECIFIED = 0;
+  COMMAND_GET_PROPERTIES = 1;
+
+  // prepend
+  COMMAND_SET_LIGHTING = 5;
+  COMMAND_UPGRADE_FIRMWARE = 6;
+}
+
 // Mode specifies the mode of the lighting
 enum Mode {
   MODE_UNSPECIFIED = 0;
+  // Manual mode
+  // show static lighting
   MODE_MANUAL = 1;
+  // Schedule mode
+  // show lighting based on schedule time configured
   MODE_SCHEDULE = 2;
-  MODE_EFFECT = 3;
 }
 
 // LED specifies the LED

@@ -13,17 +13,17 @@ import (
 type Mode uint8
 
 const (
-	ModeAmbient Mode = iota + 1
-	ModeFeeding
+	ModeManual Mode = iota + 1
+	ModeSchedule
 )
 
 type Device struct {
-	ID           uuid.UUID `json:"id"`
-	Label        string    `json:"label"`
-	PairedUserID uuid.UUID `json:"pairedUserId"`
-	Mode         Mode      `json:"mode"`
-	// LEDState is the state of the light
-	LEDState led.State `json:"ledState"`
+	ID           uuid.UUID      `json:"id"`
+	Label        string         `json:"label"`
+	PairedUserID uuid.UUID      `json:"pairedUserId"`
+	Mode         Mode           `json:"mode"`
+	Brightness   led.Brightness `json:"brightness"`
+	Schedule     TimeSchedule   `json:"schedule"`
 
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`

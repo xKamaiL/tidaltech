@@ -9,6 +9,17 @@ create table users
     updated_at timestamptz default now()
 );
 
+create table firmware_versions
+(
+    id           uuid primary key,
+    name         text not null,
+    version      text not null,
+    release_note text not null,
+    binary_url   text not null,
+    created_at   timestamptz default now(),
+    updated_at   timestamptz default now()
+);
+
 create table devices
 (
     id             uuid primary key,
@@ -17,15 +28,38 @@ create table devices
     pair_code      text not null,
     mode           smallint                   default 1,
     led_states     jsonb                      default null,
+    version        text                       default null,
     created_at     timestamptz                default now(),
     updated_at     timestamptz                default now()
 );
+
 
 create table device_lighting
 (
     id         uuid primary key,
     device_id  uuid references devices (id),
-    -- TODO: store lighting config
+
+    mode       smallint    default 1,
+    brightness jsonb       default '{
+      "red": 0,
+      "green": 0,
+      "blue": 0,
+      "royalBlue": 0,
+      "white": 0,
+      "warmWhite": 0,
+      "ultraviolet": 0
+    }'::jsonb,
+
+    schedule   jsonb       default '{
+      "points": []
+    }'::jsonb,
+
+    effect     jsonb       default '{
+      "type": "none",
+      "duration": 0,
+      "intensity": 0
+    }'::jsonb,
+
     created_at timestamptz default now(),
     updated_at timestamptz default now()
 );
