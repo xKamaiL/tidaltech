@@ -22,6 +22,18 @@
         "ble_svc_gap.h": "c",
         "nimble_port.h": "c",
         "task.h": "c",
-        "ble_hs.h": "c"
+        "ble_hs.h": "c",
+        "__debug": "c",
+        "__tuple": "c",
+        "complex": "c",
+        "type_traits": "c",
+        "iosfwd": "c",
+        "limits": "c",
+        "new": "c",
+        "ratio": "c",
+        "tuple": "c",
+        "chrono": "c",
+        "compare": "c",
+        "concepts": "c"
     }
 }

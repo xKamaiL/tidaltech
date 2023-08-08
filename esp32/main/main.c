@@ -55,9 +55,7 @@ static const struct ble_gatt_svc_def gatt_svcs[] = {
                 .flags = BLE_GATT_CHR_F_WRITE_NO_RSP,
                 .access_cb = device_write,
             },
-            {
-                0, /* No more characteristics in this service */
-            },
+            {0},
         },
     },
     {0},  // must be terminated with an entry of all zeroes
@@ -102,6 +100,9 @@ void ble_app_advertise(void) {
     fields.name = (uint8_t *)device_name;
     fields.name_len = strlen(device_name);
     fields.name_is_complete = 1;
+
+    fields.mfg_data = (uint8_t *)device_name;
+    fields.mfg_data_len = 0;
     if (ble_gap_adv_set_fields(&fields) != 0) {
         printf("Failed to set advertise fields\n");
         return;

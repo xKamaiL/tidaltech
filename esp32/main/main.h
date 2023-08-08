@@ -4,5 +4,4 @@
 
 enum {
 
-    HRS_IDX_NB,
 };
