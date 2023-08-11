@@ -34,6 +34,13 @@
         "tuple": "c",
         "chrono": "c",
         "compare": "c",
-        "concepts": "c"
-    }
+        "concepts": "c",
+        "*.tcc": "c",
+        "ctime": "c",
+        "future": "c",
+        "numeric": "c",
+        "streambuf": "c",
+        "*.inc": "c"
+    },
+    "idf.adapterTargetName": "esp32"
 }

@@ -132,6 +132,12 @@ void host_task(void *param) {
     nimble_port_freertos_deinit();
 }
 
+void getTime() {
+    time_t now;
+    struct tm timeinfo;
+    time(&now);
+}
+
 void app_main(void) {
     ESP_ERROR_CHECK(nvs_flash_init());
 
