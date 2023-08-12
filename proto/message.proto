@@ -1,31 +1,41 @@
 syntax = "proto3";
 
-message CommandResult {
-  bool ok = 1;
-  string error_code = 2;
-  string error_message = 3;
+message DeviceInformationRequest {
 }
 
-
-// Lighting is the data that will be sent
-// to the device
-message Lighting {
-  // Mode specifies the mode of the lighting
+message DeviceInformationResponse {
   Mode mode = 1;
-  oneof data {
-    // Schedule mode
-    TimePoints schedule = 2;
-    // Effect mode
-    Effect effect = 3;
-    // Manual mode
-    uint32 rgb = 4;
-  }
+  uint32 current_timestamps = 2;
+  int32 temperature = 3;
+  string device_id = 4;
 }
 
-// TimePoints store a list of TimePoint
-message TimePoints {
+message UpgradeFirmwareRequest {
+}
+
+message UpgradeFirmwareResponse {
+  bool is_latest_version = 1;
+  string current_version = 2;
+}
+
+// LightingScheduleRequest is the data that will be sent
+// to the device
+message LightingScheduleRequest {
   repeated TimePoint points = 1;
 }
+
+message SetSceneRequest {
+  Scene scene = 1;
+}
+
+message GetSceneResponse {
+  Scene scene = 1;
+}
+
+enum Scene {
+  SCENE_UNSPECIFIED = 0;
+}
+
 // Effect store a list of TimeStamp
 // and how long the effect should last
 message Effect {

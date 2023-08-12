@@ -40,7 +40,8 @@
         "future": "c",
         "numeric": "c",
         "streambuf": "c",
-        "*.inc": "c"
+        "*.inc": "c",
+        "message.pb-c.h": "c"
     },
     "idf.adapterTargetName": "esp32"
 }

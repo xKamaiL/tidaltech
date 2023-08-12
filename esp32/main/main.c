@@ -22,6 +22,9 @@
 #include "services/gap/ble_svc_gap.h"
 #include "services/gatt/ble_svc_gatt.h"
 
+// import protoc files message
+#include "proto/message.pb-c.h"
+
 char *TAG = "BLE-Server";
 uint8_t ble_addr_type;
 void ble_app_advertise(void);
@@ -132,12 +135,6 @@ void host_task(void *param) {
     nimble_port_freertos_deinit();
 }
 
-void getTime() {
-    time_t now;
-    struct tm timeinfo;
-    time(&now);
-}
-
 void app_main(void) {
     ESP_ERROR_CHECK(nvs_flash_init());
 
@@ -162,4 +159,17 @@ void app_main(void) {
     ble_hs_cfg.sync_cb = ble_app_on_sync;  // Callback for BLE synchronization
 
     nimble_port_freertos_init(host_task);  // Initialize the NimBLE host task
+}
+
+void onTimePointService(uint16_t conn_handle, uint16_t attr_handle, struct ble_gatt_access_ctxt *ctxt, void *arg) {
+    decodeTimePoint(ctxt->om->om_data, ctxt->om->om_len);
+}
+
+void decodeTimePoint(uint8_t *raw, uint8_t len) {
+    // convert raw bytes into protobuf message
+    TimePoint *timePoint = time_point__unpack(NULL, len, raw);
+    if (timePoint == NULL) {
+        printf("Failed to unpack time point\n");
+        return;
+    }
 }
