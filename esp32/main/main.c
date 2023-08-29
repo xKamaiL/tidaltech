@@ -165,11 +165,3 @@ void onTimePointService(uint16_t conn_handle, uint16_t attr_handle, struct ble_g
     decodeTimePoint(ctxt->om->om_data, ctxt->om->om_len);
 }
 
-void decodeTimePoint(uint8_t *raw, uint8_t len) {
-    // convert raw bytes into protobuf message
-    TimePoint *timePoint = time_point__unpack(NULL, len, raw);
-    if (timePoint == NULL) {
-        printf("Failed to unpack time point\n");
-        return;
-    }
-}
