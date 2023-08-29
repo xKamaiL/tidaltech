@@ -37,8 +37,8 @@ class DashboardScreen extends HookConsumerWidget {
               ),
               child: Container(
                 // blur image
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0), // brightness
+                decoration: const BoxDecoration(
+                  color: Colors.transparent, // brightness
                 ),
 
                 child: BackdropFilter(
