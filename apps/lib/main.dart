@@ -29,7 +29,7 @@ class MyApp extends ConsumerWidget {
       theme: ThemeData(
         primarySwatch: ThemeColors.primary,
         fontFamily: GoogleFonts.notoSansThai().fontFamily,
-        fontFamilyFallback: ["NotoSansThai_regular", "sans-serif"],
+        fontFamilyFallback: const ["NotoSansThai_regular", "sans-serif"],
         scaffoldBackgroundColor: ThemeColors.white,
         appBarTheme: Theme.of(context).appBarTheme.copyWith(systemOverlayStyle: SystemUiOverlayStyle.light),
 

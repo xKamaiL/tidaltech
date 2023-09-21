@@ -8,6 +8,7 @@ class FeederTimeHeader extends StatelessWidget {
     return n.Row(List.generate(
       7,
       (index) => n.Text("${(index * 4).toString().padLeft(1, '0')}:00")
+        ..fontSize = 12
         ..color = ThemeColors.foreground,
     ))
       ..spaceBetween;
