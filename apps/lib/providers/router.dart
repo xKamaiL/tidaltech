@@ -1,3 +1,4 @@
+import 'package:permission_handler/permission_handler.dart';
 import 'package:tidal_tech/pages/ligting/feeder/profile/index.dart';
 import 'package:tidal_tech/pages/ligting/lighting.dart';
 import 'package:tidal_tech/pages/scenes/scenes.dart';
@@ -12,6 +13,7 @@ import 'package:tidal_tech/ui/onboard_screen.dart';
 
 import '../pages/home/home.dart';
 import '../pages/login.dart';
+import '../pages/scan/scan.dart';
 import '../pages/splash.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -60,7 +62,7 @@ class RouterNotifier extends ChangeNotifier {
               pageBuilder: (_, state) => NoTransitionPage(
                 key: state.pageKey,
                 restorationId: state.pageKey.value,
-                child: HomeIndexPage(),
+                child: const HomeIndexPage(),
               ),
             ),
             GoRoute(
@@ -88,7 +90,7 @@ class RouterNotifier extends ChangeNotifier {
                   return NoTransitionPage(
                     key: state.pageKey,
                     restorationId: state.pageKey.value,
-                    child: ScenesIndexPage(),
+                    child: const ScenesIndexPage(),
                   );
                 }),
             GoRoute(
@@ -98,11 +100,16 @@ class RouterNotifier extends ChangeNotifier {
                   return NoTransitionPage(
                     key: state.pageKey,
                     restorationId: state.pageKey.value,
-                    child: SettingsIndexPage(),
+                    child: const SettingsIndexPage(),
                   );
                 }),
           ],
-        )
+        ),
+        GoRoute(
+          path: "/scan",
+          pageBuilder: (context, state) =>
+              const MaterialPage(child: ScanPage()),
+        ),
       ];
 
   String? _redirectLogic(BuildContext buildContext, GoRouterState state) {
@@ -124,3 +131,13 @@ class RouterNotifier extends ChangeNotifier {
     return null;
   }
 }
+
+final routeInformationProvider =
+    ChangeNotifierProvider<GoRouteInformationProvider>((ref) {
+  final router = ref.watch(routerProvider);
+  return router.routeInformationProvider;
+});
+
+final currentRouteProvider = Provider((ref) {
+  return ref.watch(routeInformationProvider).value.location;
+});

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:niku/namespace.dart' as n;
+import 'package:permission_handler/permission_handler.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 import 'package:tidal_tech/pages/home/clock_widget.dart';
 import 'package:tidal_tech/pages/home/history_widget.dart';
@@ -67,8 +68,10 @@ class HomeIndexPage extends HookConsumerWidget {
                 title: "Thunderstorm",
                 icon: Icons.thunderstorm_outlined,
               ),
-              onTap: () {
+              onTap: () async {
                 //
+                final s = await Permission.bluetoothScan.request();
+                print(s);
               },
               active: true,
             ),

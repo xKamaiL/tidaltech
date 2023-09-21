@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:permission_handler/permission_handler.dart';
 import 'package:tidal_tech/ui/widget/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 
@@ -18,6 +19,8 @@ class NormalScreen extends StatefulWidget {
 
 class _NormalScreenState extends State<NormalScreen> {
   static const blur = 5.0;
+  // final flutterReactiveBle = FlutterReactiveBle();
+
 
   @override
   Widget build(BuildContext context) {
