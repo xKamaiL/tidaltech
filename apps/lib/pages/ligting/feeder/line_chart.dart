@@ -1,6 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -108,7 +107,7 @@ class ShowLineChart extends HookConsumerWidget {
         clipData: const FlClipData.none(),
         maxY: 100,
         minY: 0,
-        backgroundColor: ThemeColors.black,
+        backgroundColor: ThemeColors.zinc.shade900,
       ),
       duration: const Duration(milliseconds: 250),
       curve: Curves.decelerate,

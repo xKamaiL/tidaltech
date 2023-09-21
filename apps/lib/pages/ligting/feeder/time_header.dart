@@ -3,6 +3,8 @@ import 'package:niku/namespace.dart' as n;
 import 'package:tidal_tech/theme/colors.dart';
 
 class FeederTimeHeader extends StatelessWidget {
+  const FeederTimeHeader({super.key});
+
   @override
   Widget build(BuildContext context) {
     return n.Row(List.generate(
