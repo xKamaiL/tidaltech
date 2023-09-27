@@ -21,6 +21,7 @@ version: 1.0.0+1
 environment:
   sdk: '>=3.0.2 <4.0.0'
 
+
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
 # consider running `flutter pub upgrade --major-versions`. Alternatively,
@@ -52,9 +53,11 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   flutter_native_splash: ^2.3.1
   flutter_statusbarcolor_ns: ^0.5.0
-  protobuf: ^3.0.0
+  protobuf: ^2.0.0
   permission_handler: ^11.0.0
   dio: ^5.3.2
+  flutter_reactive_ble: ^5.2.0
+  flutter_blue_plus: ^1.15.8
 
 dev_dependencies:
   flutter_test:

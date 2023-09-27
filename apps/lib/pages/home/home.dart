@@ -13,6 +13,7 @@ import 'package:tidal_tech/pages/home/on_hour_widget.dart';
 import 'package:tidal_tech/pages/home/sunrise_widget.dart';
 import 'package:tidal_tech/pages/home/water_temp_widget.dart';
 import 'package:tidal_tech/ui/widget/scene_card.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 class HomeIndexPage extends HookConsumerWidget {
   const HomeIndexPage({super.key});
@@ -70,8 +71,6 @@ class HomeIndexPage extends HookConsumerWidget {
               ),
               onTap: () async {
                 //
-                final s = await Permission.bluetoothScan.request();
-                print(s);
               },
               active: true,
             ),

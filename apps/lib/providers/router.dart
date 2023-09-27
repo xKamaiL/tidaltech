@@ -1,4 +1,5 @@
 import 'package:permission_handler/permission_handler.dart';
+import 'package:tidal_tech/pages/landing/landing.dart';
 import 'package:tidal_tech/pages/ligting/feeder/profile/index.dart';
 import 'package:tidal_tech/pages/ligting/lighting.dart';
 import 'package:tidal_tech/pages/scenes/scenes.dart';
@@ -51,6 +52,19 @@ class RouterNotifier extends ChangeNotifier {
           ],
           builder: (context, state, child) => OnBoardScreen(child: child),
         ),
+        ShellRoute(
+            builder: (context, state, child) => OnBoardScreen(child: child),
+            routes: [
+              GoRoute(
+                path: "/landing",
+                pageBuilder: (_, __) =>
+                    const MaterialPage(child: LandingPage()),
+              ),
+              GoRoute(
+                path: "/scan",
+                pageBuilder: (_, __) => const MaterialPage(child: ScanPage()),
+              ),
+            ]),
         ShellRoute(
           builder: (context, state, child) => DashboardScreen(
             child,
@@ -105,14 +119,11 @@ class RouterNotifier extends ChangeNotifier {
                 }),
           ],
         ),
-        GoRoute(
-          path: "/scan",
-          pageBuilder: (context, state) =>
-              const MaterialPage(child: ScanPage()),
-        ),
       ];
 
-  String? _redirectLogic(BuildContext buildContext, GoRouterState state) {
+  Future<String?> _redirectLogic(
+      BuildContext buildContext, GoRouterState state) async {
+    //
     if (state.path == null) {
       return null;
     }
