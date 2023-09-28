@@ -13,24 +13,19 @@ class SplashPage extends ConsumerStatefulWidget {
 
 class _SplashPageState extends ConsumerState<SplashPage> {
   @override
-  void initState() async {
+  void initState() {
     super.initState();
-    final isBleAllow = await Permission.bluetooth.isGranted;
-    if (!isBleAllow) {
-      final ok = await Permission.bluetooth.request();
-      if (!ok.isGranted) {
-        // TODO: show message that why you need this permission
-        debugPrint("Permission.bluetooth.request() is not granted");
+
+    Permission.bluetooth.isGranted.then((isGranted) {
+      if (!isGranted) {
+        Permission.bluetooth.request().then((value) => {
+              if (value.isGranted) {context.go("/landing")}
+              //
+            });
         return;
       }
-    }
-    Future.delayed(const Duration(microseconds: 100), () async {
-      FlutterNativeSplash.remove();
-      // check permission
-
-      // check is that device already have connection
       context.go("/landing");
-    });
+    }).then((value) => FlutterNativeSplash.remove());
   }
 
   @override
