@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tidal_tech/providers/devices.dart';
 import 'package:tidal_tech/theme/colors.dart';
 import 'package:go_router/go_router.dart';
@@ -10,6 +11,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../providers/ble_manager.dart';
 import '../../styles/button.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:collection/collection.dart';
 
 // TODO: refactor later
 final _servicesUuids = <Guid>[Guid("399d90e1-16f1-4fe9-8c2c-91058ed7ae4a")];
@@ -26,21 +28,9 @@ class _LandingPageState extends ConsumerState<LandingPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    reconnect();
     final x = ref.read(scannerProvider.notifier);
     final connected = ref.read(connectDeviceProvider.notifier);
-    FlutterBluePlus.connectedSystemDevices.then((device) async {
-      final tidalDevices =
-          device.where((element) => TidalDeviceFilter.ok(element));
-      if (tidalDevices.isNotEmpty) {
-        // initial connection of bluetooth
-        await tidalDevices.first.connect();
-        await tidalDevices.first.discoverServices();
-        // redirect to home
-        connected.connect(tidalDevices.first);
-        context.go("/home");
-        return;
-      }
-    });
 
     FlutterBluePlus.scanResults.listen((List<ScanResult> results) async {
       // print("found ${results.length} devices");
@@ -58,6 +48,40 @@ class _LandingPageState extends ConsumerState<LandingPage> {
         FlutterBluePlus.startScan(
           withServices: _servicesUuids,
         );
+      }
+    });
+  }
+
+  void reconnect() async {
+    final connected = ref.read(connectDeviceProvider.notifier);
+    final prefs = await SharedPreferences.getInstance();
+    // try to find device from local storage
+    final id = prefs.getString("id");
+    if (id != null) {
+      debugPrint("try to connect to $id");
+      final device = (await FlutterBluePlus.connectedSystemDevices)
+          .firstWhereOrNull((element) => element.remoteId.toString() == id);
+      if (device != null) {
+        // initial connection of bluetooth
+        await device.connect();
+        await device.discoverServices();
+        // redirect to home
+        connected.connect(device);
+        context.go("/home");
+      }
+    }
+
+    FlutterBluePlus.connectedSystemDevices.then((device) async {
+      final tidalDevices =
+          device.where((element) => TidalDeviceFilter.ok(element));
+      if (tidalDevices.isNotEmpty) {
+        // initial connection of bluetooth
+        await tidalDevices.first.connect();
+        await tidalDevices.first.discoverServices();
+        // redirect to home
+        connected.connect(tidalDevices.first);
+        context.go("/home");
+        return;
       }
     });
   }
@@ -224,6 +248,9 @@ class DeviceItem extends HookConsumerWidget {
             // set global device to use
             ref.read(connectDeviceProvider.notifier).connect(device.device);
             // save device to local storage
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+
+            await prefs.setString("id", device.device.remoteId.toString());
 
             context.go("/home");
           }
