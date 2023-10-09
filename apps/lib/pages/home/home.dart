@@ -12,14 +12,21 @@ import 'package:tidal_tech/pages/home/moonlight_widget.dart';
 import 'package:tidal_tech/pages/home/on_hour_widget.dart';
 import 'package:tidal_tech/pages/home/sunrise_widget.dart';
 import 'package:tidal_tech/pages/home/water_temp_widget.dart';
+import 'package:tidal_tech/providers/devices.dart';
 import 'package:tidal_tech/ui/widget/scene_card.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 class HomeIndexPage extends HookConsumerWidget {
   const HomeIndexPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final device = ref.read(connectDeviceProvider.notifier);
+    useEffect(() {
+      device.getStatus();
+      return null;
+    }, const []);
     return Scaffold(
       appBar: AppBar(
         title: n.Text('Home')

@@ -28,10 +28,13 @@ class _LandingPageState extends ConsumerState<LandingPage> {
     super.initState();
     final x = ref.read(scannerProvider.notifier);
     final connected = ref.read(connectDeviceProvider.notifier);
-    FlutterBluePlus.connectedSystemDevices.then((device) {
+    FlutterBluePlus.connectedSystemDevices.then((device) async {
       final tidalDevices =
           device.where((element) => TidalDeviceFilter.ok(element));
       if (tidalDevices.isNotEmpty) {
+        // initial connection of bluetooth
+        await tidalDevices.first.connect();
+        await tidalDevices.first.discoverServices();
         // redirect to home
         connected.connect(tidalDevices.first);
         context.go("/home");
@@ -40,16 +43,18 @@ class _LandingPageState extends ConsumerState<LandingPage> {
     });
 
     FlutterBluePlus.scanResults.listen((List<ScanResult> results) async {
+      // print("found ${results.length} devices");
       for (ScanResult result in results) {
         x.addDevice(
           result.device,
           result.rssi,
         );
       }
+      FlutterBluePlus.stopScan();
     });
-    // check ble is on or not ?
     FlutterBluePlus.adapterState.listen((state) async {
-      if (state == BluetoothAdapterState.on && connected.isConnected()) {
+      // debugPrint("adapter state $state ${connected.isConnected()}");
+      if (state == BluetoothAdapterState.on && !connected.isConnected()) {
         FlutterBluePlus.startScan(
           withServices: _servicesUuids,
         );
