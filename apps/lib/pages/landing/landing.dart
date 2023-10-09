@@ -30,6 +30,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
     super.initState();
     reconnect().then((found) {
       if (found) return;
+      debugPrint("start scan");
       final x = ref.read(scannerProvider.notifier);
       final connected = ref.read(connectDeviceProvider.notifier);
 
@@ -61,7 +62,9 @@ class _LandingPageState extends ConsumerState<LandingPage> {
     final id = prefs.getString("id");
     if (id != null) {
       debugPrint("try to connect to $id");
-      final device = (await FlutterBluePlus.connectedSystemDevices)
+      final connectedDevices = await FlutterBluePlus.connectedSystemDevices;
+      debugPrint("found ${connectedDevices.length} devices");
+      final device = (connectedDevices)
           .firstWhereOrNull((element) => element.remoteId.toString() == id);
       if (device != null) {
         // initial connection of bluetooth
@@ -70,8 +73,10 @@ class _LandingPageState extends ConsumerState<LandingPage> {
         // redirect to home
         connected.connect(device);
         FlutterBluePlus.stopScan();
-        context.go("/home");
+        debugPrint("connected to $id successfully");
         return true;
+      } else {
+        debugPrint("%$id device not found");
       }
     }
 
@@ -101,7 +106,13 @@ class _LandingPageState extends ConsumerState<LandingPage> {
   @override
   Widget build(BuildContext context) {
     final devices = ref.watch(scannerProvider);
-    final connected = ref.watch(connectDeviceProvider);
+    final connected = ref.watch(connectDeviceProvider.notifier);
+
+    ref.listen(connectDeviceProvider.notifier, (previous, next) {
+      if (next.isConnected()) {
+        context.go("/home");
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(
