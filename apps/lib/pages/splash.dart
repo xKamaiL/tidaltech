@@ -18,7 +18,6 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   @override
   void initState() {
     super.initState();
-
     Permission.bluetooth.isGranted.then((isGranted) {
       if (!isGranted) {
         Permission.bluetooth.request().then((value) => {
@@ -37,7 +36,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children:  [
             n.Text('Please allow permission.')..bodyLarge,
             const SizedBox(height: 24),
             n.Button("Allow Permission".n)

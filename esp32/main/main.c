@@ -139,7 +139,7 @@ void app_main(void) {
     ESP_ERROR_CHECK(nvs_flash_init());
 
     ESP_ERROR_CHECK(nimble_port_init());
-    if (ble_svc_gap_device_name_set("Tidal Lighting") != 0) {
+    if (ble_svc_gap_device_name_set("Tidal Tech") != 0) {
         printf("Failed to set device name\n");
         return;
     }
@@ -164,4 +164,3 @@ void app_main(void) {
 void onTimePointService(uint16_t conn_handle, uint16_t attr_handle, struct ble_gatt_access_ctxt *ctxt, void *arg) {
     decodeTimePoint(ctxt->om->om_data, ctxt->om->om_len);
 }
-

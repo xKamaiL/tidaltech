@@ -45,7 +45,7 @@ class LightingIndexPage extends HookConsumerWidget {
           ModeSelection(tabController),
           Expanded(
             child: TabBarView(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               controller: tabController,
               children: [
                 SingleChildScrollView(
