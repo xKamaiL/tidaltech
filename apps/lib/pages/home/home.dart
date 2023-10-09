@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -24,7 +25,25 @@ class HomeIndexPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final device = ref.read(connectDeviceProvider.notifier);
     useEffect(() {
-      device.getStatus();
+      device.getStatus().then((value) {
+        print(value);
+        showCupertinoDialog(
+          context: context,
+          builder: (context) => CupertinoAlertDialog(
+            title: n.Text("Bluetooth Status"),
+            content: n.Text(value),
+            actions: [
+              CupertinoDialogAction(
+                child: n.Text("OK"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          ),
+        );
+      });
+
       return null;
     }, const []);
     return Scaffold(

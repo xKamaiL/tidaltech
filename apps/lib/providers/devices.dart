@@ -27,31 +27,29 @@ class ConnectedDeviceProvider extends StateNotifier<ConnectDeviceData> {
 
   BluetoothDevice? get ble => state.ble;
 
-  getStatus() async {
+  Future<String> getStatus() async {
     final t = ble;
-    if (t == null) return;
+    if (t == null) return "no bluetooth is connected";
     await t.connect(
       timeout: const Duration(seconds: 10),
       autoConnect: true,
     );
     final services = await t.discoverServices();
+    var result = "";
     try {
       services.forEach((element) {
         debugPrint("service ${element.uuid.toString()}");
       });
       final service = services.firstWhere((element) =>
           element.uuid.toString() == "399d90e1-16f1-4fe9-8c2c-91058ed7ae4a");
-      service.characteristics.forEach((element) {
-        debugPrint("characteristic ${element.uuid.toString()} ${element.descriptors}");
-        element.read().then((value) {
-          // convert to string
-          final str = String.fromCharCodes(value);
-          debugPrint("value $str");
-        });
-
-      });
+      for (var element in service.characteristics) {
+        final str = String.fromCharCodes(await element.read());
+        return str;
+      }
+      return result;
     } catch (e) {
-      debugPrint("service not found");
+      print(e);
+      return "service not found";
     }
   }
 
