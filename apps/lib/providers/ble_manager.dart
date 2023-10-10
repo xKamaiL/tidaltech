@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tidal_tech/constants/ble_services_ids.dart';
 
 const String bleName = "TIDAL";
@@ -170,7 +171,7 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
     );
   }
 
-  void healthCheck() async  {
+  void healthCheck() async {
     debugPrint("health check");
     final conn = state.connectedDevice;
     if (conn == null) {
@@ -201,5 +202,12 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
 
   void setOffline() {
     state = state.copyWith(isOnline: false);
+  }
+
+  forgot() async {
+    await SharedPreferences.getInstance().then((value) {
+      value.remove("id");
+      state = state.copyWith(connectedDevice: null);
+    });
   }
 }

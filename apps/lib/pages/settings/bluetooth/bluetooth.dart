@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:niku/namespace.dart' as n;
 
@@ -31,6 +32,20 @@ class BluetoothSettingPage extends HookConsumerWidget {
           onTap: () {},
           tileColor: ThemeColors.white,
         ),
+        n.ListTile(
+          title: n.Text("Disconnect")
+            ..color = Colors.grey.shade900
+            ..fontSize = 16.0
+            ..bold,
+          subtitle: n.Text("Disconnect from current device")
+            ..color = ThemeColors.zinc.shade900
+            ..fontSize = 12.0,
+          trailing: n.Icon(Icons.remove)..color = Colors.red,
+          onTap: () async {
+            ref.read(bleManagerProvider.notifier).forgot();
+            context.go("/scan");
+          },
+        )..mt = 8 * 4,
       ])
         ..gap = 4
         ..p = 8,
