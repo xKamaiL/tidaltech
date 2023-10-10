@@ -149,6 +149,11 @@ class _LandingPageState extends ConsumerState<LandingPage> {
                               ),
                               const Text("Scanning for devices..."),
                               Text("Found ${devices.length} devices"),
+                              const SizedBox(
+                                height: 80,
+                              ),
+                              n.Button("Can't find tidal tech devices".n)
+                                ..onPressed = () async {},
                             ],
                           )
                         : const DevicesList(),
