@@ -182,7 +182,7 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
       //
 
       await conn.connect(
-        timeout: const Duration(seconds: 5),
+        timeout: const Duration(seconds: 1),
         autoConnect: false,
       );
 
