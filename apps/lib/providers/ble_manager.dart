@@ -28,9 +28,10 @@ class BLEManager extends Equatable {
   final BluetoothDevice? connectedDevice;
   final String connectedDeviceId;
 
-  final isScanning;
+  final bool isScanning;
+  final bool isReconnecting;
 
-  final isReconnecting;
+  final bool isOnline;
 
   bool get isConnected => connectedDevice != null;
 
@@ -40,13 +41,9 @@ class BLEManager extends Equatable {
 
   List<BluetoothDevice> get knownDevices => scanResults;
 
-  const BLEManager(
-    this.scanResults,
-    this.connectedDevice,
-    this.connectedDeviceId,
-    this.isScanning,
-    this.isReconnecting,
-  );
+  const BLEManager(this.scanResults, this.connectedDevice,
+      this.connectedDeviceId, this.isScanning, this.isReconnecting,
+      {this.isOnline = false});
 
   BLEManager copyWith({
     List<BluetoothDevice>? scanResults,
@@ -54,6 +51,7 @@ class BLEManager extends Equatable {
     String? connectedDeviceId,
     bool? isScanning,
     bool? isReconnecting,
+    bool? isOnline,
   }) {
     return BLEManager(
       scanResults ?? this.scanResults,
@@ -61,6 +59,7 @@ class BLEManager extends Equatable {
       connectedDeviceId ?? this.connectedDeviceId,
       isScanning ?? this.isScanning,
       isReconnecting ?? this.isReconnecting,
+      isOnline: isOnline ?? this.isOnline,
     );
   }
 
@@ -72,6 +71,7 @@ class BLEManager extends Equatable {
         connectedDeviceId,
         isScanning,
         isReconnecting,
+        isOnline,
       ];
 }
 
@@ -121,7 +121,7 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
     state = state.copyWith(isScanning: true);
   }
 
-  void connectTo(BluetoothDevice device) {
+  void startConnect(BluetoothDevice device) {
     state = state.copyWith(connectedDevice: device);
   }
 
@@ -138,7 +138,11 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
     if (s.device.remoteId.toString() == state.connectedDeviceId &&
         state.isReconnecting) {
       stopScan();
-      state = state.copyWith(connectedDevice: s.device, isReconnecting: false);
+      state = state.copyWith(
+        connectedDevice: s.device,
+        isReconnecting: false,
+        isOnline: true,
+      );
       return;
     }
     state = state.copyWith(scanResults: [...state.scanResults, s.device]);
@@ -155,5 +159,47 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
   void refreshScan() {
     clearScanResult();
     startScan();
+  }
+
+  void connect() async {
+    final conn = state.connectedDevice;
+    if (conn == null) return;
+    await conn.connect(
+      timeout: const Duration(seconds: 5),
+      autoConnect: false,
+    );
+  }
+
+  void healthCheck() async  {
+    debugPrint("health check");
+    final conn = state.connectedDevice;
+    if (conn == null) {
+      reconnect();
+      return;
+    }
+
+    try {
+      //
+
+      await conn.connect(
+        timeout: const Duration(seconds: 5),
+        autoConnect: false,
+      );
+
+      setOnline();
+
+      state = state.copyWith(isReconnecting: false);
+    } catch (e) {
+      setOffline();
+      // state = state.copyWith(isReconnecting: false);
+    }
+  }
+
+  void setOnline() {
+    state = state.copyWith(isOnline: true);
+  }
+
+  void setOffline() {
+    state = state.copyWith(isOnline: false);
   }
 }

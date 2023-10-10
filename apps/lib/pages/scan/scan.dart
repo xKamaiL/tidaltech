@@ -234,7 +234,7 @@ class DeviceItem extends HookConsumerWidget {
                 return;
               }
               // set global device to use
-              ref.read(bleManagerProvider.notifier).connectTo(device);
+              ref.read(bleManagerProvider.notifier).startConnect(device);
 
               // save device to local storage
               SharedPreferences prefs = await SharedPreferences.getInstance();
