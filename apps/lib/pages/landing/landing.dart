@@ -5,7 +5,6 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tidal_tech/providers/devices.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -29,8 +28,6 @@ class _LandingPageState extends ConsumerState<LandingPage> {
     }
     ref.read(bleManagerProvider.notifier).init();
     SharedPreferences.getInstance().then((prefs) {
-      context.go("/scan");
-      return;
       // try to find device from local storage
       final id = prefs.getString("id");
       if (id == null) {
@@ -38,7 +35,10 @@ class _LandingPageState extends ConsumerState<LandingPage> {
         context.go("/scan");
         return;
       }
+      ref.read(bleManagerProvider.notifier).setReconnectId(id);
       FlutterNativeSplash.remove();
+      // decide to re-connect immediately
+      ref.read(bleManagerProvider.notifier).reconnect();
       context.go("/home");
       return;
     });

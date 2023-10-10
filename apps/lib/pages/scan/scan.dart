@@ -7,7 +7,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tidal_tech/constants/ble_services_ids.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
-import '../../providers/devices.dart';
 import '../../styles/button.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import '../../providers/ble_manager.dart';
@@ -248,6 +247,7 @@ class DeviceItem extends HookConsumerWidget {
                   message: "Connected to device successfully",
                 ),
               );
+
               Future.delayed(const Duration(seconds: 1), () {
                 context.go("/home");
               });

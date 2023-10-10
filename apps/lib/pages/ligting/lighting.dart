@@ -8,6 +8,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:tidal_tech/pages/ligting/time_selection.dart';
 import 'package:tidal_tech/stores/lighting.dart';
 import 'package:tidal_tech/theme/colors.dart';
+import 'package:tidal_tech/ui/BluetoothStatusIcon.dart';
 import 'package:tidal_tech/ui/panel.dart';
 
 class LightingIndexPage extends HookConsumerWidget {
@@ -28,13 +29,9 @@ class LightingIndexPage extends HookConsumerWidget {
           ..bold,
         elevation: 0,
         backgroundColor: Colors.white,
-        automaticallyImplyLeading: true,
-        centerTitle: false,
-        actionsIconTheme: const IconThemeData(color: ThemeColors.foreground),
-        actions: [
-          n.IconButton(
-            Icons.menu,
-            onPressed: () {},
+        actions: const [
+          BluetoothStatusIcon(
+            isDark: true,
           ),
         ],
       ),

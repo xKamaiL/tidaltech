@@ -106,9 +106,10 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
   }
 
   void reconnect() {
-    if (!state.firstLoad) return;
-    //
-    // TODO: re-connect logic
+    if (state.connectedDevice != null) return;
+    debugPrint("reconnecting");
+    state = state.copyWith(isReconnecting: true);
+    FlutterBluePlus.startScan();
   }
 
   void startScan() async {
@@ -132,7 +133,19 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
     }
     if (!s.device.localName.startsWith(bleName)) return;
 
+    // if we have connected device are set, we will stop scanning
+    // and connect to that device
+    if (s.device.remoteId.toString() == state.connectedDeviceId &&
+        state.isReconnecting) {
+      stopScan();
+      state = state.copyWith(connectedDevice: s.device, isReconnecting: false);
+      return;
+    }
     state = state.copyWith(scanResults: [...state.scanResults, s.device]);
+  }
+
+  void setReconnectId(String id) {
+    state = state.copyWith(connectedDeviceId: id);
   }
 
   void clearScanResult() {

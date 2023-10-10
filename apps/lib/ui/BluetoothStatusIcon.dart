@@ -1,41 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:niku/namespace.dart' as n;
 import 'package:tidal_tech/providers/ble_manager.dart';
-import 'package:tidal_tech/theme/colors.dart';
-import 'package:tidal_tech/ui/snackbar.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 
-import '../providers/devices.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:tidal_tech/theme/colors.dart';
 
 class BluetoothStatusIcon extends HookConsumerWidget {
-  final isDark = false;
+  final bool isDark;
 
-  const BluetoothStatusIcon({Key? key, isDark = false}) : super(key: key);
+  const BluetoothStatusIcon({Key? key, this.isDark = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final device = ref.watch(connectDeviceProvider);
-    reconnect() async {
-      if (!device.firstLoad) return;
-    }
+    final manager = ref.read(bleManagerProvider.notifier);
+    final device = ref.watch(bleManagerProvider);
 
-    final isConnect = device.ble != null;
+    final isConnect = device.isConnected;
     final isScanning = device.isScanning;
-    useEffect(() {
-      reconnect();
-      return null;
-    }, const []);
-    FlutterBluePlus.isScanning.listen((event) {
-      final x = ref.read(connectDeviceProvider.notifier);
-      if (event) {
-        x.startScan();
-      } else {
-        x.stopScan();
-      }
-    });
+
     final textColor = isDark ? Colors.black : Colors.white;
     return n.Padding(
       top: 8,
@@ -44,16 +27,16 @@ class BluetoothStatusIcon extends HookConsumerWidget {
       left: 8,
       child: GestureDetector(
         onTap: () async {
-          if (device.isScanning) {
-          } else {}
+          if (device.isReconnecting) return;
+          manager.reconnect();
         },
         child: n.Icon(
-          isConnect
+          !isConnect
               ? isScanning
                   ? Icons.bluetooth_searching
                   : Icons.bluetooth_disabled
               : Icons.bluetooth_connected,
-          color: isConnect ? textColor : textColor.withOpacity(0.75),
+          color: isConnect ? textColor : ThemeColors.danger,
           size: 24,
         ),
       ),
