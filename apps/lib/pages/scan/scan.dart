@@ -7,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tidal_tech/constants/ble_services_ids.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import '../../stores/bottom_bar.dart';
 import '../../styles/button.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import '../../providers/ble_manager.dart';
@@ -16,7 +17,6 @@ import 'package:tidal_tech/theme/colors.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../ui/snackbar.dart';
-
 
 class ScanPage extends ConsumerStatefulWidget {
   const ScanPage({Key? key}) : super(key: key);
@@ -242,6 +242,7 @@ class DeviceItem extends HookConsumerWidget {
                 );
 
                 Future.delayed(const Duration(seconds: 1), () {
+                  ref.read(bottomBarProvider.notifier).setPosition(0);
                   context.go("/home");
                 });
               } catch (e) {

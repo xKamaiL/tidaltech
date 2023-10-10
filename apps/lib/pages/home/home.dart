@@ -29,7 +29,7 @@ class HomeIndexPage extends HookConsumerWidget {
           ..fontSize = 18.0,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        actions:  [
+        actions:  const [
           BluetoothStatusIcon(
             isDark: false,
           ),
