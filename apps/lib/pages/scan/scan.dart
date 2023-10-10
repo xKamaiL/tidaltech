@@ -188,13 +188,19 @@ class DeviceItem extends HookConsumerWidget {
             ..onPressed = () async {
               try {
                 loading.value = true;
-                await device.connect(
+                if ((await device.connectionState.first) ==
+                    BluetoothConnectionState.connected) {
+                  await device.disconnect();
+                }
+
+                await FlutterBluePlus.stopScan();
+
+                await device
+                    .connect(
                   timeout: const Duration(seconds: 5),
-                );
-                await Future.delayed(const Duration(milliseconds: 100), () async {
-                  await device.discoverServices(
-                    timeout: 15,
-                  );
+                )
+                    .then((value) {
+                  return device.discoverServices();
                 });
 
                 if (device.servicesList!.isEmpty) {

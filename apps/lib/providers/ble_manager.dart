@@ -124,7 +124,22 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
   }
 
   void startConnect(BluetoothDevice device) {
-    state = state.copyWith(connectedDevice: device);
+    device.connect();
+    state = state.copyWith(connectedDevice: device, isOnline: true);
+  }
+
+  void initConnection() {
+    if (state.connectedDevice == null) return;
+    state.connectedDevice?.connectionState
+        .listen((BluetoothConnectionState state) async {
+      if (state == BluetoothConnectionState.disconnected) {
+        // TODO:
+        // 1. typically, start a periodic timer that tries to
+        //    periodically reconnect, or just call connect() again right now
+        // 2. you must always re-discover services after disconnection!
+        // 3. you should cancel subscriptions to all characteristics you listened to
+      }
+    });
   }
 
   void addScanResult(ScanResult s) {
