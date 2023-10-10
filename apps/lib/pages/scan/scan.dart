@@ -158,18 +158,6 @@ class DeviceItem extends HookConsumerWidget {
 
     final loading = useState(false);
 
-    useEffect(() {
-      if (status.connectionState == ConnectionState.active) {
-        debugPrint("discover services ${device.remoteId}");
-        device.discoverServices();
-      }
-      return () async {
-        // debugPrint("disconnect to ${device.device.remoteId}");
-        // await device.device.disconnect();
-      };
-    }, const []);
-    //
-
     return n.Box(
       n.Column([
         n.Box(),
@@ -198,59 +186,74 @@ class DeviceItem extends HookConsumerWidget {
                 XButtonStyle.confirm(loading: loading.value, label: "Connect")
             ..width = double.infinity
             ..onPressed = () async {
-              loading.value = true;
-              await device.connect();
-              await device.discoverServices();
-              if (device.servicesList!.isEmpty) {
-                await device.disconnect();
-                showTopSnackBar(
-                  Overlay.of(context),
-                  const XSnackBar.error(
-                    message:
-                        "Good job, your release is successful. Have a nice day",
-                  ),
+              try {
+                loading.value = true;
+                await device.connect(
+                  timeout: const Duration(seconds: 5),
                 );
-                loading.value = false;
-                return;
-              }
-              var i = 0;
-              for (final service in device.servicesList!) {
-                print("found service ${service.uuid}");
-                if (BLEServices.list().contains(service.uuid)) {
-                  i++;
+                await device.discoverServices(
+                  timeout: 15,
+                );
+                if (device.servicesList!.isEmpty) {
+                  await device.disconnect();
+                  showTopSnackBar(
+                    Overlay.of(context),
+                    const XSnackBar.error(
+                      message:
+                          "This device is not a TidalTech device, please try again with another device",
+                    ),
+                  );
+                  loading.value = false;
+                  return;
                 }
-              }
-              if (i != 3) {
-                await device.disconnect();
+                var i = 0;
+                for (final service in device.servicesList!) {
+                  print("found service ${service.uuid}");
+                  if (BLEServices.list().contains(service.uuid)) {
+                    i++;
+                  }
+                }
+                if (i != 3) {
+                  await device.disconnect();
+                  showTopSnackBar(
+                    Overlay.of(context),
+                    const XSnackBar.error(
+                      message:
+                          "Invalid device, please try again with another device",
+                    ),
+                  );
+                  loading.value = false;
+
+                  return;
+                }
+                // set global device to use
+                ref.read(bleManagerProvider.notifier).startConnect(device);
+
+                // save device to local storage
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+
+                await prefs.setString("id", device.remoteId.toString());
+                loading.value = false;
+                showTopSnackBar(
+                  Overlay.of(context),
+                  const XSnackBar.success(
+                    message: "Connected to device successfully",
+                  ),
+                );
+
+                Future.delayed(const Duration(seconds: 1), () {
+                  context.go("/home");
+                });
+              } catch (e) {
+                print(e);
+                loading.value = false;
                 showTopSnackBar(
                   Overlay.of(context),
                   const XSnackBar.error(
-                    message:
-                        "Invalid device, please try again with another device",
+                    message: "Failed to connect to device",
                   ),
                 );
-                loading.value = false;
-
-                return;
               }
-              // set global device to use
-              ref.read(bleManagerProvider.notifier).startConnect(device);
-
-              // save device to local storage
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-
-              await prefs.setString("id", device.remoteId.toString());
-              loading.value = false;
-              showTopSnackBar(
-                Overlay.of(context),
-                const XSnackBar.success(
-                  message: "Connected to device successfully",
-                ),
-              );
-
-              Future.delayed(const Duration(seconds: 1), () {
-                context.go("/home");
-              });
             }
         ]),
       ])

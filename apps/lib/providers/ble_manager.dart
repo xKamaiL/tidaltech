@@ -158,7 +158,7 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
   }
 
   void refreshScan() {
-    clearScanResult();
+    // clearScanResult();
     startScan();
   }
 
