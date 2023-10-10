@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tidal_tech/providers/devices.dart';
@@ -26,42 +27,25 @@ class _LandingPageState extends ConsumerState<LandingPage> {
     if (Platform.isAndroid) {
       FlutterBluePlus.turnOn();
     }
-  }
-
-  reconnect() async {
-    final connected = ref.read(connectDeviceProvider.notifier);
-    final prefs = await SharedPreferences.getInstance();
-    // try to find device from local storage
-    final id = prefs.getString("id");
-    if (id == null) {
-      debugPrint("no remote id found");
+    ref.read(bleManagerProvider.notifier).init();
+    SharedPreferences.getInstance().then((prefs) {
       context.go("/scan");
       return;
-    }
-    debugPrint("try to connect to $id");
-    final connectedDevices = await FlutterBluePlus.connectedSystemDevices;
-    debugPrint("found ${connectedDevices.length} devices");
-    final device = (connectedDevices)
-        .firstWhereOrNull((element) => element.remoteId.toString() == id);
-    if (device != null) {
-      // initial connection of bluetooth
-      await device.connect();
-      await device.discoverServices();
-      // redirect to home
-      connected.set(device);
-      // FlutterBluePlus.stopScan();
-      debugPrint("connected to $id successfully");
-      return true;
-    } else {
-      prefs.remove("id");
-      debugPrint("%$id device not found");
-    }
-    return false;
+      // try to find device from local storage
+      final id = prefs.getString("id");
+      if (id == null) {
+        FlutterNativeSplash.remove();
+        context.go("/scan");
+        return;
+      }
+      FlutterNativeSplash.remove();
+      context.go("/home");
+      return;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    reconnect();
     return const Scaffold();
   }
 }

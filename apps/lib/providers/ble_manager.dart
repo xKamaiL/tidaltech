@@ -1,16 +1,12 @@
+import 'dart:io';
+
+import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tidal_tech/constants/ble_services_ids.dart';
 
-const String bleName = "TIDAL TECH";
-
-class ScannerDeviceItem {
-  final BluetoothDevice device;
-  final int rssi;
-
-  ScannerDeviceItem(this.device, this.rssi);
-}
+const String bleName = "TIDAL";
 
 class TidalDeviceFilter {
   final String name;
@@ -19,40 +15,132 @@ class TidalDeviceFilter {
   TidalDeviceFilter(this.name, this.serviceUUID);
 
   static bool ok(BluetoothDevice device) {
-    return device.localName.startsWith(bleName, 0);
+    return device.localName.startsWith(bleName);
   }
 }
 
-final scannerProvider =
-    StateNotifierProvider<Scanner, List<ScannerDeviceItem>>((ref) {
-  return Scanner();
+@immutable
+class BLEManager extends Equatable {
+  final bool firstLoad = true;
+
+  final List<BluetoothDevice> scanResults;
+
+  final BluetoothDevice? connectedDevice;
+  final String connectedDeviceId;
+
+  final isScanning;
+
+  final isReconnecting;
+
+  bool get isConnected => connectedDevice != null;
+
+  get scanLength => scanResults.length;
+
+  bool get isDisconnected => connectedDevice == null;
+
+  List<BluetoothDevice> get knownDevices => scanResults;
+
+  const BLEManager(
+    this.scanResults,
+    this.connectedDevice,
+    this.connectedDeviceId,
+    this.isScanning,
+    this.isReconnecting,
+  );
+
+  BLEManager copyWith({
+    List<BluetoothDevice>? scanResults,
+    BluetoothDevice? connectedDevice,
+    String? connectedDeviceId,
+    bool? isScanning,
+    bool? isReconnecting,
+  }) {
+    return BLEManager(
+      scanResults ?? this.scanResults,
+      connectedDevice ?? this.connectedDevice,
+      connectedDeviceId ?? this.connectedDeviceId,
+      isScanning ?? this.isScanning,
+      isReconnecting ?? this.isReconnecting,
+    );
+  }
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [
+        scanResults,
+        connectedDevice,
+        connectedDeviceId,
+        isScanning,
+        isReconnecting,
+      ];
+}
+
+final bleManagerProvider =
+    StateNotifierProvider<BLEManagerProvider, BLEManager>((ref) {
+  //
+  return BLEManagerProvider();
 });
 
-class Scanner extends StateNotifier<List<ScannerDeviceItem>> {
-  Scanner() : super([]);
+class BLEManagerProvider extends StateNotifier<BLEManager> {
+  BLEManagerProvider() : super(const BLEManager([], null, "", false, false));
 
-  void clearDevices() {
-    state = [];
+  void init() {
+    debugPrint("init BLEManagerProvider");
+    FlutterBluePlus.scanResults.listen((event) {
+      for (final result in event) {
+        addScanResult(result);
+      }
+    });
   }
 
-  void addDevice(BluetoothDevice device, int rssi) async {
-    if (state.any((element) => element.device.remoteId == device.remoteId)) {
-      return;
-    }
-    if (device.localName.isEmpty) {
-      return;
-    }
-
-    if (!TidalDeviceFilter.ok(device)) {
-      return;
-    }
-
-    state = [...state, ScannerDeviceItem(device, 0)];
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    debugPrint("BLEManagerProvider dispose");
   }
 
-  void removeDevice(BluetoothDevice device) {
-    state = state
-        .where((element) => element.device.remoteId != device.remoteId)
-        .toList();
+  void stopScan() {
+    FlutterBluePlus.stopScan();
+    state = state.copyWith(isScanning: false);
+  }
+
+  void reconnect() {
+    if (!state.firstLoad) return;
+    //
+    // TODO: re-connect logic
+  }
+
+  void startScan() async {
+    if (Platform.isAndroid) {
+      FlutterBluePlus.turnOn();
+    }
+    FlutterBluePlus.startScan(withServices: []);
+
+    state = state.copyWith(isScanning: true);
+  }
+
+  void connectTo(BluetoothDevice device) {
+    state = state.copyWith(connectedDevice: device);
+  }
+
+  void addScanResult(ScanResult s) {
+    if (s.device.localName.isEmpty) return;
+    if (state.scanResults
+        .any((element) => element.remoteId == s.device.remoteId)) {
+      return;
+    }
+    if (!s.device.localName.startsWith(bleName)) return;
+
+    state = state.copyWith(scanResults: [...state.scanResults, s.device]);
+  }
+
+  void clearScanResult() {
+    state = state.copyWith(scanResults: []);
+  }
+
+  void refreshScan() {
+    clearScanResult();
+    startScan();
   }
 }

@@ -10,9 +10,12 @@ class ConnectDeviceData {
 
   ConnectDeviceData(this.ble, this.id, {this.firstLoad = false});
 
+  bool isScanning = false;
+
   copyWith({BluetoothDevice? ble, String? id}) {
     return ConnectDeviceData(ble ?? this.ble, id ?? this.id, firstLoad: false);
   }
+
 }
 
 final connectDeviceProvider =
@@ -61,5 +64,13 @@ class ConnectedDeviceProvider extends StateNotifier<ConnectDeviceData> {
 
   bool isConnected() {
     return state.ble != null;
+  }
+
+  void startScan() {
+    state.isScanning = true;
+  }
+
+  void stopScan() {
+    state.isScanning = false;
   }
 }

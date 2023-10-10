@@ -14,6 +14,7 @@ import 'package:tidal_tech/pages/home/on_hour_widget.dart';
 import 'package:tidal_tech/pages/home/sunrise_widget.dart';
 import 'package:tidal_tech/pages/home/water_temp_widget.dart';
 import 'package:tidal_tech/providers/devices.dart';
+import 'package:tidal_tech/ui/BluetoothStatusIcon.dart';
 import 'package:tidal_tech/ui/widget/scene_card.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -23,24 +24,15 @@ class HomeIndexPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final device = ref.read(connectDeviceProvider.notifier);
-   
     return Scaffold(
       appBar: AppBar(
-        title: n.Text('Home')
+        title: n.Text('Your Home')
           ..bold
           ..fontSize = 18.0,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        actions: [
-          n.IconButton(
-            Icons.add,
-            onPressed: () {},
-          ),
-          n.IconButton(
-            Icons.menu,
-            onPressed: () {},
-          ),
+        actions: const [
+          BluetoothStatusIcon(),
         ],
         centerTitle: false,
       ),
@@ -50,12 +42,12 @@ class HomeIndexPage extends HookConsumerWidget {
           desiredItemWidth: 150,
           minSpacing: 8,
           children: [
-            ClockWidget(),
-            MoonLightWidget(),
-            OnHourWidget(),
-            WaterTemperature(),
-            SunriseWidget(),
-            HistoryWidget(),
+            const ClockWidget(),
+            const MoonLightWidget(),
+            const OnHourWidget(),
+            const WaterTemperature(),
+            const SunriseWidget(),
+            const HistoryWidget(),
             n.Text("Scenes")
               ..color = Colors.white
               ..bold
