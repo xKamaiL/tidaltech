@@ -29,6 +29,8 @@ char *BLE_NAME = "TIDAL TECH";
 uint8_t ble_addr_type;
 void ble_app_advertise(void);
 
+static uint16_t conn_handle;
+
 // BLE GATT service definition
 // 2840ef22-f2ba-46b7-a1d4-cd06ce7e65b9
 static const ble_uuid128_t uuid_device_information = BLE_UUID128_INIT(0x28, 0x40, 0xEF, 0x22, 0xF2, 0xBA, 0x46, 0xB7, 0xA1, 0xD4, 0xCD, 0x06, 0xCE, 0x7E, 0x65, 0xB9);
@@ -100,6 +102,8 @@ static int ble_gap_event(struct ble_gap_event *event, void *arg) {
                 // retry again if failed
                 ble_app_advertise();
             }
+            conn_handle = event->connect.conn_handle;
+
             break;
         // Advertise again after completion of the event
         case BLE_GAP_EVENT_ADV_COMPLETE:
@@ -110,6 +114,26 @@ static int ble_gap_event(struct ble_gap_event *event, void *arg) {
             ESP_LOGI("GAP", "BLE GAP EVENT DISCONNECT");
             ble_app_advertise();
             break;
+        case BLE_GAP_EVENT_MTU:
+            MODLOG_DFLT(INFO, "mtu update event; conn_handle=%d mtu=%d\n",
+                        event->mtu.conn_handle,
+                        event->mtu.value);
+            break;
+        case BLE_GAP_EVENT_SUBSCRIBE:
+            ESP_LOGI(INFO,
+                     "subscribe event; cur_notify=%d\n value handle; "
+                     "val_handle=%d\n",
+                     event->subscribe.cur_notify, hrs_hrm_handle);
+            // if (event->subscribe.attr_handle == hrs_hrm_handle) {
+            //     notify_state = event->subscribe.cur_notify;
+            //     blehr_tx_hrate_reset();
+            // } else if (event->subscribe.attr_handle != hrs_hrm_handle) {
+            //     notify_state = event->subscribe.cur_notify;
+            //     blehr_tx_hrate_stop();
+            // }
+            ESP_LOGI("BLE_GAP_SUBSCRIBE_EVENT", "conn_handle from subscribe=%d", conn_handle);
+            break;
+
         default:
             break;
     }
@@ -129,6 +153,9 @@ void ble_app_advertise(void) {
     fields.name = (uint8_t *)device_name;
     fields.name_len = strlen(device_name);
     fields.name_is_complete = 1;
+
+    fields.tx_pwr_lvl_is_present = 1;
+    fields.tx_pwr_lvl = BLE_HS_ADV_TX_PWR_LVL_AUTO;
 
     fields.mfg_data = (uint8_t *)device_name;
     fields.mfg_data_len = 0;
