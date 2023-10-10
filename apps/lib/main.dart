@@ -12,9 +12,18 @@ void main() async {
   runApp(
     const ProviderScope(
       overrides: [],
-      child: MyApp(),
+      child: WrapApp(),
     ),
   );
+}
+
+class WrapApp extends StatelessWidget {
+  const WrapApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const MyApp();
+  }
 }
 
 class MyApp extends ConsumerStatefulWidget {
@@ -31,7 +40,6 @@ class _MyAppState extends ConsumerState<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    precacheImage(const ExactAssetImage("assets/hdlight.jpg"), context);
   }
 
   // This widget is the root of your application.

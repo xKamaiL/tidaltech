@@ -191,9 +191,12 @@ class DeviceItem extends HookConsumerWidget {
                 await device.connect(
                   timeout: const Duration(seconds: 5),
                 );
-                await device.discoverServices(
-                  timeout: 15,
-                );
+                await Future.delayed(const Duration(milliseconds: 100), () async {
+                  await device.discoverServices(
+                    timeout: 15,
+                  );
+                });
+
                 if (device.servicesList!.isEmpty) {
                   await device.disconnect();
                   showTopSnackBar(
