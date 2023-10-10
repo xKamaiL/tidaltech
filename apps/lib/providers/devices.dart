@@ -6,10 +6,12 @@ class ConnectDeviceData {
   final BluetoothDevice? ble;
   final String id;
 
-  ConnectDeviceData(this.ble, this.id);
+  bool firstLoad = true; // initial state
+
+  ConnectDeviceData(this.ble, this.id, {this.firstLoad = false});
 
   copyWith({BluetoothDevice? ble, String? id}) {
-    return ConnectDeviceData(ble ?? this.ble, id ?? this.id);
+    return ConnectDeviceData(ble ?? this.ble, id ?? this.id, firstLoad: false);
   }
 }
 
@@ -21,7 +23,7 @@ final connectDeviceProvider =
 class ConnectedDeviceProvider extends StateNotifier<ConnectDeviceData> {
   ConnectedDeviceProvider() : super(ConnectDeviceData(null, ""));
 
-  void connect(BluetoothDevice device) {
+  void set(BluetoothDevice device) {
     state = state.copyWith(ble: device);
   }
 

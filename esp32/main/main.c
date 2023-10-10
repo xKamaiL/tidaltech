@@ -29,6 +29,55 @@ char *BLE_NAME = "TIDAL TECH";
 uint8_t ble_addr_type;
 void ble_app_advertise(void);
 
+// BLE GATT service definition
+// 2840ef22-f2ba-46b7-a1d4-cd06ce7e65b9
+static const ble_uuid128_t uuid_device_information = BLE_UUID128_INIT(0x28, 0x40, 0xEF, 0x22, 0xF2, 0xBA, 0x46, 0xB7, 0xA1, 0xD4, 0xCD, 0x06, 0xCE, 0x7E, 0x65, 0xB9);
+// 72b60562-580c-4946-b3b5-8bd8bf8d8c5b
+static const ble_uuid128_t uuid_color = BLE_UUID128_INIT(0x5B, 0x8C, 0x8D, 0xBF, 0xD8, 0x8B, 0xB5, 0xB3, 0x46, 0x49, 0x0C, 0x58, 0x62, 0x05, 0xB6, 0x72);
+
+// 2f659cc6-7bdc-4c2a-966f-2411706b0b85
+static const ble_uuid128_t uuid_rtc = BLE_UUID128_INIT(0x85, 0x0B, 0x6B, 0x70, 0x11, 0x24, 0x6F, 0x96, 0x2A, 0x4C, 0xDC, 0x7B, 0xC6, 0x9C, 0x65, 0x2F);
+
+// Array of pointers to other service definitions
+// UUID - Universal Unique Identifier
+static const struct ble_gatt_svc_def gatt_svcs[] = {
+    {
+        .type = BLE_GATT_SVC_TYPE_PRIMARY,
+        // 2840ef22-f2ba-46b7-a1d4-cd06ce7e65b9
+        .uuid = &uuid_device_information.u,
+        .characteristics = (struct ble_gatt_chr_def[]){
+            // {
+            //     .uuid = BLE_UUID16_DECLARE(0xFEF4),
+            //     .flags = BLE_GATT_CHR_F_READ,
+            //     .access_cb = device_read,
+            // },
+            // {
+            //     .uuid = BLE_UUID16_DECLARE(0xDEAD),
+            //     .flags = BLE_GATT_CHR_F_WRITE_NO_RSP,
+            //     .access_cb = device_write,
+            // },
+            {0},
+        },
+    },
+    {
+        .type = BLE_GATT_SVC_TYPE_PRIMARY,
+        // 72b60562-580c-4946-b3b5-8bd8bf8d8c5b
+        .uuid = &uuid_color.u,
+        .characteristics = (struct ble_gatt_chr_def[]){
+            {0},
+        },
+    },
+    {
+        .type = BLE_GATT_SVC_TYPE_PRIMARY,
+        // 2f659cc6-7bdc-4c2a-966f-2411706b0b85
+        .uuid = &uuid_rtc.u,
+        .characteristics = (struct ble_gatt_chr_def[]){
+            {0},
+        },
+    },
+    {0},  // must be terminated with an entry of all zeroes
+};
+
 // Write data to ESP32 defined as server
 static int device_write(uint16_t conn_handle, uint16_t attr_handle, struct ble_gatt_access_ctxt *ctxt, void *arg) {
     printf("Data from the client: %.*s\n", ctxt->om->om_len, ctxt->om->om_data);
@@ -75,7 +124,7 @@ void ble_app_advertise(void) {
     memset(&fields, 0, sizeof(fields));
     device_name = ble_svc_gap_device_name();  // Read the BLE device name
     // set uuid to 0x180F
-    fields.uuids128 = BLE_UUID128_DECLARE(0x152CF9EE363711EE8077B08A6F34574D);
+    fields.uuids128 = BLE_UUID128_DECLARE(0x180F);
     fields.uuids128_is_complete = 1;
     fields.name = (uint8_t *)device_name;
     fields.name_len = strlen(device_name);

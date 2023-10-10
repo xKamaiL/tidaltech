@@ -24,28 +24,7 @@ class HomeIndexPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final device = ref.read(connectDeviceProvider.notifier);
-    useEffect(() {
-      device.getStatus().then((value) {
-        print(value);
-        showCupertinoDialog(
-          context: context,
-          builder: (context) => CupertinoAlertDialog(
-            title: n.Text("Bluetooth Status"),
-            content: n.Text(value),
-            actions: [
-              CupertinoDialogAction(
-                child: n.Text("OK"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )
-            ],
-          ),
-        );
-      });
-
-      return null;
-    }, const []);
+   
     return Scaffold(
       appBar: AppBar(
         title: n.Text('Home')
