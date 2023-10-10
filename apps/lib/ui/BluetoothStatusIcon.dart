@@ -6,20 +6,34 @@ import 'package:tidal_tech/providers/ble_manager.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:tidal_tech/theme/colors.dart';
 
-class BluetoothStatusIcon extends HookConsumerWidget {
+class BluetoothStatusIcon extends ConsumerStatefulWidget {
   final bool isDark;
 
   const BluetoothStatusIcon({Key? key, this.isDark = false}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<BluetoothStatusIcon> createState() =>
+      _BluetoothStatusIconState();
+}
+
+class _BluetoothStatusIconState extends ConsumerState<BluetoothStatusIcon> {
+  _BluetoothStatusIconState() : super();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final manager = ref.read(bleManagerProvider.notifier);
     final device = ref.watch(bleManagerProvider);
 
     final isConnect = device.isConnected;
     final isScanning = device.isScanning;
 
-    final textColor = isDark ? Colors.blueAccent : Colors.white;
+    final textColor = widget.isDark ? Colors.blueAccent : Colors.white;
+
     return n.Padding(
       top: 8,
       right: 8,

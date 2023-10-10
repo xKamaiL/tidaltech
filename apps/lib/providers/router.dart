@@ -37,11 +37,12 @@ class RouterNotifier extends ChangeNotifier {
     _ref.listen(bottomBarProvider, (_, __) => notifyListeners());
   }
 
-  List<RouteBase> get _routes => [
+  List<RouteBase> get _routes =>
+      [
         GoRoute(
           path: '/',
           pageBuilder: (context, state) =>
-              const MaterialPage(child: SplashPage()),
+          const MaterialPage(child: SplashPage()),
         ),
         ShellRoute(
           routes: [
@@ -59,7 +60,7 @@ class RouterNotifier extends ChangeNotifier {
               GoRoute(
                 path: "/landing",
                 pageBuilder: (_, __) =>
-                    const MaterialPage(child: LandingPage()),
+                const MaterialPage(child: LandingPage()),
               ),
               GoRoute(
                 path: "/scan",
@@ -67,36 +68,40 @@ class RouterNotifier extends ChangeNotifier {
               ),
             ]),
         ShellRoute(
-          builder: (context, state, child) => DashboardScreen(
-            child,
-          ),
+          builder: (context, state, child) =>
+              DashboardScreen(
+                child,
+              ),
           routes: [
             GoRoute(
               name: "home",
               path: '/home',
-              pageBuilder: (_, state) => NoTransitionPage(
-                key: state.pageKey,
-                restorationId: state.pageKey.value,
-                child: const HomeIndexPage(),
-              ),
+              pageBuilder: (_, state) =>
+                  NoTransitionPage(
+                    key: state.pageKey,
+                    restorationId: state.pageKey.value,
+                    child: const HomeIndexPage(),
+                  ),
             ),
             GoRoute(
               name: "lighting",
               path: "/lighting",
-              pageBuilder: (_, state) => NoTransitionPage(
-                key: state.pageKey,
-                restorationId: state.pageKey.value,
-                child: const LightingIndexPage(),
-              ),
+              pageBuilder: (_, state) =>
+                  NoTransitionPage(
+                    key: state.pageKey,
+                    restorationId: state.pageKey.value,
+                    child: const LightingIndexPage(),
+                  ),
             ),
             GoRoute(
               name: "lighting-feeder-profile",
               path: "/lighting/feeder/profile",
-              pageBuilder: (_, state) => MaterialPage(
-                key: state.pageKey,
-                restorationId: state.pageKey.value,
-                child: const LightingFeederProfilePage(),
-              ),
+              pageBuilder: (_, state) =>
+                  MaterialPage(
+                    key: state.pageKey,
+                    restorationId: state.pageKey.value,
+                    child: const LightingFeederProfilePage(),
+                  ),
             ),
             GoRoute(
                 name: "scenes",
@@ -111,18 +116,23 @@ class RouterNotifier extends ChangeNotifier {
             GoRoute(
               name: "setting",
               path: "/setting",
-              builder: (context, state) {
-                return const SettingsIndexPage();
+              pageBuilder: (context, state) {
+                return NoTransitionPage(
+                  key: state.pageKey,
+                  restorationId: state.pageKey.value,
+                  child: const SettingsIndexPage(),
+                );
               },
               routes: [
                 GoRoute(
                   name: "settings-bluetooth",
                   path: "bluetooth",
-                  pageBuilder: (_, state) => MaterialPage(
-                    key: state.pageKey,
-                    restorationId: state.pageKey.value,
-                    child: const BluetoothSettingPage(),
-                  ),
+                  pageBuilder: (_, state) =>
+                      MaterialPage(
+                        key: state.pageKey,
+                        restorationId: state.pageKey.value,
+                        child: const BluetoothSettingPage(),
+                      ),
                 ),
               ],
             ),
@@ -130,8 +140,8 @@ class RouterNotifier extends ChangeNotifier {
         ),
       ];
 
-  Future<String?> _redirectLogic(
-      BuildContext buildContext, GoRouterState state) async {
+  Future<String?> _redirectLogic(BuildContext buildContext,
+      GoRouterState state) async {
     //
     if (state.path == null) {
       return null;
@@ -153,11 +163,14 @@ class RouterNotifier extends ChangeNotifier {
 }
 
 final routeInformationProvider =
-    ChangeNotifierProvider<GoRouteInformationProvider>((ref) {
+ChangeNotifierProvider<GoRouteInformationProvider>((ref) {
   final router = ref.watch(routerProvider);
   return router.routeInformationProvider;
 });
 
 final currentRouteProvider = Provider((ref) {
-  return ref.watch(routeInformationProvider).value.location;
+  return ref
+      .watch(routeInformationProvider)
+      .value
+      .location;
 });
