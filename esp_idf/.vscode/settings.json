@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "stdio.h": "c",
+        "inttypes.h": "c",
+        "esp_chip_info.h": "c",
+        "nimbledevice.h": "c",
+        "nimconfig.h": "c",
+        "freertos.h": "c"
+    },
+    "idf.adapterTargetName": "esp32"
+}
