@@ -25,7 +25,7 @@
 // import protoc files message
 #include "proto/message.pb-c.h"
 
-char *TAG = "BLE-Server";
+char *BLE_NAME = "TIDAL TECH";
 uint8_t ble_addr_type;
 void ble_app_advertise(void);
 
@@ -40,29 +40,6 @@ static int device_read(uint16_t con_handle, uint16_t attr_handle, struct ble_gat
     os_mbuf_append(ctxt->om, "Data from the server", strlen("Data from the server"));
     return 0;
 }
-
-// Array of pointers to other service definitions
-// UUID - Universal Unique Identifier
-static const struct ble_gatt_svc_def gatt_svcs[] = {
-    {
-        .type = BLE_GATT_SVC_TYPE_PRIMARY,
-        .uuid = BLE_UUID16_DECLARE(0x180),
-        .characteristics = (struct ble_gatt_chr_def[]){
-            {
-                .uuid = BLE_UUID16_DECLARE(0xFEF4),
-                .flags = BLE_GATT_CHR_F_READ,
-                .access_cb = device_read,
-            },
-            {
-                .uuid = BLE_UUID16_DECLARE(0xDEAD),
-                .flags = BLE_GATT_CHR_F_WRITE_NO_RSP,
-                .access_cb = device_write,
-            },
-            {0},
-        },
-    },
-    {0},  // must be terminated with an entry of all zeroes
-};
 
 // BLE event handling
 static int ble_gap_event(struct ble_gap_event *event, void *arg) {
@@ -139,7 +116,7 @@ void app_main(void) {
     ESP_ERROR_CHECK(nvs_flash_init());
 
     ESP_ERROR_CHECK(nimble_port_init());
-    if (ble_svc_gap_device_name_set("Tidal Tech") != 0) {
+    if (ble_svc_gap_device_name_set(BLE_NAME) != 0) {
         printf("Failed to set device name\n");
         return;
     }
@@ -159,8 +136,4 @@ void app_main(void) {
     ble_hs_cfg.sync_cb = ble_app_on_sync;  // Callback for BLE synchronization
 
     nimble_port_freertos_init(host_task);  // Initialize the NimBLE host task
-}
-
-void onTimePointService(uint16_t conn_handle, uint16_t attr_handle, struct ble_gatt_access_ctxt *ctxt, void *arg) {
-    decodeTimePoint(ctxt->om->om_data, ctxt->om->om_len);
 }

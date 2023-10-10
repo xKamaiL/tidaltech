@@ -41,7 +41,13 @@
         "numeric": "c",
         "streambuf": "c",
         "*.inc": "c",
-        "message.pb-c.h": "c"
+        "message.pb-c.h": "c",
+        "esp_system.h": "c",
+        "ble_svc_gatt.h": "c",
+        "ble.h": "c",
+        "stdlib.h": "c",
+        "stdio.h": "c",
+        "main.h": "c"
     },
     "idf.adapterTargetName": "esp32"
 }
