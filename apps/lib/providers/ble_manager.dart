@@ -114,6 +114,7 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
   }
 
   void startScan() async {
+    debugPrint("start scan...");
     if (Platform.isAndroid) {
       FlutterBluePlus.turnOn();
     }

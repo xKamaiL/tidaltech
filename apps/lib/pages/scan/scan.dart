@@ -17,7 +17,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../ui/snackbar.dart';
 
-final _servicesUuids = <Guid>[];
 
 class ScanPage extends ConsumerStatefulWidget {
   const ScanPage({Key? key}) : super(key: key);
@@ -118,6 +117,7 @@ class DevicesList extends HookConsumerWidget {
     final knownDevices = ref.watch(bleManagerProvider).knownDevices;
     return RefreshIndicator.adaptive(
       onRefresh: () async {
+        await Future.delayed(const Duration(seconds: 2));
         ref.read(bleManagerProvider.notifier).refreshScan();
       },
       child: GridView.count(
@@ -162,7 +162,7 @@ class DeviceItem extends HookConsumerWidget {
       n.Column([
         n.Box(),
         n.NikuIcon(
-          CupertinoIcons.lightbulb,
+          CupertinoIcons.wind,
         )
           ..size = 80.0
           ..color = ThemeColors.primary,
@@ -172,7 +172,7 @@ class DeviceItem extends HookConsumerWidget {
             ..bold
             ..color = ThemeColors.foreground
             ..center,
-          n.Text("Address: " + device.remoteId.toString())
+          n.Text("ID: ${device.remoteId}")
             ..fontSize = 12
             ..my = 4
             ..color = ThemeColors.zinc.shade600
@@ -249,8 +249,8 @@ class DeviceItem extends HookConsumerWidget {
                 loading.value = false;
                 showTopSnackBar(
                   Overlay.of(context),
-                  const XSnackBar.error(
-                    message: "Failed to connect to device",
+                  XSnackBar.error(
+                    message: e.toString(),
                   ),
                 );
               }
