@@ -13,8 +13,11 @@ import '../../styles/button.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:collection/collection.dart';
 
-// TODO: refactor later
-final _servicesUuids = <Guid>[Guid("399d90e1-16f1-4fe9-8c2c-91058ed7ae4a")];
+final _servicesUuids = <Guid>[
+  Guid("2840ef22-f2ba-46b7-a1d4-cd06ce7e65b9"),
+  Guid("72b60562-580c-4946-b3b5-8bd8bf8d8c5b"),
+  Guid("2f659cc6-7bdc-4c2a-966f-2411706b0b85"),
+];
 
 class LandingPage extends ConsumerStatefulWidget {
   const LandingPage({Key? key}) : super(key: key);

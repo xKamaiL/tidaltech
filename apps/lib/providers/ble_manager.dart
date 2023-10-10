@@ -39,6 +39,7 @@ class Scanner extends StateNotifier<List<ScannerDeviceItem>> {
     if (state.any((element) => element.device.remoteId == device.remoteId)) {
       return;
     }
+    debugPrint("device ${device.localName} ${device.remoteId}");
     if (device.localName.isEmpty) {
       return;
     }

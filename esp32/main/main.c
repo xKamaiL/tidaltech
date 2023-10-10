@@ -113,25 +113,22 @@ void host_task(void *param) {
 }
 
 void app_main(void) {
-    ESP_ERROR_CHECK(nvs_flash_init());
+    int rc;
+    rc = nvs_flash_init();
+    assert(rc == 0);
 
-    ESP_ERROR_CHECK(nimble_port_init());
-    if (ble_svc_gap_device_name_set(BLE_NAME) != 0) {
-        printf("Failed to set device name\n");
-        return;
-    }
+    rc = nimble_port_init();
+    assert(rc == 0);
+    rc = ble_svc_gap_device_name_set(BLE_NAME);
+    assert(rc == 0);
+
     ble_svc_gap_init();   // Initialize the GAP (Generic Access Profile)
     ble_svc_gatt_init();  // Initialize the GATT (Generic Attribute Profile)
+    rc = ble_gatts_count_cfg(gatt_svcs);
+    assert(rc == 0);
 
-    if (ble_gatts_count_cfg(gatt_svcs) != 0) {
-        printf("Failed to count services\n");
-        return;
-    }
-
-    if (ble_gatts_add_svcs(gatt_svcs) != 0) {
-        printf("Failed to add services\n");
-        return;
-    }
+    rc = ble_gatts_add_svcs(gatt_svcs);
+    assert(rc == 0);
 
     ble_hs_cfg.sync_cb = ble_app_on_sync;  // Callback for BLE synchronization
 

@@ -1,11 +1,14 @@
-ESP-IDF template app
-====================
+Services Definations
+===
 
-This is a template application to be used with [Espressif IoT Development Framework](https://github.com/espressif/esp-idf).
+## Device Information
 
-Please check [ESP-IDF docs](https://docs.espressif.com/projects/esp-idf/en/latest/get-started/index.html) for getting started instructions.
+2840ef22-f2ba-46b7-a1d4-cd06ce7e65b9
 
-*Code in this repository is in the Public Domain (or CC0 licensed, at your option.)
-Unless required by applicable law or agreed to in writing, this
-software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied.*
+## Lighing
+
+72b60562-580c-4946-b3b5-8bd8bf8d8c5b
+
+## RTC Sync
+
+2f659cc6-7bdc-4c2a-966f-2411706b0b85
