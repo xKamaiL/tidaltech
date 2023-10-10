@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tidal_tech/pages/settings/widgets/scaffold.dart';
 import 'package:tidal_tech/stores/stores.dart';
 import 'package:tidal_tech/theme/colors.dart';
 import 'package:niku/namespace.dart' as n;
@@ -10,22 +11,8 @@ class SettingsIndexPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
-        title: n.Text("Settings")
-          ..color = Colors.grey.shade900
-          ..fontSize = 18.0
-          ..bold,
-        elevation: 0,
-        backgroundColor: ThemeColors.white,
-        automaticallyImplyLeading: true,
-        centerTitle: false,
-        actionsIconTheme: IconThemeData(color: Colors.grey.shade900),
-      ),
-      backgroundColor: ThemeColors.muted,
-      body: n.Column([
-        // avatar
-        //
+    return SettingScaffold(
+      children: n.Column([
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
           child: Container(
@@ -55,11 +42,26 @@ class SettingsIndexPage extends HookConsumerWidget {
                   ..color = Colors.grey.shade900,
                 onTap: () {},
                 tileColor: ThemeColors.white,
+              ),
+              n.ListTile(
+                title: n.Text("Bluetooth")
+                  ..color = Colors.grey.shade900
+                  ..fontSize = 16.0
+                  ..bold,
+                subtitle: n.Text("Bluetooth connection")
+                  ..color = Colors.grey.shade900
+                  ..fontSize = 14.0,
+                trailing: n.Icon(Icons.arrow_forward_ios_rounded)
+                  ..color = Colors.grey.shade900,
+                onTap: () {
+                  context.push("/setting/bluetooth");
+                },
+                tileColor: ThemeColors.white,
               )
-            ]),
+            ])
+              ..gap = 8,
           ),
         ),
-
         n.ListTile(
           title: n.Text("Sign out")
             ..color = ThemeColors.danger

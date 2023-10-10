@@ -19,7 +19,7 @@ class BluetoothStatusIcon extends HookConsumerWidget {
     final isConnect = device.isConnected;
     final isScanning = device.isScanning;
 
-    final textColor = isDark ? Colors.black : Colors.white;
+    final textColor = isDark ? Colors.blueAccent : Colors.white;
     return n.Padding(
       top: 8,
       right: 8,

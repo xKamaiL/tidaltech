@@ -3,6 +3,7 @@ import 'package:tidal_tech/pages/landing/landing.dart';
 import 'package:tidal_tech/pages/ligting/feeder/profile/index.dart';
 import 'package:tidal_tech/pages/ligting/lighting.dart';
 import 'package:tidal_tech/pages/scenes/scenes.dart';
+import 'package:tidal_tech/pages/settings/bluetooth/bluetooth.dart';
 import 'package:tidal_tech/pages/settings/settings.dart';
 import 'package:tidal_tech/stores/bottom_bar.dart';
 import 'package:tidal_tech/stores/stores.dart';
@@ -108,15 +109,23 @@ class RouterNotifier extends ChangeNotifier {
                   );
                 }),
             GoRoute(
-                name: "setting",
-                path: "/setting",
-                pageBuilder: (context, state) {
-                  return NoTransitionPage(
+              name: "setting",
+              path: "/setting",
+              builder: (context, state) {
+                return const SettingsIndexPage();
+              },
+              routes: [
+                GoRoute(
+                  name: "settings-bluetooth",
+                  path: "bluetooth",
+                  pageBuilder: (_, state) => MaterialPage(
                     key: state.pageKey,
                     restorationId: state.pageKey.value,
-                    child: const SettingsIndexPage(),
-                  );
-                }),
+                    child: const BluetoothSettingPage(),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ];
