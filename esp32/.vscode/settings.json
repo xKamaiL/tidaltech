@@ -47,7 +47,14 @@
         "ble.h": "c",
         "stdlib.h": "c",
         "stdio.h": "c",
-        "main.h": "c"
+        "main.h": "c",
+        "inttypes.h": "c",
+        "nimbledevice.h": "c",
+        "nimblescan.h": "c",
+        "nimbleutils.h": "c",
+        "nimbleadvertiseddevice.h": "c",
+        "nimbleaddress.h": "c",
+        "nimconfig.h": "c"
     },
     "idf.adapterTargetName": "esp32"
 }
