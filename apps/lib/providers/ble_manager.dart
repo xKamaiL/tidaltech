@@ -227,5 +227,54 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
     });
   }
 
+  Future<BluetoothCharacteristic?> _callCharacteristic(
+      String serviceGuid, String characteristicGuid) async {
+    final conn = state.connectedDevice;
+    if (conn == null) return null;
+
+    final connState = await conn.connectionState.first;
+    if (connState != BluetoothConnectionState.connected) {
+      await conn.connect();
+      await conn.discoverServices();
+    }
+
+    if (conn.servicesList == null) {
+      return null;
+    }
+
+    final service = conn.servicesList
+        ?.where((element) => element.serviceUuid.toString() == serviceGuid)
+        .first;
+    if (service == null) return null;
+
+    final c = service.characteristics
+        .where((element) =>
+            element.characteristicUuid.toString() == characteristicGuid)
+        .first;
+    return c;
+  }
+
+  void checkRTC() async {
+    debugPrint("check RTC");
+
+    final c =
+        await _callCharacteristic(BLEServices.rtc, RTCService.getCurrentTime);
+
+    if (c == null) return;
+
+    try {
+      final result = await c.read();
+      // convert into string
+      final str = String.fromCharCodes(result);
+      debugPrint("RTC: $str");
+    } catch (e) {
+      debugPrint("RTC: $e");
+    }
+
+    // parse result to Time
+
+    return;
+  }
+
 //
 }

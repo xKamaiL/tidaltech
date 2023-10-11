@@ -1,15 +1,48 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import 'package:niku/namespace.dart' as n;
+import 'package:tidal_tech/providers/ble_manager.dart';
 import 'package:tidal_tech/ui/panel.dart';
 
-class ClockWidget extends HookConsumerWidget {
-  const ClockWidget({super.key});
+class ClockWidget extends ConsumerStatefulWidget {
+  const ClockWidget({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ClockWidget> createState() => _ClockWidgetState();
+}
+
+class _ClockWidgetState extends ConsumerState<ClockWidget> {
+  Timer? timer;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    checkRTC();
+  }
+
+  void checkRTC() {
+    debugPrint("checkRTC");
+    final conn = ref.read(bleManagerProvider.notifier);
+    conn.checkRTC();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    timer?.cancel();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ref.watch(bleManagerProvider.select((value) => value.isOnline));
+
     return StreamBuilder(
       stream: Stream.periodic(const Duration(seconds: 1)),
       builder: (context, snap) {
