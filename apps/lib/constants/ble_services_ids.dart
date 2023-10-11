@@ -1,5 +1,24 @@
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
+class DeviceInformationService {
+  static Guid getDeviceName = Guid("c833d84a-56c9-46a9-8717-8210cc30bc69");
+  static Guid getDeviceId = Guid("bd131062-7e70-4391-8555-88f655c3c334");
+
+}
+
+class ColorService {
+  static Guid getColorMode = Guid("f5057e16-c769-4a17-99f7-79b03dcac1c7");
+  static Guid setColorMode = Guid("7808c1c0-632f-475f-a3f1-d49b5d7dec69");
+
+  static Guid listTimePoints = Guid("940e68e7-9b45-4de4-a034-c7a40855702c");
+
+}
+
+class RTCService {
+  static Guid getCurrentTime = Guid("0ac1599e-0a32-42c2-b890-64d63a47afb3");
+  static Guid setCurrentTime = Guid("c99edcca-4af2-4bd9-a791-a40e0e2d86e5");
+}
+
 class BLEServices {
   // static const deviceInformation = "2840ef22-f2ba-46b7-a1d4-cd06ce7e65b9";
   static const deviceInformation = "b9657ece-06cd-d4a1-b746-baf222ef4028";

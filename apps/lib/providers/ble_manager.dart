@@ -226,4 +226,6 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
       state = state.copyWith(connectedDevice: null);
     });
   }
+
+//
 }
