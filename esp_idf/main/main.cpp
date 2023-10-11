@@ -22,10 +22,31 @@ class ServerCallbacks : public NimBLEServerCallbacks {
 };
 
 class CharacteristicCallbacks : public NimBLECharacteristicCallbacks {
-    void onRead(NimBLECharacteristic* pCharacteristic) {
-        printf(pCharacteristic->getUUID().toString().c_str());
+    void onRead(NimBLECharacteristic* p) {
+        if (p->getUUID().equals(CHARACTERISTIC_UUID_GET_COLOR_MODE)) {
+            return;
+        }
+        if (p->getUUID().equals(CHARACTERISTIC_UUID_GET_CURRENT_TIME)) {
+            time_t now;
+            char strftime_buf[64];
+            struct tm timeinfo;
+
+            time(&now);
+            // Set timezone to China Standard Time
+            setenv("TZ", "CST-8", 1);
+            tzset();
+
+            localtime_r(&now, &timeinfo);
+            strftime(strftime_buf, sizeof(strftime_buf), "%c", &timeinfo);
+            ESP_LOGI("TAG", "The current date/time in Shanghai is: %s", strftime_buf);
+            // create message
+            p->setValue(strftime_buf);
+
+            return;
+        }
+        printf(p->getUUID().toString().c_str());
         printf(": onRead(), value: ");
-        printf(pCharacteristic->getValue().c_str());
+        printf(p->getValue().c_str());
     };
 
     void onWrite(NimBLECharacteristic* pCharacteristic) {
@@ -94,10 +115,10 @@ void app_main(void) {
     NimBLEService* colorService = srv->createService(COLOR_SERVICE_UUID);
 
     NimBLECharacteristic* getCurrentMode = colorService->createCharacteristic(CHARACTERISTIC_UUID_GET_COLOR_MODE, NIMBLE_PROPERTY::READ);
-    getCurrentMode->setValue(1);
+    getCurrentMode->setValue("0");
     getCurrentMode->setCallbacks(&chrCallbacks);
     NimBLECharacteristic* setColorMode = colorService->createCharacteristic(CHARACTERISTIC_UUID_SET_COLOR_MODE, NIMBLE_PROPERTY::WRITE_NR);
-    setColorMode->setValue(1);
+    setColorMode->setValue("0");
     setColorMode->setCallbacks(&chrCallbacks);
 
     // get current mode
@@ -110,9 +131,7 @@ void app_main(void) {
     NimBLECharacteristic* getCurrentTime = rtcService->createCharacteristic(CHARACTERISTIC_UUID_GET_CURRENT_TIME, NIMBLE_PROPERTY::READ);
     NimBLECharacteristic* setCurrentTime = rtcService->createCharacteristic(CHARACTERISTIC_UUID_SET_CURRENT_TIME, NIMBLE_PROPERTY::WRITE_NR);
 
-    getCurrentTime->setValue(1);
     getCurrentTime->setCallbacks(&chrCallbacks);
-    setCurrentTime->setValue(1);
     setCurrentTime->setCallbacks(&chrCallbacks);
 
     //
@@ -126,7 +145,7 @@ void app_main(void) {
     pAdvertising->addServiceUUID(colorService->getUUID());
     pAdvertising->addServiceUUID(rtcService->getUUID());
     pAdvertising->setMinPreferred(0x06);  // functions that help with iPhone connections issue
-
+    pAdvertising->setMinPreferred(0x12);
     pAdvertising->setScanResponse(true);
 
     BLEDevice::startAdvertising();
