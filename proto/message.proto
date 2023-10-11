@@ -1,22 +1,18 @@
 syntax = "proto3";
 
 message DeviceInformationRequest {
+  //
 }
 
 message DeviceInformationResponse {
   Mode mode = 1;
   uint32 current_timestamps = 2;
-  int32 temperature = 3;
-  string device_id = 4;
+  string name = 3;
+  string id = 4;
+  string version = 5;
 }
 
-message UpgradeFirmwareRequest {
-}
 
-message UpgradeFirmwareResponse {
-  bool is_latest_version = 1;
-  string current_version = 2;
-}
 
 // LightingScheduleRequest is the data that will be sent
 // to the device
@@ -50,6 +46,14 @@ enum CommandCode {
   // prepend
   COMMAND_SET_LIGHTING = 5;
   COMMAND_UPGRADE_FIRMWARE = 6;
+}
+
+message UpgradeFirmwareRequest {
+}
+
+message UpgradeFirmwareResponse {
+  bool is_latest_version = 1;
+  string current_version = 2;
 }
 
 // Mode specifies the mode of the lighting

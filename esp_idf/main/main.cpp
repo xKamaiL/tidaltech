@@ -6,6 +6,7 @@
 #include "esp_flash.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "protoc/message.pb-c.h"
 #include "sdkconfig.h"
 
 void app_main(void) {
