@@ -128,7 +128,8 @@ void app_main(void) {
     pAdvertising->setMinPreferred(0x06);  // functions that help with iPhone connections issue
 
     pAdvertising->setScanResponse(true);
-    pAdvertising->start();
+
+    BLEDevice::startAdvertising();
 
     printf("Characteristic defined! Now you can read it in your phone!\n");
 }
