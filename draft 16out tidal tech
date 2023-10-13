@@ -1,0 +1,142 @@
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "esp_system.h"
+#include "nvs_flash.h"
+#include "esp_bt.h"
+#include "esp_gap_ble_api.h"
+#include "esp_gatts_api.h"
+#include "esp_bt_main.h"
+#include "driver/gpio.h"
+#include "driver/ledc.h"
+
+// PWM settings
+#define PWM_FREQ 500
+#define PWM_RES 12
+
+// Define GPIO pins for each channel
+#define CHANNEL_PINS_LEFT              \
+    {                                  \
+        12, 13, 14, 15, 16, 17, 18, 19 \
+    }
+#define CHANNEL_PINS_RIGHT             \
+    {                                  \
+        21, 22, 23, 25, 26, 27, 32, 33 \
+    }
+
+// Custom UUIDs for lamp channels
+#define COOL_WHITE_UUID 0x0010
+#define WARM_WHITE_UUID 0x0011
+#define BLUE_UUID 0x0012
+#define ROYAL_BLUE_UUID 0x0013
+#define UV_SEMI_LED_410NM_UUID 0x0014
+#define UV_SEMI_LED_400NM_UUID 0x0015
+#define RED_UUID 0x0016
+#define GREEN_UUID 0x0017
+
+// BLE settings
+#define SERVICE_UUID 0x00FF
+#define CHARACTERISTIC_UUID 0xFF01
+#define GATTS_TABLE_TAG "Coral_Lamp_Control"
+#define PROFILE_NUM 1
+#define PROFILE_APP_IDX 0
+#define ESP_APP_ID 0x55
+
+// Variables for lamp values for each channel
+int channelValuesLeft[8] = {0};
+int channelValuesRight[8] = {0};
+
+// GATT server variables
+static uint8_t adv_config_done = 0;
+static esp_gatt_if_t gatts_profile_tab[PROFILE_NUM];
+static uint16_t gatts_if;
+
+// Function to map an 8-bit lamp value (0-255) to a 12-bit PWM value (0-4095)
+uint16_t mapLampValueToPWM(uint8_t lampValue)
+{
+    return (lampValue * 4095) / 255;
+}
+
+// GATT server event handler
+static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
+                                        esp_ble_gatts_cb_param_t *param)
+{
+    // Handle GATT events here (e.g., read/write requests)
+    // You can use this handler to process BLE commands and update channelValuesLeft and channelValuesRight.
+    // Be sure to handle the data format for communication with the BLE client.
+}
+
+// Initialize the GATT server
+static void gatts_profile_init(void)
+{
+    esp_err_t ret;
+    esp_bt_controller_init();
+    esp_bt_controller_enable(ESP_BT_MODE_BLE);
+    esp_bluedroid_init();
+    esp_bluedroid_enable();
+    esp_ble_gatts_register_callback(gatts_profile_event_handler);
+    esp_ble_gap_register_callback(gatts_profile_event_handler);
+    ret = esp_ble_gatts_app_register(ESP_APP_ID);
+    esp_ble_gatts_app_register(PROFILE_APP_IDX);
+    esp_ble_gatts_create_attr_tab(gatt_db, gatts_if, PROFILE_APP_IDX);
+    esp_ble_gatts_start_service(profile_tab[PROFILE_APP_IDX]);
+    esp_ble_gap_set_device_name("Coral_Lamp_Control");
+    esp_ble_gap_config_adv_data(&adv_data);
+    esp_ble_gatts_app_register(PROFILE_APP_IDX);
+}
+
+// FreeRTOS task for handling PWM control and printing channel values and PWM values
+static void pwm_task(void *arg)
+{
+    while (1)
+    {
+        // Set the PWM values for each channel
+        for (int i = 0; i < 8; i++)
+        {
+            ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0 + i, mapLampValueToPWM(channelValuesLeft[i]));
+            ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0 + i);
+            ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_8 + i, mapLampValueToPWM(channelValuesRight[i]));
+            ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_8 + i);
+
+            // Print lamp and PWM values
+            printf("Channel %d - Left: Lamp Value: %d, PWM Value: %d | Right: Lamp Value: %d, PWM Value: %d\n",
+                   i, channelValuesLeft[i], mapLampValueToPWM(channelValuesLeft[i]),
+                   channelValuesRight[i], mapLampValueToPWM(channelValuesRight[i]));
+        }
+        vTaskDelay(10 / portTICK_RATE_MS); // Delay for 10 milliseconds
+    }
+}
+
+void app_main(void)
+{
+    // Initialize NVS
+    nvs_flash_init();
+
+    // Initialize LEDC for PWM
+    ledc_timer_config_t ledc_timer = {
+        .duty_resolution = PWM_RES,
+        .freq_hz = PWM_FREQ,
+        .speed_mode = LEDC_LOW_SPEED_MODE,
+        .timer_num = LEDC_TIMER_0};
+    ledc_timer_config(&ledc_timer);
+
+    for (int i = 0; i < 8; i++)
+    {
+        ledc_channel_config_t ledc_channel = {
+            .channel = LEDC_CHANNEL_0 + i,
+            .duty = 0,
+            .gpio_num = CHANNEL_PINS_LEFT[i],
+            .speed_mode = LEDC_LOW_SPEED_MODE,
+            .hpoint = 0,
+            .timer_sel = LEDC_TIMER_0};
+        ledc_channel_config(&ledc_channel);
+        ledc_channel.gpio_num = CHANNEL_PINS_RIGHT[i];
+        ledc_channel.channel = LEDC_CHANNEL_8 + i;
+        ledc_channel_config(&ledc_channel);
+    }
+
+    // Initialize BLE GATT server
+    gatts_profile_init();
+
+    // Create a FreeRTOS task for PWM control and printing
+    xTaskCreate(pwm_task, "pwm_task", 4096, NULL, 5, NULL);
+}
