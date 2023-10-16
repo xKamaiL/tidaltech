@@ -26,6 +26,12 @@ class CharacteristicCallbacks : public NimBLECharacteristicCallbacks {
         printf(pCharacteristic->getUUID().toString().c_str());
         printf(": onRead(), value: ");
         printf(pCharacteristic->getValue().c_str());
+
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_GET_COLOR_MODE)) {
+            printf("get color mode");
+        } else if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_GET_CURRENT_TIME)) {
+            printf("get current time");
+        }
     };
 
     void onWrite(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
