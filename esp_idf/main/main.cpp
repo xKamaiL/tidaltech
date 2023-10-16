@@ -22,34 +22,13 @@ class ServerCallbacks : public NimBLEServerCallbacks {
 };
 
 class CharacteristicCallbacks : public NimBLECharacteristicCallbacks {
-    void onRead(NimBLECharacteristic* p) {
-        if (p->getUUID().equals(CHARACTERISTIC_UUID_GET_COLOR_MODE)) {
-            return;
-        }
-        if (p->getUUID().equals(CHARACTERISTIC_UUID_GET_CURRENT_TIME)) {
-            time_t now;
-            char strftime_buf[64];
-            struct tm timeinfo;
-
-            time(&now);
-            // Set timezone to China Standard Time
-            setenv("TZ", "CST-8", 1);
-            tzset();
-
-            localtime_r(&now, &timeinfo);
-            strftime(strftime_buf, sizeof(strftime_buf), "%c", &timeinfo);
-            ESP_LOGI("TAG", "The current date/time in Shanghai is: %s", strftime_buf);
-            // create message
-            p->setValue(strftime_buf);
-
-            return;
-        }
-        printf(p->getUUID().toString().c_str());
+    void onRead(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
+        printf(pCharacteristic->getUUID().toString().c_str());
         printf(": onRead(), value: ");
-        printf(p->getValue().c_str());
+        printf(pCharacteristic->getValue().c_str());
     };
 
-    void onWrite(NimBLECharacteristic* pCharacteristic) {
+    void onWrite(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
         printf(pCharacteristic->getUUID().toString().c_str());
         printf(": onWrite(), value: ");
         printf(pCharacteristic->getValue().c_str());
@@ -73,11 +52,10 @@ class CharacteristicCallbacks : public NimBLECharacteristicCallbacks {
         printf(str.c_str());
     };
 
-    void onSubscribe(NimBLECharacteristic* pCharacteristic, ble_gap_conn_desc* desc, uint16_t subValue) {
+    void onSubscribe(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo, uint16_t subValue) {
         std::string str = "Client ID: ";
-        str += desc->conn_handle;
         str += " Address: ";
-        str += std::string(NimBLEAddress(desc->peer_ota_addr)).c_str();
+        str += std::string(connInfo.getAddress()).c_str();
         if (subValue == 0) {
             str += " Unsubscribed to ";
         } else if (subValue == 1) {
@@ -98,7 +76,7 @@ void app_main(void);
 }
 void app_main(void) {
     NimBLEDevice::init("TIDAL TECH LIGHTING");
-    NimBLEDevice::setPower(ESP_PWR_LVL_P9); /** +9db */
+    // NimBLEDevice::setPower(ESP_PWR_LVL_P9); /** +9db */
 
     NimBLEServer* srv = NimBLEDevice::createServer();
     srv->setCallbacks(new ServerCallbacks);
@@ -108,9 +86,13 @@ void app_main(void) {
     NimBLECharacteristic* deviceNameCharacteristic = deviceInformationService->createCharacteristic(
         CHARACTERISTIC_UUID_DEVICE_ID, NIMBLE_PROPERTY::READ);
     deviceNameCharacteristic->setValue(NimBLEUUID(""));
+
+    deviceNameCharacteristic->setCallbacks(&chrCallbacks);
+
     NimBLECharacteristic* deviceIdCharacteristic = deviceInformationService->createCharacteristic(
         CHARACTERISTIC_UUID_DEVICE_NAME, NIMBLE_PROPERTY::READ);
     deviceIdCharacteristic->setValue("TIDAL TECH LIGHTING");
+    deviceIdCharacteristic->setCallbacks(&chrCallbacks);
 
     NimBLEService* colorService = srv->createService(COLOR_SERVICE_UUID);
     size_t x = sizeof(LightingScheduleRequest);
@@ -141,6 +123,7 @@ void app_main(void) {
     rtcService->start();
 
     NimBLEAdvertising* pAdvertising = NimBLEDevice::getAdvertising();
+    pAdvertising->setName("TIDAL TECH LIGHTING");
     pAdvertising->addServiceUUID(deviceInformationService->getUUID());
     pAdvertising->addServiceUUID(colorService->getUUID());
     pAdvertising->addServiceUUID(rtcService->getUUID());
