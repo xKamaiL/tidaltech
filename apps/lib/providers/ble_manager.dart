@@ -6,6 +6,10 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tidal_tech/constants/ble_services_ids.dart';
+import 'package:tidal_tech/proto/message.pb.dart';
+import 'package:tidal_tech/providers/feeder.dart';
+import 'package:tidal_tech/providers/lighting.dart';
+import 'package:tidal_tech/stores/lighting.dart';
 
 const String bleName = "TIDAL";
 
@@ -78,7 +82,7 @@ class BLEManager extends Equatable {
 
 final bleManagerProvider =
     StateNotifierProvider<BLEManagerProvider, BLEManager>((ref) {
-  //
+//
   return BLEManagerProvider();
 });
 
@@ -92,13 +96,6 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
         addScanResult(result);
       }
     });
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    debugPrint("BLEManagerProvider dispose");
   }
 
   void stopScan() {
@@ -274,6 +271,21 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
     // parse result to Time
 
     return;
+  }
+
+  void sendTimePoints({
+    required List<TimePoint> timePoints,
+  }) {
+    // log bytes length
+    final req = LightingScheduleRequest.create();
+
+    for (final p in timePoints) {
+      req.points.add(p.toProto());
+    }
+    final bytes = req.writeToBuffer();
+    // print value
+    debugPrint("bytes length: ${bytes.length}");
+    // send to device
   }
 
 //

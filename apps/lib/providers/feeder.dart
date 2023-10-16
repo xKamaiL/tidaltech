@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:tidal_tech/proto/message.pb.dart';
 
 // LED that available on the product
 enum LED {
@@ -117,6 +118,34 @@ class TimePoint {
   int hours() {
     return hour;
   }
+
+  TimePointItem toProto() {
+    final proto = TimePointItem();
+    proto.hh = hour;
+    proto.mm = minute;
+    if (colors[LED.white]!.intensity > 0) {
+      proto.white = colors[LED.white]!.intensity;
+    }
+    if (colors[LED.warmWhite]!.intensity > 0) {
+      proto.warmWhite = colors[LED.warmWhite]!.intensity;
+    }
+    if (colors[LED.red]!.intensity > 0) {
+      proto.red = colors[LED.red]!.intensity;
+    }
+    if (colors[LED.green]!.intensity > 0) {
+      proto.green = colors[LED.green]!.intensity;
+    }
+    if (colors[LED.blue]!.intensity > 0) {
+      proto.blue = colors[LED.blue]!.intensity;
+    }
+    if (colors[LED.royalBlue]!.intensity > 0) {
+      proto.royalBlue = colors[LED.royalBlue]!.intensity;
+    }
+    if (colors[LED.ultraViolet]!.intensity > 0) {
+      proto.ultraViolet = colors[LED.ultraViolet]!.intensity;
+    }
+    return proto;
+  }
 }
 
 class ColorPoint {
@@ -128,4 +157,7 @@ class ColorPoint {
   copyWith({required int intensity}) {
     return ColorPoint(led, intensity);
   }
+
+  // to U8List
+
 }

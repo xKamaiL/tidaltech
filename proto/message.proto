@@ -19,7 +19,7 @@ message DeviceInformationResponse {
 // LightingScheduleRequest is the data that will be sent
 // to the device
 message LightingScheduleRequest {
-  repeated TimePoint points = 1;
+  repeated TimePointItem points = 1;
 }
 
 message SetSceneRequest {
@@ -43,11 +43,11 @@ message Effect {
 
 enum CommandCode {
   COMMAND_CODE_UNSPECIFIED = 0;
-  COMMAND_GET_PROPERTIES = 1;
+  COMMAND_CODE_GET_PROPERTIES = 1;
 
   // prepend
-  COMMAND_SET_LIGHTING = 5;
-  COMMAND_UPGRADE_FIRMWARE = 6;
+  COMMAND_CODE_SET_LIGHTING = 5;
+  COMMAND_CODE_UPGRADE_FIRMWARE = 6;
 }
 
 message UpgradeFirmwareRequest {
@@ -81,28 +81,27 @@ enum LED {
   LED_ULTRA_VIOLET = 7;
 }
 
-// TimePoint store hh:mm
+// TimePointItem store hh:mm
 // store minutes vs hh:mm
-message TimePoint {
+message TimePointItem {
   uint32 hh = 1; // 5 bit
   uint32 mm = 2; // 6 bit
-  Brightness brightness = 3;
+  optional uint32 white = 3;
+  optional uint32 warm_white = 4;
+  optional uint32 red = 5;
+  optional uint32 green = 6;
+  optional uint32 blue = 7;
+  optional uint32 royal_blue = 8;
+  optional uint32 ultra_violet = 9;
 }
-
-// Brightness store 0-100 %
-// of each LED
-message Brightness {
-  uint32 white = 3;
-  uint32 warm_white = 4;
-  uint32 red = 5;
-  uint32 green = 6;
-  uint32 blue = 7;
-  uint32 royal_blue = 8;
-  uint32 ultra_violet = 9;
-}
-
 
 message TimeStamp {
   uint32 seconds = 1;
-  Brightness brightness = 2;
+  optional uint32 white = 3;
+  optional uint32 warm_white = 4;
+  optional uint32 red = 5;
+  optional uint32 green = 6;
+  optional uint32 blue = 7;
+  optional uint32 royal_blue = 8;
+  optional uint32 ultra_violet = 9;
 }

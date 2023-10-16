@@ -28,15 +28,15 @@ class Scene extends $pb.ProtobufEnum {
 
 class CommandCode extends $pb.ProtobufEnum {
   static const CommandCode COMMAND_CODE_UNSPECIFIED = CommandCode._(0, _omitEnumNames ? '' : 'COMMAND_CODE_UNSPECIFIED');
-  static const CommandCode COMMAND_GET_PROPERTIES = CommandCode._(1, _omitEnumNames ? '' : 'COMMAND_GET_PROPERTIES');
-  static const CommandCode COMMAND_SET_LIGHTING = CommandCode._(5, _omitEnumNames ? '' : 'COMMAND_SET_LIGHTING');
-  static const CommandCode COMMAND_UPGRADE_FIRMWARE = CommandCode._(6, _omitEnumNames ? '' : 'COMMAND_UPGRADE_FIRMWARE');
+  static const CommandCode COMMAND_CODE_GET_PROPERTIES = CommandCode._(1, _omitEnumNames ? '' : 'COMMAND_CODE_GET_PROPERTIES');
+  static const CommandCode COMMAND_CODE_SET_LIGHTING = CommandCode._(5, _omitEnumNames ? '' : 'COMMAND_CODE_SET_LIGHTING');
+  static const CommandCode COMMAND_CODE_UPGRADE_FIRMWARE = CommandCode._(6, _omitEnumNames ? '' : 'COMMAND_CODE_UPGRADE_FIRMWARE');
 
   static const $core.List<CommandCode> values = <CommandCode> [
     COMMAND_CODE_UNSPECIFIED,
-    COMMAND_GET_PROPERTIES,
-    COMMAND_SET_LIGHTING,
-    COMMAND_UPGRADE_FIRMWARE,
+    COMMAND_CODE_GET_PROPERTIES,
+    COMMAND_CODE_SET_LIGHTING,
+    COMMAND_CODE_UPGRADE_FIRMWARE,
   ];
 
   static final $core.Map<$core.int, CommandCode> _byValue = $pb.ProtobufEnum.initByValue(values);

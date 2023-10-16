@@ -6,12 +6,22 @@ import 'package:tidal_tech/pages/ligting/feeder/graph.dart';
 import 'package:tidal_tech/pages/ligting/feeder/graph_control.dart';
 import 'package:tidal_tech/pages/ligting/feeder/time_header.dart';
 import 'package:tidal_tech/pages/ligting/spectrum_card.dart';
+import 'package:tidal_tech/providers/ble_manager.dart';
+import 'package:tidal_tech/providers/feeder.dart';
+import 'package:tidal_tech/providers/lighting.dart';
 
 class FeederControl extends HookConsumerWidget {
   const FeederControl({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final manager = ref.read(bleManagerProvider.notifier);
+    ref.listen<List<TimePoint>>(timePointsNotifier, (_, next) {
+      manager.sendTimePoints(
+        timePoints: next,
+      );
+      return;
+    });
     return n.Column(
       const [
         FeederTimeHeader(),

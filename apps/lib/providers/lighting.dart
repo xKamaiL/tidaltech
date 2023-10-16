@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tidal_tech/providers/feeder.dart';
 
-// Finally, we are using StateNotifierProvider to allow the UI to interact with
-// our TodosNotifier class.
+final timePointsProvider = timePointsNotifier;
+
 final timePointsNotifier =
     StateNotifierProvider<TimePointsNotifier, List<TimePoint>>((ref) {
   return TimePointsNotifier(ref);
@@ -53,7 +54,6 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
     ];
     // prefer to select the last time point
     ref.read(timePointEditingProvider.notifier).set(state.last);
-
 
     return;
   }
