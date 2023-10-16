@@ -123,6 +123,7 @@ void app_main(void) {
     rtcService->start();
 
     NimBLEAdvertising* pAdvertising = NimBLEDevice::getAdvertising();
+    pAdvertising->setName("TIDAL TECH LIGHTING");
     pAdvertising->addServiceUUID(deviceInformationService->getUUID());
     pAdvertising->addServiceUUID(colorService->getUUID());
     pAdvertising->addServiceUUID(rtcService->getUUID());
