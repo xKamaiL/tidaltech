@@ -119,10 +119,15 @@ class TimePoint {
     return hour;
   }
 
-  TimePointItem toProto() {
-    final proto = TimePointItem();
-    proto.hh = hour;
-    proto.mm = minute;
+  LightingScheduleRequest toProto() {
+    final proto = LightingScheduleRequest();
+    if (hour > 0) {
+      proto.hh = hour;
+    }
+    if (minute > 0) {
+      proto.mm = minute;
+    }
+
     if (colors[LED.white]!.intensity > 0) {
       proto.white = colors[LED.white]!.intensity;
     }
@@ -158,6 +163,5 @@ class ColorPoint {
     return ColorPoint(led, intensity);
   }
 
-  // to U8List
-
+// to U8List
 }

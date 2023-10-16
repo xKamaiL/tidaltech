@@ -138,7 +138,15 @@ class LightingScheduleRequest extends $pb.GeneratedMessage {
   factory LightingScheduleRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'LightingScheduleRequest', createEmptyInstance: create)
-    ..pc<TimePointItem>(1, _omitFieldNames ? '' : 'points', $pb.PbFieldType.PM, subBuilder: TimePointItem.create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'hh', $pb.PbFieldType.OU3)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'mm', $pb.PbFieldType.OU3)
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'white', $pb.PbFieldType.OU3)
+    ..a<$core.int>(4, _omitFieldNames ? '' : 'warmWhite', $pb.PbFieldType.OU3)
+    ..a<$core.int>(5, _omitFieldNames ? '' : 'red', $pb.PbFieldType.OU3)
+    ..a<$core.int>(6, _omitFieldNames ? '' : 'green', $pb.PbFieldType.OU3)
+    ..a<$core.int>(7, _omitFieldNames ? '' : 'blue', $pb.PbFieldType.OU3)
+    ..a<$core.int>(8, _omitFieldNames ? '' : 'royalBlue', $pb.PbFieldType.OU3)
+    ..a<$core.int>(9, _omitFieldNames ? '' : 'ultraViolet', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -164,7 +172,85 @@ class LightingScheduleRequest extends $pb.GeneratedMessage {
   static LightingScheduleRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<TimePointItem> get points => $_getList(0);
+  $core.int get hh => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set hh($core.int v) { $_setUnsignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasHh() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearHh() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get mm => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set mm($core.int v) { $_setUnsignedInt32(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasMm() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearMm() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.int get white => $_getIZ(2);
+  @$pb.TagNumber(3)
+  set white($core.int v) { $_setUnsignedInt32(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasWhite() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearWhite() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.int get warmWhite => $_getIZ(3);
+  @$pb.TagNumber(4)
+  set warmWhite($core.int v) { $_setUnsignedInt32(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasWarmWhite() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearWarmWhite() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.int get red => $_getIZ(4);
+  @$pb.TagNumber(5)
+  set red($core.int v) { $_setUnsignedInt32(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasRed() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearRed() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.int get green => $_getIZ(5);
+  @$pb.TagNumber(6)
+  set green($core.int v) { $_setUnsignedInt32(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasGreen() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearGreen() => clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.int get blue => $_getIZ(6);
+  @$pb.TagNumber(7)
+  set blue($core.int v) { $_setUnsignedInt32(6, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasBlue() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearBlue() => clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.int get royalBlue => $_getIZ(7);
+  @$pb.TagNumber(8)
+  set royalBlue($core.int v) { $_setUnsignedInt32(7, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasRoyalBlue() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearRoyalBlue() => clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.int get ultraViolet => $_getIZ(8);
+  @$pb.TagNumber(9)
+  set ultraViolet($core.int v) { $_setUnsignedInt32(8, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasUltraViolet() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearUltraViolet() => clearField(9);
 }
 
 class SetSceneRequest extends $pb.GeneratedMessage {
@@ -381,230 +467,6 @@ class UpgradeFirmwareResponse extends $pb.GeneratedMessage {
   void clearCurrentVersion() => clearField(2);
 }
 
-class TimePointItem extends $pb.GeneratedMessage {
-  factory TimePointItem() => create();
-  TimePointItem._() : super();
-  factory TimePointItem.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory TimePointItem.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'TimePointItem', createEmptyInstance: create)
-    ..a<$core.int>(1, _omitFieldNames ? '' : 'hh', $pb.PbFieldType.OU3)
-    ..a<$core.int>(2, _omitFieldNames ? '' : 'mm', $pb.PbFieldType.OU3)
-    ..a<$core.int>(3, _omitFieldNames ? '' : 'white', $pb.PbFieldType.OU3)
-    ..a<$core.int>(4, _omitFieldNames ? '' : 'warmWhite', $pb.PbFieldType.OU3)
-    ..a<$core.int>(5, _omitFieldNames ? '' : 'red', $pb.PbFieldType.OU3)
-    ..a<$core.int>(6, _omitFieldNames ? '' : 'green', $pb.PbFieldType.OU3)
-    ..a<$core.int>(7, _omitFieldNames ? '' : 'blue', $pb.PbFieldType.OU3)
-    ..a<$core.int>(8, _omitFieldNames ? '' : 'royalBlue', $pb.PbFieldType.OU3)
-    ..a<$core.int>(9, _omitFieldNames ? '' : 'ultraViolet', $pb.PbFieldType.OU3)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  TimePointItem clone() => TimePointItem()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  TimePointItem copyWith(void Function(TimePointItem) updates) => super.copyWith((message) => updates(message as TimePointItem)) as TimePointItem;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static TimePointItem create() => TimePointItem._();
-  TimePointItem createEmptyInstance() => create();
-  static $pb.PbList<TimePointItem> createRepeated() => $pb.PbList<TimePointItem>();
-  @$core.pragma('dart2js:noInline')
-  static TimePointItem getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TimePointItem>(create);
-  static TimePointItem? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.int get hh => $_getIZ(0);
-  @$pb.TagNumber(1)
-  set hh($core.int v) { $_setUnsignedInt32(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasHh() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearHh() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.int get mm => $_getIZ(1);
-  @$pb.TagNumber(2)
-  set mm($core.int v) { $_setUnsignedInt32(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasMm() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearMm() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.int get white => $_getIZ(2);
-  @$pb.TagNumber(3)
-  set white($core.int v) { $_setUnsignedInt32(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasWhite() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearWhite() => clearField(3);
-
-  @$pb.TagNumber(4)
-  $core.int get warmWhite => $_getIZ(3);
-  @$pb.TagNumber(4)
-  set warmWhite($core.int v) { $_setUnsignedInt32(3, v); }
-  @$pb.TagNumber(4)
-  $core.bool hasWarmWhite() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearWarmWhite() => clearField(4);
-
-  @$pb.TagNumber(5)
-  $core.int get red => $_getIZ(4);
-  @$pb.TagNumber(5)
-  set red($core.int v) { $_setUnsignedInt32(4, v); }
-  @$pb.TagNumber(5)
-  $core.bool hasRed() => $_has(4);
-  @$pb.TagNumber(5)
-  void clearRed() => clearField(5);
-
-  @$pb.TagNumber(6)
-  $core.int get green => $_getIZ(5);
-  @$pb.TagNumber(6)
-  set green($core.int v) { $_setUnsignedInt32(5, v); }
-  @$pb.TagNumber(6)
-  $core.bool hasGreen() => $_has(5);
-  @$pb.TagNumber(6)
-  void clearGreen() => clearField(6);
-
-  @$pb.TagNumber(7)
-  $core.int get blue => $_getIZ(6);
-  @$pb.TagNumber(7)
-  set blue($core.int v) { $_setUnsignedInt32(6, v); }
-  @$pb.TagNumber(7)
-  $core.bool hasBlue() => $_has(6);
-  @$pb.TagNumber(7)
-  void clearBlue() => clearField(7);
-
-  @$pb.TagNumber(8)
-  $core.int get royalBlue => $_getIZ(7);
-  @$pb.TagNumber(8)
-  set royalBlue($core.int v) { $_setUnsignedInt32(7, v); }
-  @$pb.TagNumber(8)
-  $core.bool hasRoyalBlue() => $_has(7);
-  @$pb.TagNumber(8)
-  void clearRoyalBlue() => clearField(8);
-
-  @$pb.TagNumber(9)
-  $core.int get ultraViolet => $_getIZ(8);
-  @$pb.TagNumber(9)
-  set ultraViolet($core.int v) { $_setUnsignedInt32(8, v); }
-  @$pb.TagNumber(9)
-  $core.bool hasUltraViolet() => $_has(8);
-  @$pb.TagNumber(9)
-  void clearUltraViolet() => clearField(9);
-}
-
-class Brightness extends $pb.GeneratedMessage {
-  factory Brightness() => create();
-  Brightness._() : super();
-  factory Brightness.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Brightness.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Brightness', createEmptyInstance: create)
-    ..a<$core.int>(3, _omitFieldNames ? '' : 'white', $pb.PbFieldType.OU3)
-    ..a<$core.int>(4, _omitFieldNames ? '' : 'warmWhite', $pb.PbFieldType.OU3)
-    ..a<$core.int>(5, _omitFieldNames ? '' : 'red', $pb.PbFieldType.OU3)
-    ..a<$core.int>(6, _omitFieldNames ? '' : 'green', $pb.PbFieldType.OU3)
-    ..a<$core.int>(7, _omitFieldNames ? '' : 'blue', $pb.PbFieldType.OU3)
-    ..a<$core.int>(8, _omitFieldNames ? '' : 'royalBlue', $pb.PbFieldType.OU3)
-    ..a<$core.int>(9, _omitFieldNames ? '' : 'ultraViolet', $pb.PbFieldType.OU3)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  Brightness clone() => Brightness()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  Brightness copyWith(void Function(Brightness) updates) => super.copyWith((message) => updates(message as Brightness)) as Brightness;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static Brightness create() => Brightness._();
-  Brightness createEmptyInstance() => create();
-  static $pb.PbList<Brightness> createRepeated() => $pb.PbList<Brightness>();
-  @$core.pragma('dart2js:noInline')
-  static Brightness getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Brightness>(create);
-  static Brightness? _defaultInstance;
-
-  @$pb.TagNumber(3)
-  $core.int get white => $_getIZ(0);
-  @$pb.TagNumber(3)
-  set white($core.int v) { $_setUnsignedInt32(0, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasWhite() => $_has(0);
-  @$pb.TagNumber(3)
-  void clearWhite() => clearField(3);
-
-  @$pb.TagNumber(4)
-  $core.int get warmWhite => $_getIZ(1);
-  @$pb.TagNumber(4)
-  set warmWhite($core.int v) { $_setUnsignedInt32(1, v); }
-  @$pb.TagNumber(4)
-  $core.bool hasWarmWhite() => $_has(1);
-  @$pb.TagNumber(4)
-  void clearWarmWhite() => clearField(4);
-
-  @$pb.TagNumber(5)
-  $core.int get red => $_getIZ(2);
-  @$pb.TagNumber(5)
-  set red($core.int v) { $_setUnsignedInt32(2, v); }
-  @$pb.TagNumber(5)
-  $core.bool hasRed() => $_has(2);
-  @$pb.TagNumber(5)
-  void clearRed() => clearField(5);
-
-  @$pb.TagNumber(6)
-  $core.int get green => $_getIZ(3);
-  @$pb.TagNumber(6)
-  set green($core.int v) { $_setUnsignedInt32(3, v); }
-  @$pb.TagNumber(6)
-  $core.bool hasGreen() => $_has(3);
-  @$pb.TagNumber(6)
-  void clearGreen() => clearField(6);
-
-  @$pb.TagNumber(7)
-  $core.int get blue => $_getIZ(4);
-  @$pb.TagNumber(7)
-  set blue($core.int v) { $_setUnsignedInt32(4, v); }
-  @$pb.TagNumber(7)
-  $core.bool hasBlue() => $_has(4);
-  @$pb.TagNumber(7)
-  void clearBlue() => clearField(7);
-
-  @$pb.TagNumber(8)
-  $core.int get royalBlue => $_getIZ(5);
-  @$pb.TagNumber(8)
-  set royalBlue($core.int v) { $_setUnsignedInt32(5, v); }
-  @$pb.TagNumber(8)
-  $core.bool hasRoyalBlue() => $_has(5);
-  @$pb.TagNumber(8)
-  void clearRoyalBlue() => clearField(8);
-
-  @$pb.TagNumber(9)
-  $core.int get ultraViolet => $_getIZ(6);
-  @$pb.TagNumber(9)
-  set ultraViolet($core.int v) { $_setUnsignedInt32(6, v); }
-  @$pb.TagNumber(9)
-  $core.bool hasUltraViolet() => $_has(6);
-  @$pb.TagNumber(9)
-  void clearUltraViolet() => clearField(9);
-}
-
 class TimeStamp extends $pb.GeneratedMessage {
   factory TimeStamp() => create();
   TimeStamp._() : super();
@@ -613,7 +475,13 @@ class TimeStamp extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'TimeStamp', createEmptyInstance: create)
     ..a<$core.int>(1, _omitFieldNames ? '' : 'seconds', $pb.PbFieldType.OU3)
-    ..aOM<Brightness>(2, _omitFieldNames ? '' : 'brightness', subBuilder: Brightness.create)
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'white', $pb.PbFieldType.OU3)
+    ..a<$core.int>(4, _omitFieldNames ? '' : 'warmWhite', $pb.PbFieldType.OU3)
+    ..a<$core.int>(5, _omitFieldNames ? '' : 'red', $pb.PbFieldType.OU3)
+    ..a<$core.int>(6, _omitFieldNames ? '' : 'green', $pb.PbFieldType.OU3)
+    ..a<$core.int>(7, _omitFieldNames ? '' : 'blue', $pb.PbFieldType.OU3)
+    ..a<$core.int>(8, _omitFieldNames ? '' : 'royalBlue', $pb.PbFieldType.OU3)
+    ..a<$core.int>(9, _omitFieldNames ? '' : 'ultraViolet', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -647,16 +515,68 @@ class TimeStamp extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   void clearSeconds() => clearField(1);
 
-  @$pb.TagNumber(2)
-  Brightness get brightness => $_getN(1);
-  @$pb.TagNumber(2)
-  set brightness(Brightness v) { setField(2, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasBrightness() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearBrightness() => clearField(2);
-  @$pb.TagNumber(2)
-  Brightness ensureBrightness() => $_ensure(1);
+  @$pb.TagNumber(3)
+  $core.int get white => $_getIZ(1);
+  @$pb.TagNumber(3)
+  set white($core.int v) { $_setUnsignedInt32(1, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasWhite() => $_has(1);
+  @$pb.TagNumber(3)
+  void clearWhite() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.int get warmWhite => $_getIZ(2);
+  @$pb.TagNumber(4)
+  set warmWhite($core.int v) { $_setUnsignedInt32(2, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasWarmWhite() => $_has(2);
+  @$pb.TagNumber(4)
+  void clearWarmWhite() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.int get red => $_getIZ(3);
+  @$pb.TagNumber(5)
+  set red($core.int v) { $_setUnsignedInt32(3, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasRed() => $_has(3);
+  @$pb.TagNumber(5)
+  void clearRed() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.int get green => $_getIZ(4);
+  @$pb.TagNumber(6)
+  set green($core.int v) { $_setUnsignedInt32(4, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasGreen() => $_has(4);
+  @$pb.TagNumber(6)
+  void clearGreen() => clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.int get blue => $_getIZ(5);
+  @$pb.TagNumber(7)
+  set blue($core.int v) { $_setUnsignedInt32(5, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasBlue() => $_has(5);
+  @$pb.TagNumber(7)
+  void clearBlue() => clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.int get royalBlue => $_getIZ(6);
+  @$pb.TagNumber(8)
+  set royalBlue($core.int v) { $_setUnsignedInt32(6, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasRoyalBlue() => $_has(6);
+  @$pb.TagNumber(8)
+  void clearRoyalBlue() => clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.int get ultraViolet => $_getIZ(7);
+  @$pb.TagNumber(9)
+  set ultraViolet($core.int v) { $_setUnsignedInt32(7, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasUltraViolet() => $_has(7);
+  @$pb.TagNumber(9)
+  void clearUltraViolet() => clearField(9);
 }
 
 

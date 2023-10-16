@@ -109,14 +109,38 @@ final $typed_data.Uint8List deviceInformationResponseDescriptor = $convert.base6
 const LightingScheduleRequest$json = {
   '1': 'LightingScheduleRequest',
   '2': [
-    {'1': 'points', '3': 1, '4': 3, '5': 11, '6': '.TimePointItem', '10': 'points'},
+    {'1': 'hh', '3': 1, '4': 1, '5': 13, '9': 0, '10': 'hh', '17': true},
+    {'1': 'mm', '3': 2, '4': 1, '5': 13, '9': 1, '10': 'mm', '17': true},
+    {'1': 'white', '3': 3, '4': 1, '5': 13, '9': 2, '10': 'white', '17': true},
+    {'1': 'warm_white', '3': 4, '4': 1, '5': 13, '9': 3, '10': 'warmWhite', '17': true},
+    {'1': 'red', '3': 5, '4': 1, '5': 13, '9': 4, '10': 'red', '17': true},
+    {'1': 'green', '3': 6, '4': 1, '5': 13, '9': 5, '10': 'green', '17': true},
+    {'1': 'blue', '3': 7, '4': 1, '5': 13, '9': 6, '10': 'blue', '17': true},
+    {'1': 'royal_blue', '3': 8, '4': 1, '5': 13, '9': 7, '10': 'royalBlue', '17': true},
+    {'1': 'ultra_violet', '3': 9, '4': 1, '5': 13, '9': 8, '10': 'ultraViolet', '17': true},
+  ],
+  '8': [
+    {'1': '_hh'},
+    {'1': '_mm'},
+    {'1': '_white'},
+    {'1': '_warm_white'},
+    {'1': '_red'},
+    {'1': '_green'},
+    {'1': '_blue'},
+    {'1': '_royal_blue'},
+    {'1': '_ultra_violet'},
   ],
 };
 
 /// Descriptor for `LightingScheduleRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List lightingScheduleRequestDescriptor = $convert.base64Decode(
-    'ChdMaWdodGluZ1NjaGVkdWxlUmVxdWVzdBImCgZwb2ludHMYASADKAsyDi5UaW1lUG9pbnRJdG'
-    'VtUgZwb2ludHM=');
+    'ChdMaWdodGluZ1NjaGVkdWxlUmVxdWVzdBITCgJoaBgBIAEoDUgAUgJoaIgBARITCgJtbRgCIA'
+    'EoDUgBUgJtbYgBARIZCgV3aGl0ZRgDIAEoDUgCUgV3aGl0ZYgBARIiCgp3YXJtX3doaXRlGAQg'
+    'ASgNSANSCXdhcm1XaGl0ZYgBARIVCgNyZWQYBSABKA1IBFIDcmVkiAEBEhkKBWdyZWVuGAYgAS'
+    'gNSAVSBWdyZWVuiAEBEhcKBGJsdWUYByABKA1IBlIEYmx1ZYgBARIiCgpyb3lhbF9ibHVlGAgg'
+    'ASgNSAdSCXJveWFsQmx1ZYgBARImCgx1bHRyYV92aW9sZXQYCSABKA1ICFILdWx0cmFWaW9sZX'
+    'SIAQFCBQoDX2hoQgUKA19tbUIICgZfd2hpdGVCDQoLX3dhcm1fd2hpdGVCBgoEX3JlZEIICgZf'
+    'Z3JlZW5CBwoFX2JsdWVCDQoLX3JveWFsX2JsdWVCDwoNX3VsdHJhX3Zpb2xldA==');
 
 @$core.Deprecated('Use setSceneRequestDescriptor instead')
 const SetSceneRequest$json = {
@@ -179,84 +203,37 @@ final $typed_data.Uint8List upgradeFirmwareResponseDescriptor = $convert.base64D
     'ChdVcGdyYWRlRmlybXdhcmVSZXNwb25zZRIqChFpc19sYXRlc3RfdmVyc2lvbhgBIAEoCFIPaX'
     'NMYXRlc3RWZXJzaW9uEicKD2N1cnJlbnRfdmVyc2lvbhgCIAEoCVIOY3VycmVudFZlcnNpb24=');
 
-@$core.Deprecated('Use timePointItemDescriptor instead')
-const TimePointItem$json = {
-  '1': 'TimePointItem',
-  '2': [
-    {'1': 'hh', '3': 1, '4': 1, '5': 13, '10': 'hh'},
-    {'1': 'mm', '3': 2, '4': 1, '5': 13, '10': 'mm'},
-    {'1': 'white', '3': 3, '4': 1, '5': 13, '9': 0, '10': 'white', '17': true},
-    {'1': 'warm_white', '3': 4, '4': 1, '5': 13, '9': 1, '10': 'warmWhite', '17': true},
-    {'1': 'red', '3': 5, '4': 1, '5': 13, '9': 2, '10': 'red', '17': true},
-    {'1': 'green', '3': 6, '4': 1, '5': 13, '9': 3, '10': 'green', '17': true},
-    {'1': 'blue', '3': 7, '4': 1, '5': 13, '9': 4, '10': 'blue', '17': true},
-    {'1': 'royal_blue', '3': 8, '4': 1, '5': 13, '9': 5, '10': 'royalBlue', '17': true},
-    {'1': 'ultra_violet', '3': 9, '4': 1, '5': 13, '9': 6, '10': 'ultraViolet', '17': true},
-  ],
-  '8': [
-    {'1': '_white'},
-    {'1': '_warm_white'},
-    {'1': '_red'},
-    {'1': '_green'},
-    {'1': '_blue'},
-    {'1': '_royal_blue'},
-    {'1': '_ultra_violet'},
-  ],
-};
-
-/// Descriptor for `TimePointItem`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List timePointItemDescriptor = $convert.base64Decode(
-    'Cg1UaW1lUG9pbnRJdGVtEg4KAmhoGAEgASgNUgJoaBIOCgJtbRgCIAEoDVICbW0SGQoFd2hpdG'
-    'UYAyABKA1IAFIFd2hpdGWIAQESIgoKd2FybV93aGl0ZRgEIAEoDUgBUgl3YXJtV2hpdGWIAQES'
-    'FQoDcmVkGAUgASgNSAJSA3JlZIgBARIZCgVncmVlbhgGIAEoDUgDUgVncmVlbogBARIXCgRibH'
-    'VlGAcgASgNSARSBGJsdWWIAQESIgoKcm95YWxfYmx1ZRgIIAEoDUgFUglyb3lhbEJsdWWIAQES'
-    'JgoMdWx0cmFfdmlvbGV0GAkgASgNSAZSC3VsdHJhVmlvbGV0iAEBQggKBl93aGl0ZUINCgtfd2'
-    'FybV93aGl0ZUIGCgRfcmVkQggKBl9ncmVlbkIHCgVfYmx1ZUINCgtfcm95YWxfYmx1ZUIPCg1f'
-    'dWx0cmFfdmlvbGV0');
-
-@$core.Deprecated('Use brightnessDescriptor instead')
-const Brightness$json = {
-  '1': 'Brightness',
-  '2': [
-    {'1': 'white', '3': 3, '4': 1, '5': 13, '9': 0, '10': 'white', '17': true},
-    {'1': 'warm_white', '3': 4, '4': 1, '5': 13, '9': 1, '10': 'warmWhite', '17': true},
-    {'1': 'red', '3': 5, '4': 1, '5': 13, '9': 2, '10': 'red', '17': true},
-    {'1': 'green', '3': 6, '4': 1, '5': 13, '9': 3, '10': 'green', '17': true},
-    {'1': 'blue', '3': 7, '4': 1, '5': 13, '9': 4, '10': 'blue', '17': true},
-    {'1': 'royal_blue', '3': 8, '4': 1, '5': 13, '9': 5, '10': 'royalBlue', '17': true},
-    {'1': 'ultra_violet', '3': 9, '4': 1, '5': 13, '9': 6, '10': 'ultraViolet', '17': true},
-  ],
-  '8': [
-    {'1': '_white'},
-    {'1': '_warm_white'},
-    {'1': '_red'},
-    {'1': '_green'},
-    {'1': '_blue'},
-    {'1': '_royal_blue'},
-    {'1': '_ultra_violet'},
-  ],
-};
-
-/// Descriptor for `Brightness`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List brightnessDescriptor = $convert.base64Decode(
-    'CgpCcmlnaHRuZXNzEhkKBXdoaXRlGAMgASgNSABSBXdoaXRliAEBEiIKCndhcm1fd2hpdGUYBC'
-    'ABKA1IAVIJd2FybVdoaXRliAEBEhUKA3JlZBgFIAEoDUgCUgNyZWSIAQESGQoFZ3JlZW4YBiAB'
-    'KA1IA1IFZ3JlZW6IAQESFwoEYmx1ZRgHIAEoDUgEUgRibHVliAEBEiIKCnJveWFsX2JsdWUYCC'
-    'ABKA1IBVIJcm95YWxCbHVliAEBEiYKDHVsdHJhX3Zpb2xldBgJIAEoDUgGUgt1bHRyYVZpb2xl'
-    'dIgBAUIICgZfd2hpdGVCDQoLX3dhcm1fd2hpdGVCBgoEX3JlZEIICgZfZ3JlZW5CBwoFX2JsdW'
-    'VCDQoLX3JveWFsX2JsdWVCDwoNX3VsdHJhX3Zpb2xldA==');
-
 @$core.Deprecated('Use timeStampDescriptor instead')
 const TimeStamp$json = {
   '1': 'TimeStamp',
   '2': [
     {'1': 'seconds', '3': 1, '4': 1, '5': 13, '10': 'seconds'},
-    {'1': 'brightness', '3': 2, '4': 1, '5': 11, '6': '.Brightness', '10': 'brightness'},
+    {'1': 'white', '3': 3, '4': 1, '5': 13, '9': 0, '10': 'white', '17': true},
+    {'1': 'warm_white', '3': 4, '4': 1, '5': 13, '9': 1, '10': 'warmWhite', '17': true},
+    {'1': 'red', '3': 5, '4': 1, '5': 13, '9': 2, '10': 'red', '17': true},
+    {'1': 'green', '3': 6, '4': 1, '5': 13, '9': 3, '10': 'green', '17': true},
+    {'1': 'blue', '3': 7, '4': 1, '5': 13, '9': 4, '10': 'blue', '17': true},
+    {'1': 'royal_blue', '3': 8, '4': 1, '5': 13, '9': 5, '10': 'royalBlue', '17': true},
+    {'1': 'ultra_violet', '3': 9, '4': 1, '5': 13, '9': 6, '10': 'ultraViolet', '17': true},
+  ],
+  '8': [
+    {'1': '_white'},
+    {'1': '_warm_white'},
+    {'1': '_red'},
+    {'1': '_green'},
+    {'1': '_blue'},
+    {'1': '_royal_blue'},
+    {'1': '_ultra_violet'},
   ],
 };
 
 /// Descriptor for `TimeStamp`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List timeStampDescriptor = $convert.base64Decode(
-    'CglUaW1lU3RhbXASGAoHc2Vjb25kcxgBIAEoDVIHc2Vjb25kcxIrCgpicmlnaHRuZXNzGAIgAS'
-    'gLMgsuQnJpZ2h0bmVzc1IKYnJpZ2h0bmVzcw==');
+    'CglUaW1lU3RhbXASGAoHc2Vjb25kcxgBIAEoDVIHc2Vjb25kcxIZCgV3aGl0ZRgDIAEoDUgAUg'
+    'V3aGl0ZYgBARIiCgp3YXJtX3doaXRlGAQgASgNSAFSCXdhcm1XaGl0ZYgBARIVCgNyZWQYBSAB'
+    'KA1IAlIDcmVkiAEBEhkKBWdyZWVuGAYgASgNSANSBWdyZWVuiAEBEhcKBGJsdWUYByABKA1IBF'
+    'IEYmx1ZYgBARIiCgpyb3lhbF9ibHVlGAggASgNSAVSCXJveWFsQmx1ZYgBARImCgx1bHRyYV92'
+    'aW9sZXQYCSABKA1IBlILdWx0cmFWaW9sZXSIAQFCCAoGX3doaXRlQg0KC193YXJtX3doaXRlQg'
+    'YKBF9yZWRCCAoGX2dyZWVuQgcKBV9ibHVlQg0KC19yb3lhbF9ibHVlQg8KDV91bHRyYV92aW9s'
+    'ZXQ=');
 

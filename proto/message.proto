@@ -18,8 +18,17 @@ message DeviceInformationResponse {
 
 // LightingScheduleRequest is the data that will be sent
 // to the device
+// which is sent one by one (time point) to the device
 message LightingScheduleRequest {
-  repeated TimePointItem points = 1;
+  optional uint32 hh = 1; // 5 bit
+  optional uint32 mm = 2; // 6 bit
+  optional uint32 white = 3;
+  optional uint32 warm_white = 4;
+  optional uint32 red = 5;
+  optional uint32 green = 6;
+  optional uint32 blue = 7;
+  optional uint32 royal_blue = 8;
+  optional uint32 ultra_violet = 9;
 }
 
 message SetSceneRequest {
@@ -81,19 +90,6 @@ enum LED {
   LED_ULTRA_VIOLET = 7;
 }
 
-// TimePointItem store hh:mm
-// store minutes vs hh:mm
-message TimePointItem {
-  uint32 hh = 1; // 5 bit
-  uint32 mm = 2; // 6 bit
-  optional uint32 white = 3;
-  optional uint32 warm_white = 4;
-  optional uint32 red = 5;
-  optional uint32 green = 6;
-  optional uint32 blue = 7;
-  optional uint32 royal_blue = 8;
-  optional uint32 ultra_violet = 9;
-}
 
 message TimeStamp {
   uint32 seconds = 1;

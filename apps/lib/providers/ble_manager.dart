@@ -276,15 +276,14 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
   void sendTimePoints({
     required List<TimePoint> timePoints,
   }) {
-    // log bytes length
-    final req = LightingScheduleRequest.create();
 
     for (final p in timePoints) {
-      req.points.add(p.toProto());
+      // log bytes length
+      final req =  p.toProto();
+      final bytes = req.writeToBuffer();
+      // print value
+      debugPrint("bytes length: ${bytes.length}");
     }
-    final bytes = req.writeToBuffer();
-    // print value
-    debugPrint("bytes length: ${bytes.length}");
     // send to device
   }
 
