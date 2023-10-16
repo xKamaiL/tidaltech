@@ -5,9 +5,7 @@
 
 #include "NimBLEDevice.h"
 #include "definations.h"
-#include "esp_log.h"
-#include "esp_sleep.h"
-#include "message.pb-c.h"
+#include "proto/message.pb-c.h"
 #include "sdkconfig.h"
 
 /* Handler class for server events */
@@ -21,6 +19,8 @@ class ServerCallbacks : public NimBLEServerCallbacks {
     };
 };
 
+void addColorTimePoint(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo);
+
 class CharacteristicCallbacks : public NimBLECharacteristicCallbacks {
     void onRead(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
         printf(pCharacteristic->getUUID().toString().c_str());
@@ -31,6 +31,10 @@ class CharacteristicCallbacks : public NimBLECharacteristicCallbacks {
             printf("get color mode");
         } else if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_GET_CURRENT_TIME)) {
             printf("get current time");
+        }
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_ADD_COLOR_TIME_POINT)) {
+            printf("add color time point");
+            addColorTimePoint(pCharacteristic, connInfo);
         }
     };
 
@@ -101,7 +105,6 @@ void app_main(void) {
     deviceIdCharacteristic->setCallbacks(&chrCallbacks);
 
     NimBLEService* colorService = srv->createService(COLOR_SERVICE_UUID);
-    size_t x = sizeof(LightingScheduleRequest);
     NimBLECharacteristic* getCurrentMode = colorService->createCharacteristic(CHARACTERISTIC_UUID_GET_COLOR_MODE, NIMBLE_PROPERTY::READ);
     getCurrentMode->setValue("0");
     getCurrentMode->setCallbacks(&chrCallbacks);
@@ -140,4 +143,12 @@ void app_main(void) {
     BLEDevice::startAdvertising();
 
     printf("Characteristic defined! Now you can read it in your phone!\n");
+}
+
+void addColorTimePoint(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
+    printf("addColorTimePoint: start decode message");
+
+    LightingScheduleRequest* request = lighting_schedule_request__unpack(NULL, pCharacteristic->getValue().length(), (uint8_t*)pCharacteristic->getValue().c_str());
+
+    printf("addColorTimePoint: end decode message");
 }

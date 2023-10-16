@@ -23,8 +23,6 @@ typedef struct GetSceneResponse GetSceneResponse;
 typedef struct Effect Effect;
 typedef struct UpgradeFirmwareRequest UpgradeFirmwareRequest;
 typedef struct UpgradeFirmwareResponse UpgradeFirmwareResponse;
-typedef struct TimePoint TimePoint;
-typedef struct Brightness Brightness;
 typedef struct TimeStamp TimeStamp;
 
 
@@ -36,12 +34,12 @@ typedef enum _Scene {
 } Scene;
 typedef enum _CommandCode {
   COMMAND_CODE__COMMAND_CODE_UNSPECIFIED = 0,
-  COMMAND_CODE__COMMAND_GET_PROPERTIES = 1,
+  COMMAND_CODE__COMMAND_CODE_GET_PROPERTIES = 1,
   /*
    * prepend
    */
-  COMMAND_CODE__COMMAND_SET_LIGHTING = 5,
-  COMMAND_CODE__COMMAND_UPGRADE_FIRMWARE = 6
+  COMMAND_CODE__COMMAND_CODE_SET_LIGHTING = 5,
+  COMMAND_CODE__COMMAND_CODE_UPGRADE_FIRMWARE = 6
     PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(COMMAND_CODE)
 } CommandCode;
 /*
@@ -104,16 +102,30 @@ struct  DeviceInformationResponse
 /*
  * LightingScheduleRequest is the data that will be sent
  * to the device
+ * which is sent one by one (time point) to the device
  */
 struct  LightingScheduleRequest
 {
   ProtobufCMessage base;
-  size_t n_points;
-  TimePoint **points;
+  /*
+   * 5 bit
+   */
+  uint32_t hh;
+  /*
+   * 6 bit
+   */
+  uint32_t mm;
+  uint32_t white;
+  uint32_t warm_white;
+  uint32_t red;
+  uint32_t green;
+  uint32_t blue;
+  uint32_t royal_blue;
+  uint32_t ultra_violet;
 };
 #define LIGHTING_SCHEDULE_REQUEST__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&lighting_schedule_request__descriptor) \
-, 0,NULL }
+, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 
 
 struct  SetSceneRequest
@@ -172,35 +184,10 @@ struct  UpgradeFirmwareResponse
 , 0, (char *)protobuf_c_empty_string }
 
 
-/*
- * TimePoint store hh:mm
- * store minutes vs hh:mm
- */
-struct  TimePoint
+struct  TimeStamp
 {
   ProtobufCMessage base;
-  /*
-   * 5 bit
-   */
-  uint32_t hh;
-  /*
-   * 6 bit
-   */
-  uint32_t mm;
-  Brightness *brightness;
-};
-#define TIME_POINT__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&time_point__descriptor) \
-, 0, 0, NULL }
-
-
-/*
- * Brightness store 0-100 %
- * of each LED
- */
-struct  Brightness
-{
-  ProtobufCMessage base;
+  uint32_t seconds;
   uint32_t white;
   uint32_t warm_white;
   uint32_t red;
@@ -209,20 +196,9 @@ struct  Brightness
   uint32_t royal_blue;
   uint32_t ultra_violet;
 };
-#define BRIGHTNESS__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&brightness__descriptor) \
-, 0, 0, 0, 0, 0, 0, 0 }
-
-
-struct  TimeStamp
-{
-  ProtobufCMessage base;
-  uint32_t seconds;
-  Brightness *brightness;
-};
 #define TIME_STAMP__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&time_stamp__descriptor) \
-, 0, NULL }
+, 0, 0, 0, 0, 0, 0, 0, 0 }
 
 
 /* DeviceInformationRequest methods */
@@ -377,44 +353,6 @@ UpgradeFirmwareResponse *
 void   upgrade_firmware_response__free_unpacked
                      (UpgradeFirmwareResponse *message,
                       ProtobufCAllocator *allocator);
-/* TimePoint methods */
-void   time_point__init
-                     (TimePoint         *message);
-size_t time_point__get_packed_size
-                     (const TimePoint   *message);
-size_t time_point__pack
-                     (const TimePoint   *message,
-                      uint8_t             *out);
-size_t time_point__pack_to_buffer
-                     (const TimePoint   *message,
-                      ProtobufCBuffer     *buffer);
-TimePoint *
-       time_point__unpack
-                     (ProtobufCAllocator  *allocator,
-                      size_t               len,
-                      const uint8_t       *data);
-void   time_point__free_unpacked
-                     (TimePoint *message,
-                      ProtobufCAllocator *allocator);
-/* Brightness methods */
-void   brightness__init
-                     (Brightness         *message);
-size_t brightness__get_packed_size
-                     (const Brightness   *message);
-size_t brightness__pack
-                     (const Brightness   *message,
-                      uint8_t             *out);
-size_t brightness__pack_to_buffer
-                     (const Brightness   *message,
-                      ProtobufCBuffer     *buffer);
-Brightness *
-       brightness__unpack
-                     (ProtobufCAllocator  *allocator,
-                      size_t               len,
-                      const uint8_t       *data);
-void   brightness__free_unpacked
-                     (Brightness *message,
-                      ProtobufCAllocator *allocator);
 /* TimeStamp methods */
 void   time_stamp__init
                      (TimeStamp         *message);
@@ -460,12 +398,6 @@ typedef void (*UpgradeFirmwareRequest_Closure)
 typedef void (*UpgradeFirmwareResponse_Closure)
                  (const UpgradeFirmwareResponse *message,
                   void *closure_data);
-typedef void (*TimePoint_Closure)
-                 (const TimePoint *message,
-                  void *closure_data);
-typedef void (*Brightness_Closure)
-                 (const Brightness *message,
-                  void *closure_data);
 typedef void (*TimeStamp_Closure)
                  (const TimeStamp *message,
                   void *closure_data);
@@ -487,8 +419,6 @@ extern const ProtobufCMessageDescriptor get_scene_response__descriptor;
 extern const ProtobufCMessageDescriptor effect__descriptor;
 extern const ProtobufCMessageDescriptor upgrade_firmware_request__descriptor;
 extern const ProtobufCMessageDescriptor upgrade_firmware_response__descriptor;
-extern const ProtobufCMessageDescriptor time_point__descriptor;
-extern const ProtobufCMessageDescriptor brightness__descriptor;
 extern const ProtobufCMessageDescriptor time_stamp__descriptor;
 
 PROTOBUF_C__END_DECLS

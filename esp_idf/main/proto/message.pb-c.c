@@ -367,96 +367,6 @@ void   upgrade_firmware_response__free_unpacked
   assert(message->base.descriptor == &upgrade_firmware_response__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
-void   time_point__init
-                     (TimePoint         *message)
-{
-  static const TimePoint init_value = TIME_POINT__INIT;
-  *message = init_value;
-}
-size_t time_point__get_packed_size
-                     (const TimePoint *message)
-{
-  assert(message->base.descriptor == &time_point__descriptor);
-  return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
-}
-size_t time_point__pack
-                     (const TimePoint *message,
-                      uint8_t       *out)
-{
-  assert(message->base.descriptor == &time_point__descriptor);
-  return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
-}
-size_t time_point__pack_to_buffer
-                     (const TimePoint *message,
-                      ProtobufCBuffer *buffer)
-{
-  assert(message->base.descriptor == &time_point__descriptor);
-  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
-}
-TimePoint *
-       time_point__unpack
-                     (ProtobufCAllocator  *allocator,
-                      size_t               len,
-                      const uint8_t       *data)
-{
-  return (TimePoint *)
-     protobuf_c_message_unpack (&time_point__descriptor,
-                                allocator, len, data);
-}
-void   time_point__free_unpacked
-                     (TimePoint *message,
-                      ProtobufCAllocator *allocator)
-{
-  if(!message)
-    return;
-  assert(message->base.descriptor == &time_point__descriptor);
-  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
-}
-void   brightness__init
-                     (Brightness         *message)
-{
-  static const Brightness init_value = BRIGHTNESS__INIT;
-  *message = init_value;
-}
-size_t brightness__get_packed_size
-                     (const Brightness *message)
-{
-  assert(message->base.descriptor == &brightness__descriptor);
-  return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
-}
-size_t brightness__pack
-                     (const Brightness *message,
-                      uint8_t       *out)
-{
-  assert(message->base.descriptor == &brightness__descriptor);
-  return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
-}
-size_t brightness__pack_to_buffer
-                     (const Brightness *message,
-                      ProtobufCBuffer *buffer)
-{
-  assert(message->base.descriptor == &brightness__descriptor);
-  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
-}
-Brightness *
-       brightness__unpack
-                     (ProtobufCAllocator  *allocator,
-                      size_t               len,
-                      const uint8_t       *data)
-{
-  return (Brightness *)
-     protobuf_c_message_unpack (&brightness__descriptor,
-                                allocator, len, data);
-}
-void   brightness__free_unpacked
-                     (Brightness *message,
-                      ProtobufCAllocator *allocator)
-{
-  if(!message)
-    return;
-  assert(message->base.descriptor == &brightness__descriptor);
-  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
-}
 void   time_stamp__init
                      (TimeStamp         *message)
 {
@@ -610,28 +520,132 @@ const ProtobufCMessageDescriptor device_information_response__descriptor =
   (ProtobufCMessageInit) device_information_response__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor lighting_schedule_request__field_descriptors[1] =
+static const ProtobufCFieldDescriptor lighting_schedule_request__field_descriptors[9] =
 {
   {
-    "points",
+    "hh",
     1,
-    PROTOBUF_C_LABEL_REPEATED,
-    PROTOBUF_C_TYPE_MESSAGE,
-    offsetof(LightingScheduleRequest, n_points),
-    offsetof(LightingScheduleRequest, points),
-    &time_point__descriptor,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(LightingScheduleRequest, hh),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "mm",
+    2,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(LightingScheduleRequest, mm),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "white",
+    3,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(LightingScheduleRequest, white),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "warm_white",
+    4,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(LightingScheduleRequest, warm_white),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "red",
+    5,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(LightingScheduleRequest, red),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "green",
+    6,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(LightingScheduleRequest, green),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "blue",
+    7,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(LightingScheduleRequest, blue),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "royal_blue",
+    8,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(LightingScheduleRequest, royal_blue),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "ultra_violet",
+    9,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(LightingScheduleRequest, ultra_violet),
+    NULL,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
 static const unsigned lighting_schedule_request__field_indices_by_name[] = {
-  0,   /* field[0] = points */
+  6,   /* field[6] = blue */
+  5,   /* field[5] = green */
+  0,   /* field[0] = hh */
+  1,   /* field[1] = mm */
+  4,   /* field[4] = red */
+  7,   /* field[7] = royal_blue */
+  8,   /* field[8] = ultra_violet */
+  3,   /* field[3] = warm_white */
+  2,   /* field[2] = white */
 };
 static const ProtobufCIntRange lighting_schedule_request__number_ranges[1 + 1] =
 {
   { 1, 0 },
-  { 0, 1 }
+  { 0, 9 }
 };
 const ProtobufCMessageDescriptor lighting_schedule_request__descriptor =
 {
@@ -641,7 +655,7 @@ const ProtobufCMessageDescriptor lighting_schedule_request__descriptor =
   "LightingScheduleRequest",
   "",
   sizeof(LightingScheduleRequest),
-  1,
+  9,
   lighting_schedule_request__field_descriptors,
   lighting_schedule_request__field_indices_by_name,
   1,  lighting_schedule_request__number_ranges,
@@ -844,187 +858,7 @@ const ProtobufCMessageDescriptor upgrade_firmware_response__descriptor =
   (ProtobufCMessageInit) upgrade_firmware_response__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor time_point__field_descriptors[3] =
-{
-  {
-    "hh",
-    1,
-    PROTOBUF_C_LABEL_NONE,
-    PROTOBUF_C_TYPE_UINT32,
-    0,   /* quantifier_offset */
-    offsetof(TimePoint, hh),
-    NULL,
-    NULL,
-    0,             /* flags */
-    0,NULL,NULL    /* reserved1,reserved2, etc */
-  },
-  {
-    "mm",
-    2,
-    PROTOBUF_C_LABEL_NONE,
-    PROTOBUF_C_TYPE_UINT32,
-    0,   /* quantifier_offset */
-    offsetof(TimePoint, mm),
-    NULL,
-    NULL,
-    0,             /* flags */
-    0,NULL,NULL    /* reserved1,reserved2, etc */
-  },
-  {
-    "brightness",
-    3,
-    PROTOBUF_C_LABEL_NONE,
-    PROTOBUF_C_TYPE_MESSAGE,
-    0,   /* quantifier_offset */
-    offsetof(TimePoint, brightness),
-    &brightness__descriptor,
-    NULL,
-    0,             /* flags */
-    0,NULL,NULL    /* reserved1,reserved2, etc */
-  },
-};
-static const unsigned time_point__field_indices_by_name[] = {
-  2,   /* field[2] = brightness */
-  0,   /* field[0] = hh */
-  1,   /* field[1] = mm */
-};
-static const ProtobufCIntRange time_point__number_ranges[1 + 1] =
-{
-  { 1, 0 },
-  { 0, 3 }
-};
-const ProtobufCMessageDescriptor time_point__descriptor =
-{
-  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
-  "TimePoint",
-  "TimePoint",
-  "TimePoint",
-  "",
-  sizeof(TimePoint),
-  3,
-  time_point__field_descriptors,
-  time_point__field_indices_by_name,
-  1,  time_point__number_ranges,
-  (ProtobufCMessageInit) time_point__init,
-  NULL,NULL,NULL    /* reserved[123] */
-};
-static const ProtobufCFieldDescriptor brightness__field_descriptors[7] =
-{
-  {
-    "white",
-    3,
-    PROTOBUF_C_LABEL_NONE,
-    PROTOBUF_C_TYPE_UINT32,
-    0,   /* quantifier_offset */
-    offsetof(Brightness, white),
-    NULL,
-    NULL,
-    0,             /* flags */
-    0,NULL,NULL    /* reserved1,reserved2, etc */
-  },
-  {
-    "warm_white",
-    4,
-    PROTOBUF_C_LABEL_NONE,
-    PROTOBUF_C_TYPE_UINT32,
-    0,   /* quantifier_offset */
-    offsetof(Brightness, warm_white),
-    NULL,
-    NULL,
-    0,             /* flags */
-    0,NULL,NULL    /* reserved1,reserved2, etc */
-  },
-  {
-    "red",
-    5,
-    PROTOBUF_C_LABEL_NONE,
-    PROTOBUF_C_TYPE_UINT32,
-    0,   /* quantifier_offset */
-    offsetof(Brightness, red),
-    NULL,
-    NULL,
-    0,             /* flags */
-    0,NULL,NULL    /* reserved1,reserved2, etc */
-  },
-  {
-    "green",
-    6,
-    PROTOBUF_C_LABEL_NONE,
-    PROTOBUF_C_TYPE_UINT32,
-    0,   /* quantifier_offset */
-    offsetof(Brightness, green),
-    NULL,
-    NULL,
-    0,             /* flags */
-    0,NULL,NULL    /* reserved1,reserved2, etc */
-  },
-  {
-    "blue",
-    7,
-    PROTOBUF_C_LABEL_NONE,
-    PROTOBUF_C_TYPE_UINT32,
-    0,   /* quantifier_offset */
-    offsetof(Brightness, blue),
-    NULL,
-    NULL,
-    0,             /* flags */
-    0,NULL,NULL    /* reserved1,reserved2, etc */
-  },
-  {
-    "royal_blue",
-    8,
-    PROTOBUF_C_LABEL_NONE,
-    PROTOBUF_C_TYPE_UINT32,
-    0,   /* quantifier_offset */
-    offsetof(Brightness, royal_blue),
-    NULL,
-    NULL,
-    0,             /* flags */
-    0,NULL,NULL    /* reserved1,reserved2, etc */
-  },
-  {
-    "ultra_violet",
-    9,
-    PROTOBUF_C_LABEL_NONE,
-    PROTOBUF_C_TYPE_UINT32,
-    0,   /* quantifier_offset */
-    offsetof(Brightness, ultra_violet),
-    NULL,
-    NULL,
-    0,             /* flags */
-    0,NULL,NULL    /* reserved1,reserved2, etc */
-  },
-};
-static const unsigned brightness__field_indices_by_name[] = {
-  4,   /* field[4] = blue */
-  3,   /* field[3] = green */
-  2,   /* field[2] = red */
-  5,   /* field[5] = royal_blue */
-  6,   /* field[6] = ultra_violet */
-  1,   /* field[1] = warm_white */
-  0,   /* field[0] = white */
-};
-static const ProtobufCIntRange brightness__number_ranges[1 + 1] =
-{
-  { 3, 0 },
-  { 0, 7 }
-};
-const ProtobufCMessageDescriptor brightness__descriptor =
-{
-  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
-  "Brightness",
-  "Brightness",
-  "Brightness",
-  "",
-  sizeof(Brightness),
-  7,
-  brightness__field_descriptors,
-  brightness__field_indices_by_name,
-  1,  brightness__number_ranges,
-  (ProtobufCMessageInit) brightness__init,
-  NULL,NULL,NULL    /* reserved[123] */
-};
-static const ProtobufCFieldDescriptor time_stamp__field_descriptors[2] =
+static const ProtobufCFieldDescriptor time_stamp__field_descriptors[8] =
 {
   {
     "seconds",
@@ -1039,26 +873,105 @@ static const ProtobufCFieldDescriptor time_stamp__field_descriptors[2] =
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
   {
-    "brightness",
-    2,
+    "white",
+    3,
     PROTOBUF_C_LABEL_NONE,
-    PROTOBUF_C_TYPE_MESSAGE,
+    PROTOBUF_C_TYPE_UINT32,
     0,   /* quantifier_offset */
-    offsetof(TimeStamp, brightness),
-    &brightness__descriptor,
+    offsetof(TimeStamp, white),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "warm_white",
+    4,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(TimeStamp, warm_white),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "red",
+    5,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(TimeStamp, red),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "green",
+    6,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(TimeStamp, green),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "blue",
+    7,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(TimeStamp, blue),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "royal_blue",
+    8,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(TimeStamp, royal_blue),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "ultra_violet",
+    9,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(TimeStamp, ultra_violet),
+    NULL,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
 static const unsigned time_stamp__field_indices_by_name[] = {
-  1,   /* field[1] = brightness */
+  5,   /* field[5] = blue */
+  4,   /* field[4] = green */
+  3,   /* field[3] = red */
+  6,   /* field[6] = royal_blue */
   0,   /* field[0] = seconds */
+  7,   /* field[7] = ultra_violet */
+  2,   /* field[2] = warm_white */
+  1,   /* field[1] = white */
 };
-static const ProtobufCIntRange time_stamp__number_ranges[1 + 1] =
+static const ProtobufCIntRange time_stamp__number_ranges[2 + 1] =
 {
   { 1, 0 },
-  { 0, 2 }
+  { 3, 1 },
+  { 0, 8 }
 };
 const ProtobufCMessageDescriptor time_stamp__descriptor =
 {
@@ -1068,10 +981,10 @@ const ProtobufCMessageDescriptor time_stamp__descriptor =
   "TimeStamp",
   "",
   sizeof(TimeStamp),
-  2,
+  8,
   time_stamp__field_descriptors,
   time_stamp__field_indices_by_name,
-  1,  time_stamp__number_ranges,
+  2,  time_stamp__number_ranges,
   (ProtobufCMessageInit) time_stamp__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
@@ -1104,19 +1017,19 @@ const ProtobufCEnumDescriptor scene__descriptor =
 static const ProtobufCEnumValue command_code__enum_values_by_number[4] =
 {
   { "COMMAND_CODE_UNSPECIFIED", "COMMAND_CODE__COMMAND_CODE_UNSPECIFIED", 0 },
-  { "COMMAND_GET_PROPERTIES", "COMMAND_CODE__COMMAND_GET_PROPERTIES", 1 },
-  { "COMMAND_SET_LIGHTING", "COMMAND_CODE__COMMAND_SET_LIGHTING", 5 },
-  { "COMMAND_UPGRADE_FIRMWARE", "COMMAND_CODE__COMMAND_UPGRADE_FIRMWARE", 6 },
+  { "COMMAND_CODE_GET_PROPERTIES", "COMMAND_CODE__COMMAND_CODE_GET_PROPERTIES", 1 },
+  { "COMMAND_CODE_SET_LIGHTING", "COMMAND_CODE__COMMAND_CODE_SET_LIGHTING", 5 },
+  { "COMMAND_CODE_UPGRADE_FIRMWARE", "COMMAND_CODE__COMMAND_CODE_UPGRADE_FIRMWARE", 6 },
 };
 static const ProtobufCIntRange command_code__value_ranges[] = {
 {0, 0},{5, 2},{0, 4}
 };
 static const ProtobufCEnumValueIndex command_code__enum_values_by_name[4] =
 {
+  { "COMMAND_CODE_GET_PROPERTIES", 1 },
+  { "COMMAND_CODE_SET_LIGHTING", 2 },
   { "COMMAND_CODE_UNSPECIFIED", 0 },
-  { "COMMAND_GET_PROPERTIES", 1 },
-  { "COMMAND_SET_LIGHTING", 2 },
-  { "COMMAND_UPGRADE_FIRMWARE", 3 },
+  { "COMMAND_CODE_UPGRADE_FIRMWARE", 3 },
 };
 const ProtobufCEnumDescriptor command_code__descriptor =
 {
