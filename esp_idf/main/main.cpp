@@ -113,7 +113,7 @@ void app_main(void) {
     deviceIdCharacteristic->setValue("TIDAL TECH LIGHTING");
 
     NimBLEService* colorService = srv->createService(COLOR_SERVICE_UUID);
-
+    size_t x = sizeof(LightingScheduleRequest);
     NimBLECharacteristic* getCurrentMode = colorService->createCharacteristic(CHARACTERISTIC_UUID_GET_COLOR_MODE, NIMBLE_PROPERTY::READ);
     getCurrentMode->setValue("0");
     getCurrentMode->setCallbacks(&chrCallbacks);

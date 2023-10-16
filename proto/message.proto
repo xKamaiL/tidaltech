@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option java_package = "com.tidaltech.message";
+
 message DeviceInformationRequest {
   //
 }
