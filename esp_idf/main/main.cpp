@@ -181,10 +181,22 @@ void addColorTimePoint(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& co
     leds.blue = req->blue;
     leds.royal_blue = req->royal_blue;
     leds.ultra_violet = req->ultra_violet;
-
     lighting_schedule_request__free_unpacked(req, NULL);
-    //
+
+    // TODO: iterate through schedule or add new time point ?
 }
 
 void onSetColorMode(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
+    SetColorModeRequest* req = set_color_mode_request__unpack(NULL, pCharacteristic->getValue().length(), (uint8_t*)pCharacteristic->getValue().c_str());
+    if (req == NULL) {
+        printf("onSetColorMode: decode message failed\n");
+        return;
+    }
+
+    Mode mode = req->mode;
+    set_color_mode_request__free_unpacked(req, NULL);
+
+    printf("onSetColorMode: %d\n", mode);
+
+    // TODO: change color mode ?
 }
