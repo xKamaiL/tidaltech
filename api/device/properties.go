@@ -2,13 +2,6 @@ package device
 
 import "github.com/xkamail/tidaltech/pkg/led"
 
-type Mode uint8
-
-const (
-	ModeSchedule Mode = iota
-	ModeManual
-)
-
 type Date string
 
 type Properties struct {
