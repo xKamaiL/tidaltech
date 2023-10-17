@@ -14,8 +14,14 @@ message DeviceInformationResponse {
   string version = 5;
 }
 
-message SetColorModeRequest{
-Mode mode = 1;
+message SetColorModeRequest {
+  Mode mode = 1;
+}
+
+message SetAmbientRequest {
+  uint32 r = 1;
+  uint32 g = 2;
+  uint32 b = 3;
 }
 
 

@@ -142,6 +142,51 @@ void   set_color_mode_request__free_unpacked
   assert(message->base.descriptor == &set_color_mode_request__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
+void   set_ambient_request__init
+                     (SetAmbientRequest         *message)
+{
+  static const SetAmbientRequest init_value = SET_AMBIENT_REQUEST__INIT;
+  *message = init_value;
+}
+size_t set_ambient_request__get_packed_size
+                     (const SetAmbientRequest *message)
+{
+  assert(message->base.descriptor == &set_ambient_request__descriptor);
+  return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
+}
+size_t set_ambient_request__pack
+                     (const SetAmbientRequest *message,
+                      uint8_t       *out)
+{
+  assert(message->base.descriptor == &set_ambient_request__descriptor);
+  return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
+}
+size_t set_ambient_request__pack_to_buffer
+                     (const SetAmbientRequest *message,
+                      ProtobufCBuffer *buffer)
+{
+  assert(message->base.descriptor == &set_ambient_request__descriptor);
+  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
+}
+SetAmbientRequest *
+       set_ambient_request__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data)
+{
+  return (SetAmbientRequest *)
+     protobuf_c_message_unpack (&set_ambient_request__descriptor,
+                                allocator, len, data);
+}
+void   set_ambient_request__free_unpacked
+                     (SetAmbientRequest *message,
+                      ProtobufCAllocator *allocator)
+{
+  if(!message)
+    return;
+  assert(message->base.descriptor == &set_ambient_request__descriptor);
+  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
+}
 void   lighting_schedule_request__init
                      (LightingScheduleRequest         *message)
 {
@@ -601,6 +646,70 @@ const ProtobufCMessageDescriptor set_color_mode_request__descriptor =
   set_color_mode_request__field_indices_by_name,
   1,  set_color_mode_request__number_ranges,
   (ProtobufCMessageInit) set_color_mode_request__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCFieldDescriptor set_ambient_request__field_descriptors[3] =
+{
+  {
+    "r",
+    1,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(SetAmbientRequest, r),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "g",
+    2,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(SetAmbientRequest, g),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "b",
+    3,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(SetAmbientRequest, b),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned set_ambient_request__field_indices_by_name[] = {
+  2,   /* field[2] = b */
+  1,   /* field[1] = g */
+  0,   /* field[0] = r */
+};
+static const ProtobufCIntRange set_ambient_request__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 3 }
+};
+const ProtobufCMessageDescriptor set_ambient_request__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "SetAmbientRequest",
+  "SetAmbientRequest",
+  "SetAmbientRequest",
+  "",
+  sizeof(SetAmbientRequest),
+  3,
+  set_ambient_request__field_descriptors,
+  set_ambient_request__field_indices_by_name,
+  1,  set_ambient_request__number_ranges,
+  (ProtobufCMessageInit) set_ambient_request__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
 static const ProtobufCFieldDescriptor lighting_schedule_request__field_descriptors[9] =
