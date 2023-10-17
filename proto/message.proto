@@ -14,6 +14,10 @@ message DeviceInformationResponse {
   string version = 5;
 }
 
+message SetColorModeRequest{
+Mode mode = 1;
+}
+
 
 
 // LightingScheduleRequest is the data that will be sent

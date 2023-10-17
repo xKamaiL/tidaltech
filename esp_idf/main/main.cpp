@@ -39,7 +39,8 @@ class ServerCallbacks : public NimBLEServerCallbacks {
     };
 };
 
-void addColorTimePoint(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo);
+void onAddColorTimePoint(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo);
+void onSetColorMode(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo);
 
 class CharacteristicCallbacks : public NimBLECharacteristicCallbacks {
     void onRead(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
@@ -49,11 +50,19 @@ class CharacteristicCallbacks : public NimBLECharacteristicCallbacks {
         if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_GET_CURRENT_TIME)) {
             return;
         }
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_GET_COLOR_MODE)) {
+            pCharacteristic->setValue(0);
+            return;
+        }
     };
 
     void onWrite(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
         if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_ADD_COLOR_TIME_POINT)) {
-            addColorTimePoint(pCharacteristic, connInfo);
+            onAddColorTimePoint(pCharacteristic, connInfo);
+            return;
+        }
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_SET_COLOR_MODE)) {
+            onSetColorMode(pCharacteristic, connInfo);
             return;
         }
     };
@@ -175,4 +184,7 @@ void addColorTimePoint(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& co
 
     lighting_schedule_request__free_unpacked(req, NULL);
     //
+}
+
+void onSetColorMode(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
 }

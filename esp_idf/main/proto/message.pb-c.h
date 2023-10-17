@@ -17,6 +17,7 @@ PROTOBUF_C__BEGIN_DECLS
 
 typedef struct DeviceInformationRequest DeviceInformationRequest;
 typedef struct DeviceInformationResponse DeviceInformationResponse;
+typedef struct SetColorModeRequest SetColorModeRequest;
 typedef struct LightingScheduleRequest LightingScheduleRequest;
 typedef struct SetSceneRequest SetSceneRequest;
 typedef struct GetSceneResponse GetSceneResponse;
@@ -97,6 +98,16 @@ struct  DeviceInformationResponse
 #define DEVICE_INFORMATION_RESPONSE__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&device_information_response__descriptor) \
 , MODE__MODE_UNSPECIFIED, 0, (char *)protobuf_c_empty_string, (char *)protobuf_c_empty_string, (char *)protobuf_c_empty_string }
+
+
+struct  SetColorModeRequest
+{
+  ProtobufCMessage base;
+  Mode mode;
+};
+#define SET_COLOR_MODE_REQUEST__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&set_color_mode_request__descriptor) \
+, MODE__MODE_UNSPECIFIED }
 
 
 /*
@@ -232,6 +243,25 @@ DeviceInformationResponse *
                       const uint8_t       *data);
 void   device_information_response__free_unpacked
                      (DeviceInformationResponse *message,
+                      ProtobufCAllocator *allocator);
+/* SetColorModeRequest methods */
+void   set_color_mode_request__init
+                     (SetColorModeRequest         *message);
+size_t set_color_mode_request__get_packed_size
+                     (const SetColorModeRequest   *message);
+size_t set_color_mode_request__pack
+                     (const SetColorModeRequest   *message,
+                      uint8_t             *out);
+size_t set_color_mode_request__pack_to_buffer
+                     (const SetColorModeRequest   *message,
+                      ProtobufCBuffer     *buffer);
+SetColorModeRequest *
+       set_color_mode_request__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data);
+void   set_color_mode_request__free_unpacked
+                     (SetColorModeRequest *message,
                       ProtobufCAllocator *allocator);
 /* LightingScheduleRequest methods */
 void   lighting_schedule_request__init
@@ -374,6 +404,9 @@ typedef void (*DeviceInformationRequest_Closure)
 typedef void (*DeviceInformationResponse_Closure)
                  (const DeviceInformationResponse *message,
                   void *closure_data);
+typedef void (*SetColorModeRequest_Closure)
+                 (const SetColorModeRequest *message,
+                  void *closure_data);
 typedef void (*LightingScheduleRequest_Closure)
                  (const LightingScheduleRequest *message,
                   void *closure_data);
@@ -407,6 +440,7 @@ extern const ProtobufCEnumDescriptor    mode__descriptor;
 extern const ProtobufCEnumDescriptor    led__descriptor;
 extern const ProtobufCMessageDescriptor device_information_request__descriptor;
 extern const ProtobufCMessageDescriptor device_information_response__descriptor;
+extern const ProtobufCMessageDescriptor set_color_mode_request__descriptor;
 extern const ProtobufCMessageDescriptor lighting_schedule_request__descriptor;
 extern const ProtobufCMessageDescriptor set_scene_request__descriptor;
 extern const ProtobufCMessageDescriptor get_scene_response__descriptor;

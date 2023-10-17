@@ -131,6 +131,48 @@ class DeviceInformationResponse extends $pb.GeneratedMessage {
   void clearVersion() => clearField(5);
 }
 
+class SetColorModeRequest extends $pb.GeneratedMessage {
+  factory SetColorModeRequest() => create();
+  SetColorModeRequest._() : super();
+  factory SetColorModeRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory SetColorModeRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SetColorModeRequest', createEmptyInstance: create)
+    ..e<Mode>(1, _omitFieldNames ? '' : 'mode', $pb.PbFieldType.OE, defaultOrMaker: Mode.MODE_UNSPECIFIED, valueOf: Mode.valueOf, enumValues: Mode.values)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  SetColorModeRequest clone() => SetColorModeRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  SetColorModeRequest copyWith(void Function(SetColorModeRequest) updates) => super.copyWith((message) => updates(message as SetColorModeRequest)) as SetColorModeRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static SetColorModeRequest create() => SetColorModeRequest._();
+  SetColorModeRequest createEmptyInstance() => create();
+  static $pb.PbList<SetColorModeRequest> createRepeated() => $pb.PbList<SetColorModeRequest>();
+  @$core.pragma('dart2js:noInline')
+  static SetColorModeRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SetColorModeRequest>(create);
+  static SetColorModeRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  Mode get mode => $_getN(0);
+  @$pb.TagNumber(1)
+  set mode(Mode v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasMode() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearMode() => clearField(1);
+}
+
 class LightingScheduleRequest extends $pb.GeneratedMessage {
   factory LightingScheduleRequest() => create();
   LightingScheduleRequest._() : super();

@@ -105,6 +105,18 @@ final $typed_data.Uint8List deviceInformationResponseDescriptor = $convert.base6
     '0KEmN1cnJlbnRfdGltZXN0YW1wcxgCIAEoDVIRY3VycmVudFRpbWVzdGFtcHMSEgoEbmFtZRgD'
     'IAEoCVIEbmFtZRIOCgJpZBgEIAEoCVICaWQSGAoHdmVyc2lvbhgFIAEoCVIHdmVyc2lvbg==');
 
+@$core.Deprecated('Use setColorModeRequestDescriptor instead')
+const SetColorModeRequest$json = {
+  '1': 'SetColorModeRequest',
+  '2': [
+    {'1': 'mode', '3': 1, '4': 1, '5': 14, '6': '.Mode', '10': 'mode'},
+  ],
+};
+
+/// Descriptor for `SetColorModeRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List setColorModeRequestDescriptor = $convert.base64Decode(
+    'ChNTZXRDb2xvck1vZGVSZXF1ZXN0EhkKBG1vZGUYASABKA4yBS5Nb2RlUgRtb2Rl');
+
 @$core.Deprecated('Use lightingScheduleRequestDescriptor instead')
 const LightingScheduleRequest$json = {
   '1': 'LightingScheduleRequest',
