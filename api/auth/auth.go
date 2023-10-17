@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/acoshift/pgsql"
 	"github.com/acoshift/pgsql/pgctx"
 	"github.com/asaskevich/govalidator"
 	"github.com/google/uuid"
@@ -85,7 +86,7 @@ func (p *SignUpParam) Valid() error {
 	v.Must(len(p.Email) > 0, "email is required")
 	v.Must(govalidator.IsEmail(p.Email), "email is invalid")
 	v.Must(len(p.Password) > 0, "password is required")
-	v.Must(len(p.Password) > 8, "password must be at least 8 characters")
+	v.Must(len(p.Password) >= 8, "password must be at least 8 characters")
 	v.Must(len(p.ConfirmPassword) > 0, "confirmPassword is required")
 	v.Must(p.Password == p.ConfirmPassword, "password and confirmPassword must be equal")
 
@@ -114,6 +115,9 @@ func SignUp(ctx context.Context, p *SignUpParam) (*SignInResult, error) {
 	).Scan(
 		&userID,
 	)
+	if pgsql.IsUniqueViolation(err) {
+
+	}
 	if err != nil {
 		return nil, err
 	}
