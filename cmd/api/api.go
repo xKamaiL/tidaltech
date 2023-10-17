@@ -30,7 +30,7 @@ func main() {
 func run() error {
 	s := parapet.NewBackend()
 	host := r.StringDefault("host", "")
-	port := r.StringDefault("port", "8080")
+	port := r.StringDefault("app-port", "8080")
 
 	dbURL := r.String("db_url")
 
