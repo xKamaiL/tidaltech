@@ -6,10 +6,7 @@ class DeviceInformationService {
 }
 
 class ColorService {
-  static String getColorMode = ("f5057e16-c769-4a17-99f7-79b03dcac1c7");
-  static String setColorMode = ("7808c1c0-632f-475f-a3f1-d49b5d7dec69");
-
-  static String listTimePoints = ("940e68e7-9b45-4de4-a034-c7a40855702c");
+  static String addTimePoint = ("6e530ec4-79a0-43dd-bf64-e2d8399a7196");
 }
 
 class RTCService {

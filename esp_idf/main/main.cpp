@@ -23,25 +23,19 @@ void addColorTimePoint(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& co
 
 class CharacteristicCallbacks : public NimBLECharacteristicCallbacks {
     void onRead(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
-        printf(pCharacteristic->getUUID().toString().c_str());
-        printf(": onRead(), value: ");
-        printf(pCharacteristic->getValue().c_str());
-
         if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_GET_COLOR_MODE)) {
             printf("get color mode");
-        } else if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_GET_CURRENT_TIME)) {
-            printf("get current time");
         }
-        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_ADD_COLOR_TIME_POINT)) {
-            printf("add color time point");
-            addColorTimePoint(pCharacteristic, connInfo);
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_GET_CURRENT_TIME)) {
+            printf("get current time");
         }
     };
 
     void onWrite(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
-        printf(pCharacteristic->getUUID().toString().c_str());
-        printf(": onWrite(), value: ");
-        printf(pCharacteristic->getValue().c_str());
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_ADD_COLOR_TIME_POINT)) {
+            addColorTimePoint(pCharacteristic, connInfo);
+            return;
+        }
     };
     /** Called before notification or indication is sent,
      *  the value can be changed here before sending if desired.
@@ -106,11 +100,12 @@ void app_main(void) {
 
     NimBLEService* colorService = srv->createService(COLOR_SERVICE_UUID);
     NimBLECharacteristic* getCurrentMode = colorService->createCharacteristic(CHARACTERISTIC_UUID_GET_COLOR_MODE, NIMBLE_PROPERTY::READ);
-    getCurrentMode->setValue("0");
     getCurrentMode->setCallbacks(&chrCallbacks);
     NimBLECharacteristic* setColorMode = colorService->createCharacteristic(CHARACTERISTIC_UUID_SET_COLOR_MODE, NIMBLE_PROPERTY::WRITE_NR);
-    setColorMode->setValue("0");
     setColorMode->setCallbacks(&chrCallbacks);
+
+    NimBLECharacteristic* addColorTimePointCh = colorService->createCharacteristic(CHARACTERISTIC_UUID_ADD_COLOR_TIME_POINT, NIMBLE_PROPERTY::WRITE_NR);
+    addColorTimePointCh->setCallbacks(&chrCallbacks);
 
     // get current mode
     // add time points
@@ -146,9 +141,10 @@ void app_main(void) {
 }
 
 void addColorTimePoint(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
-    printf("addColorTimePoint: start decode message");
-
     LightingScheduleRequest* request = lighting_schedule_request__unpack(NULL, pCharacteristic->getValue().length(), (uint8_t*)pCharacteristic->getValue().c_str());
-
-    printf("addColorTimePoint: end decode message");
+    if (request == NULL) {
+        printf("addColorTimePoint: decode message failed\n");
+        return;
+    }
+    printf("addColorTimePoint: %ld:%ld with sizes %u\n", request->hh, request->mm, pCharacteristic->getValue().length());
 }

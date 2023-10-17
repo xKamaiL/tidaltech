@@ -227,22 +227,30 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
   Future<BluetoothCharacteristic?> _callCharacteristic(
       String serviceGuid, String characteristicGuid) async {
     final conn = state.connectedDevice;
-    if (conn == null) return null;
+    if (conn == null) {
+      debugPrint("conn is null");
+      return null;
+    }
 
     final connState = await conn.connectionState.first;
     if (connState != BluetoothConnectionState.connected) {
+      debugPrint("conn is not connected");
       await conn.connect();
-      await conn.discoverServices();
     }
+    await conn.discoverServices();
 
     if (conn.servicesList == null) {
+      debugPrint("services list is null");
       return null;
     }
 
     final service = conn.servicesList
         ?.where((element) => element.serviceUuid.toString() == serviceGuid)
         .first;
-    if (service == null) return null;
+    if (service == null) {
+      debugPrint("service is null");
+      return null;
+    }
 
     final c = service.characteristics
         .where((element) =>
@@ -275,16 +283,26 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
 
   void sendTimePoints({
     required List<TimePoint> timePoints,
-  }) {
-
+  }) async {
+    final c =
+        await _callCharacteristic(BLEServices.color, ColorService.addTimePoint);
+    // send to device
+    if (c == null) {
+      debugPrint("characteristic is null");
+      return;
+    }
+    debugPrint("ok");
     for (final p in timePoints) {
       // log bytes length
-      final req =  p.toProto();
+      final req = p.toProto();
       final bytes = req.writeToBuffer();
       // print value
-      debugPrint("bytes length: ${bytes.length}");
+      debugPrint("bytes length: ${bytes.length} ${bytes.toString()}");
+      c.write(
+        bytes,
+        withoutResponse: true,
+      );
     }
-    // send to device
   }
 
 //
