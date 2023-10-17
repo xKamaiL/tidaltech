@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 	"crypto/sha1"
+	"encoding/base64"
 	"time"
 
 	"github.com/acoshift/pgsql/pgctx"
@@ -10,10 +11,13 @@ import (
 	"github.com/thanhpk/randstr"
 )
 
+var secretToken = "secret"
+
 func HashToken(str string) string {
 	h := sha1.New()
 	h.Write([]byte(str))
-	return string(h.Sum(nil))
+	h.Write([]byte(secretToken))
+	return base64.StdEncoding.EncodeToString(h.Sum(nil))
 }
 
 func GetToken(ctx context.Context, hashedToken string) (userID uuid.UUID, err error) {
@@ -30,7 +34,7 @@ func GetToken(ctx context.Context, hashedToken string) (userID uuid.UUID, err er
 }
 
 func insertToken(ctx context.Context, userID uuid.UUID) (token string, err error) {
-	token = randstr.Base64(32)
+	token = randstr.Hex(32)
 	_, err = pgctx.Exec(ctx, `
 		insert into user_auth_tokens (user_id, token, expires_at)
 			values ($1, $2, $3) `,

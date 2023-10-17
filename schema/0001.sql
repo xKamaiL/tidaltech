@@ -2,7 +2,7 @@ create table users
 (
     id         uuid      default gen_random_uuid(),
     email      varchar not null,
-    password   varchar not null,
+    password   text not null,
     created_at timestamp default now(),
     primary key (id)
 );

@@ -72,7 +72,8 @@ func New() *DB {
 
 	// setup fixtures
 	_, err = db.Exec(`
-		insert into users (id, email, password) values ('00000000-0000-0000-0000-000000000001','test@email.com',now());
+		-- password___
+		insert into users (id, email, password) values ('00000000-0000-0000-0000-000000000001','test@email.com','argon2id$2$65536$4$16$lMf6WteFC7fUznTQ6hUXQw$b7mhoaqCoUpe5oe79UV0Fg');
 		insert into user_auth_tokens 
 		    (user_id, token, expires_at) values ('00000000-0000-0000-0000-000000000001','TEST_TOKEN', now() + interval '1 day');
 	`)
