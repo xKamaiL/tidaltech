@@ -7,8 +7,17 @@ app = "tidaltech"
 primary_region = "sin"
 
 [build]
-  builder = "paketobuildpacks/builder:base"
-  buildpacks = ["gcr.io/paketo-buildpacks/go"]
+  dockerfile = "cmd/api/Dockerfile"
+[checks]
+  [checks.name_of_your_http_check]
+  grace_period = "60s"
+  interval = "15s"
+  method = "post"
+  path = "/health.check"
+  port = 8080
+  timeout = "5s"
+  type = "http"
+
 
 [env]
   PORT = "8080"

@@ -1,6 +1,8 @@
 package api
 
 import (
+	"context"
+
 	"github.com/acoshift/arpc/v2"
 	"github.com/moonrhythm/httpmux"
 
@@ -8,6 +10,10 @@ import (
 )
 
 func Mount(m *httpmux.Mux, am *arpc.Manager) {
+
+	m.Handle("/health.check", am.Handler(func(ctx context.Context) string {
+		return "OK"
+	}))
 
 	m.Handle("/auth.SignIn", am.Handler(auth.SignIn))
 
