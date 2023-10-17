@@ -107,13 +107,7 @@ struct  DeviceInformationResponse
 struct  LightingScheduleRequest
 {
   ProtobufCMessage base;
-  /*
-   * 5 bit
-   */
   uint32_t hh;
-  /*
-   * 6 bit
-   */
   uint32_t mm;
   uint32_t white;
   uint32_t warm_white;
