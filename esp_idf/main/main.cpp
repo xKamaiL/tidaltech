@@ -8,6 +8,26 @@
 #include "proto/message.pb-c.h"
 #include "sdkconfig.h"
 
+// LEDLevel
+typedef struct {
+    uint32_t hh;
+    uint32_t mm;
+    uint32_t white;
+    uint32_t warm_white;
+    uint32_t red;
+    uint32_t green;
+    uint32_t blue;
+    uint32_t royal_blue;
+    uint32_t ultra_violet;
+} LEDLevel;
+
+// Schdule Item
+typedef struct {
+    uint32_t hh;
+    uint32_t mm;
+    LEDLevel leds;
+} Schedule;
+
 /* Handler class for server events */
 class ServerCallbacks : public NimBLEServerCallbacks {
     void onConnect(NimBLEServer* pServer, NimBLEConnInfo& connInfo) {
@@ -24,10 +44,10 @@ void addColorTimePoint(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& co
 class CharacteristicCallbacks : public NimBLECharacteristicCallbacks {
     void onRead(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
         if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_GET_COLOR_MODE)) {
-            printf("get color mode");
+            return;
         }
         if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_GET_CURRENT_TIME)) {
-            printf("get current time");
+            return;
         }
     };
 
@@ -37,16 +57,9 @@ class CharacteristicCallbacks : public NimBLECharacteristicCallbacks {
             return;
         }
     };
-    /** Called before notification or indication is sent,
-     *  the value can be changed here before sending if desired.
-     */
-    void onNotify(NimBLECharacteristic* pCharacteristic) {
-        printf("Sending notification to clients");
-    };
 
-    /** The status returned in status is defined in NimBLECharacteristic.h.
-     *  The value returned in code is the NimBLE host return code.
-     */
+    void onNotify(NimBLECharacteristic* pCharacteristic){};
+
     void onStatus(NimBLECharacteristic* pCharacteristic, int code) {
         std::string str = ("Notification/Indication status code: ");
         str += ", return code: ";
@@ -141,10 +154,25 @@ void app_main(void) {
 }
 
 void addColorTimePoint(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
-    LightingScheduleRequest* request = lighting_schedule_request__unpack(NULL, pCharacteristic->getValue().length(), (uint8_t*)pCharacteristic->getValue().c_str());
-    if (request == NULL) {
+    LightingScheduleRequest* req = lighting_schedule_request__unpack(NULL, pCharacteristic->getValue().length(), (uint8_t*)pCharacteristic->getValue().c_str());
+    if (req == NULL) {
         printf("addColorTimePoint: decode message failed\n");
         return;
     }
-    printf("addColorTimePoint: %ld:%ld with sizes %u\n", request->hh, request->mm, pCharacteristic->getValue().length());
+    printf("addColorTimePoint: %ld:%ld with sizes %u\n", req->hh, req->mm, pCharacteristic->getValue().length());
+
+    uint32_t hh = req->hh;
+    uint32_t mm = req->mm;
+
+    LEDLevel leds;
+    leds.white = req->white;
+    leds.warm_white = req->warm_white;
+    leds.red = req->red;
+    leds.green = req->green;
+    leds.blue = req->blue;
+    leds.royal_blue = req->royal_blue;
+    leds.ultra_violet = req->ultra_violet;
+
+    lighting_schedule_request__free_unpacked(req, NULL);
+    //
 }
