@@ -5,6 +5,11 @@
 
 #include "NimBLEDevice.h"
 #include "definations.h"
+#include "driver/rtc_io.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/semphr.h"
+#include "freertos/task.h"
+#include "freertos/timers.h"
 #include "proto/message.pb-c.h"
 #include "sdkconfig.h"
 
@@ -39,8 +44,9 @@ class ServerCallbacks : public NimBLEServerCallbacks {
     };
 };
 
-void onAddColorTimePoint(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo);
-void onSetColorMode(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo);
+void on_add_color_time_points(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo);
+void on_set_color_mode(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo);
+void on_set_ambient(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo);
 
 class CharacteristicCallbacks : public NimBLECharacteristicCallbacks {
     void onRead(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
@@ -58,11 +64,15 @@ class CharacteristicCallbacks : public NimBLECharacteristicCallbacks {
 
     void onWrite(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
         if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_ADD_COLOR_TIME_POINT)) {
-            onAddColorTimePoint(pCharacteristic, connInfo);
+            on_add_color_time_points(pCharacteristic, connInfo);
             return;
         }
         if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_SET_COLOR_MODE)) {
-            onSetColorMode(pCharacteristic, connInfo);
+            on_set_color_mode(pCharacteristic, connInfo);
+            return;
+        }
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_SET_AMBIENT)) {
+            on_set_ambient(pCharacteristic, connInfo);
             return;
         }
     };
@@ -100,6 +110,7 @@ static CharacteristicCallbacks chrCallbacks;
 extern "C" {
 void app_main(void);
 }
+
 void app_main(void) {
     NimBLEDevice::init("TIDAL TECH LIGHTING");
     // NimBLEDevice::setPower(ESP_PWR_LVL_P9); /** +9db */
@@ -162,7 +173,7 @@ void app_main(void) {
     printf("Characteristic defined! Now you can read it in your phone!\n");
 }
 
-void addColorTimePoint(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
+void on_add_color_time_points(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
     LightingScheduleRequest* req = lighting_schedule_request__unpack(NULL, pCharacteristic->getValue().length(), (uint8_t*)pCharacteristic->getValue().c_str());
     if (req == NULL) {
         printf("addColorTimePoint: decode message failed\n");
@@ -186,7 +197,7 @@ void addColorTimePoint(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& co
     // TODO: iterate through schedule or add new time point ?
 }
 
-void onSetColorMode(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
+void on_set_color_mode(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
     SetColorModeRequest* req = set_color_mode_request__unpack(NULL, pCharacteristic->getValue().length(), (uint8_t*)pCharacteristic->getValue().c_str());
     if (req == NULL) {
         printf("onSetColorMode: decode message failed\n");
@@ -201,7 +212,7 @@ void onSetColorMode(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connI
     // TODO: change color mode ?
 }
 
-void onSetAmbient(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
+void on_set_ambient(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
     SetAmbientRequest* req = set_ambient_request__unpack(NULL, pCharacteristic->getValue().length(), (uint8_t*)pCharacteristic->getValue().c_str());
     if (req == NULL) {
         printf("onSetAmbient: decode message failed\n");
@@ -212,5 +223,7 @@ void onSetAmbient(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInf
     int b = req->b;
     set_ambient_request__free_unpacked(req, NULL);
 
+    // TODO: change ambient R,G,B color
+    // but do not change the current color mode
     printf("onSetAmbient: %d,%d,%d\n", r, g, b);
 }
