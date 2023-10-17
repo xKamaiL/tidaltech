@@ -26,7 +26,7 @@ func authMiddleware(r *arpc.MiddlewareContext) error {
 	if token == "" {
 		return errUnauthorized
 	}
-	
+
 	// TODO: set token
 	r.SetRequestContext(r.Request().Context())
 	return nil

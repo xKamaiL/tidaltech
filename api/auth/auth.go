@@ -23,7 +23,6 @@ type SignInResult struct {
 }
 
 func SignIn(ctx context.Context, p *SignInParam) (SignInResult, error) {
-
 	return SignInResult{
 		"token",
 	}, nil
