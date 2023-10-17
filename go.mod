@@ -11,7 +11,9 @@ require (
 
 require (
 	github.com/acoshift/arpc/v2 v2.1.5 // indirect
+	github.com/acoshift/configfile v1.9.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/kavu/go_reuseport v1.5.0 // indirect
 	github.com/lib/pq v1.10.7 // indirect
 	github.com/moonrhythm/httpmux v1.1.0 // indirect

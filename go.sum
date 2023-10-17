@@ -1,10 +1,14 @@
 github.com/DATA-DOG/go-sqlmock v1.5.0 h1:Shsta01QNfFxHCfpW6YH2STWB0MudeXXEWMr20OEh60=
 github.com/acoshift/arpc/v2 v2.1.5 h1:YK+VZop41+nwvM6MPfjWd25h58vb2VbM96djR0NkGCg=
 github.com/acoshift/arpc/v2 v2.1.5/go.mod h1:1bdfjw4BcLrnSCZhsK1Nl/70nxYoCnhlDL1BXHM6GV4=
+github.com/acoshift/configfile v1.9.0 h1:/t8DhgBdYIr15f4BkkM4bDSBWi0+ImKwWgJN/M5Hbb0=
+github.com/acoshift/configfile v1.9.0/go.mod h1:4T3q2BRRhEW4lcS0vc1Pruv0/TuBVKOb7F5vUp6ZyAY=
 github.com/acoshift/pgsql v0.13.0 h1:EjaZItgj1zJPOfKAor+RjDBoRcAcbf6GlILpNuZxgww=
 github.com/acoshift/pgsql v0.13.0/go.mod h1:kAoYUIPMJkdaqLGyUwxJJV73OSm8aY4IOixpHKmRcuI=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/joho/godotenv v1.5.1 h1:7eLL/+HRGLY0ldzfGMeQkb7vMd0as4CfYvUVzLqw0N0=
+github.com/joho/godotenv v1.5.1/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=
 github.com/kavu/go_reuseport v1.5.0 h1:UNuiY2OblcqAtVDE8Gsg1kZz8zbBWg907sP1ceBV+bk=
 github.com/kavu/go_reuseport v1.5.0/go.mod h1:CG8Ee7ceMFSMnx/xr25Vm0qXaj2Z4i5PWoUx+JZ5/CU=
 github.com/kr/text v0.2.0 h1:5Nx0Ya0ZqY2ygV366QzturHI13Jq95ApcVaJBhpS+AY=
