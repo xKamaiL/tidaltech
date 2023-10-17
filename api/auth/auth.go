@@ -19,7 +19,7 @@ type SignInParam struct {
 	Password string `json:"password"`
 }
 
-func (p *SignInParam) Valid() error {
+func (p SignInParam) Valid() error {
 	v := validator.New()
 	v.Must(len(p.Email) > 0, "email is required")
 	v.Must(govalidator.IsEmail(p.Email), "email is invalid")

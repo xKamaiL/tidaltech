@@ -72,7 +72,9 @@ func New() *DB {
 
 	// setup fixtures
 	_, err = db.Exec(`
-		insert into users (id, email, password) values ('00000000-0000-0000-0000-000000000001','test@email.com',now())
+		insert into users (id, email, password) values ('00000000-0000-0000-0000-000000000001','test@email.com',now());
+		insert into user_auth_tokens 
+		    (user_id, token, expires_at) values ('00000000-0000-0000-0000-000000000001','TEST_TOKEN', now() + interval '1 day');
 	`)
 	if err != nil {
 		panic(err)
