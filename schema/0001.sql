@@ -27,6 +27,7 @@ create table devices
     token        varchar not null,
     name         varchar not null,
     pair_user_id uuid      default null references users (id),
+    pair_at      timestamp default null,
     created_at   timestamp default now(),
     primary key (id)
 );

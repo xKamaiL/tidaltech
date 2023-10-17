@@ -7,6 +7,7 @@ import (
 	"github.com/moonrhythm/httpmux"
 
 	"github.com/xkamail/tidaltech/api/auth"
+	"github.com/xkamail/tidaltech/api/device"
 )
 
 func Mount(m *httpmux.Mux, am *arpc.Manager) {
@@ -27,9 +28,10 @@ func Mount(m *httpmux.Mux, am *arpc.Manager) {
 
 	// devices
 	{
-		m.Handle("/devices.List", nil)
-		m.Handle("/devices.Pair", nil)
-		m.Handle("/devices.UnPair", nil)
+		m.Handle("/devices.List", am.Handler(device.List))
+		m.Handle("/devices.Get", am.Handler(device.Get))
+		m.Handle("/devices.Pair", am.Handler(device.Pair))
+		m.Handle("/devices.UnPair", am.Handler(device.UnPair))
 	}
 
 	// lighting
