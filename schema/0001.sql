@@ -18,3 +18,17 @@ create table user_auth_tokens
     created_at timestamp default now(),
     primary key (id)
 );
+
+create unique index user_auth_tokens_token_uindex on user_auth_tokens (token);
+
+create table devices
+(
+    id           uuid      default gen_random_uuid(),
+    token        varchar not null,
+    name         varchar not null,
+    pair_user_id uuid      default null references users (id),
+    created_at   timestamp default now(),
+    primary key (id)
+);
+
+create unique index devices_token_uindex on devices (token);

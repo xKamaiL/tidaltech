@@ -18,6 +18,8 @@ github.com/moonrhythm/httpmux v1.1.0 h1:iqQYo7wV0nxw1gWSF4v7UsDouwHzHnzIVBVXM7Qw
 github.com/moonrhythm/httpmux v1.1.0/go.mod h1:efTwsHS/Gp3xnAhYjUEUeSyZeHfycf0rGW5v/Fl1r1Y=
 github.com/moonrhythm/parapet v0.13.0 h1:cfJ9t22OrFuuY5SQy1+ssMkoInXeff6ObDKRNiowstc=
 github.com/moonrhythm/parapet v0.13.0/go.mod h1:V3taRKT4LIPjUkqScL6Z6osu9VqV01PR4hD+VpWArPs=
+github.com/moonrhythm/passwordtool v1.3.0 h1:15HwiTKpawZHHDvqEAbfugNQpLtDf/vbwQJ6MQVHDL8=
+github.com/moonrhythm/passwordtool v1.3.0/go.mod h1:pRvdoYa4DtdgJRFiSv5z7OPSFhqfKGi+KAA8pRgZaAE=
 github.com/moonrhythm/validator v1.3.0 h1:OzZSW8Xtb66Gz7SA8qzY3ANupgdMojLFC1imDs1utOM=
 github.com/moonrhythm/validator v1.3.0/go.mod h1:gbDyBOwWGzphP8K2Sdrd9+MveRVxzxm+ezecimvu9UU=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e h1:fD57ERR4JtEqsWbfPhv4DMiApHyliiK5xCTNVSPiaAs=
@@ -25,10 +27,16 @@ github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZb
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
 github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
+github.com/thanhpk/randstr v1.0.6 h1:psAOktJFD4vV9NEVb3qkhRSMvYh4ORRaj1+w/hn4B+o=
+github.com/thanhpk/randstr v1.0.6/go.mod h1:M/H2P1eNLZzlDwAzpkkkUvoyNNMbzRGhESZuEQk3r0U=
+golang.org/x/crypto v0.14.0 h1:wBqGXzWJW6m1XrIKlAH0Hs1JJ7+9KBwnIO8v66Q9cHc=
+golang.org/x/crypto v0.14.0/go.mod h1:MVFd36DqK4CsrnJYDkBA3VC4m2GkXAM0PvzMCn4JQf4=
 golang.org/x/exp v0.0.0-20230725093048-515e97ebf090 h1:Di6/M8l0O2lCLc6VVRWhgCiApHV8MnQurBnFSHsQtNY=
 golang.org/x/exp v0.0.0-20230725093048-515e97ebf090/go.mod h1:FXUEEKJgO7OQYeo8N01OfiKP8RXMtf6e8aTskBGqWdc=
 golang.org/x/net v0.17.0 h1:pVaXccu2ozPjCXewfr1S7xza/zcXTity9cCdXQYSjIM=
 golang.org/x/net v0.17.0/go.mod h1:NxSsAGuq816PNPmqtQdLE42eU2Fs7NoRIZrHJAlaCOE=
+golang.org/x/sys v0.13.0 h1:Af8nKPmuFypiUBjVoU9V20FiaFXOcuZI21p0ycVYYGE=
+golang.org/x/sys v0.13.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/text v0.13.0 h1:ablQoSUd0tRdKxZewP80B+BaqeKJuVhuRxj/dkrun3k=
 golang.org/x/text v0.13.0/go.mod h1:TvPlkZtksWOMsz7fbANvkp4WM8x/WCo/om8BMLbz+aE=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
