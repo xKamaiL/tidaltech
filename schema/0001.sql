@@ -2,7 +2,7 @@ create table users
 (
     id         uuid      default gen_random_uuid(),
     email      varchar not null,
-    password   text not null,
+    password   text    not null,
     created_at timestamp default now(),
     primary key (id)
 );
@@ -28,6 +28,7 @@ create table devices
     name         varchar not null,
     pair_user_id uuid      default null references users (id),
     pair_at      timestamp default null,
+    properties   jsonb   not null,
     created_at   timestamp default now(),
     primary key (id)
 );
