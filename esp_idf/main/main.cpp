@@ -171,6 +171,8 @@ void app_main(void) {
     BLEDevice::startAdvertising();
 
     printf("Characteristic defined! Now you can read it in your phone!\n");
+
+    // FreeRTOS task
 }
 
 void on_add_color_time_points(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
