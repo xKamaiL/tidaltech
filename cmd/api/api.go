@@ -40,6 +40,10 @@ func run() error {
 	}
 	defer db.Close()
 
+	db.SetMaxIdleConns(r.IntDefault("db_max_idle_conns", 10))
+	db.SetMaxOpenConns(r.IntDefault("db_max_open_conns", 10))
+	db.SetConnMaxLifetime(r.DurationDefault("db_conn_max_lifetime", 10*time.Minute))
+
 	{
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
@@ -63,6 +67,6 @@ func run() error {
 
 	s.Addr = net.JoinHostPort(host, port)
 	slog.Info("starting server", "addr", s.Addr)
-	
+
 	return s.ListenAndServe()
 }
