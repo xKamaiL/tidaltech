@@ -33,15 +33,6 @@ func Mount(m *httpmux.Mux, am *arpc.Manager) {
 		m.Handle("/devices.Pair", am.Handler(device.Pair))
 		m.Handle("/devices.UnPair", am.Handler(device.UnPair))
 	}
-
-	// lighting
-	{
-		m.Handle("/lighting.Mode", nil)
-		m.Handle("/lighting.SetMode", nil)
-		m.Handle("/lighting.GetSchedule", nil)
-		m.Handle("/lighting.SetSchedule", nil)
-
-	}
 }
 
 var errUnauthorized = arpc.NewErrorCode("UNAUTHORIZED", "unauthorized")
