@@ -16,6 +16,7 @@ func Mount(m *httpmux.Mux, am *arpc.Manager) {
 	}))
 
 	m.Handle("/auth.SignIn", am.Handler(auth.SignIn))
+	m.Handle("/auth.SignUp", am.Handler(auth.SignUp))
 
 	m = m.Group("", am.Middleware(authMiddleware))
 	// auth

@@ -5,6 +5,8 @@ github.com/acoshift/configfile v1.9.0 h1:/t8DhgBdYIr15f4BkkM4bDSBWi0+ImKwWgJN/M5
 github.com/acoshift/configfile v1.9.0/go.mod h1:4T3q2BRRhEW4lcS0vc1Pruv0/TuBVKOb7F5vUp6ZyAY=
 github.com/acoshift/pgsql v0.13.0 h1:EjaZItgj1zJPOfKAor+RjDBoRcAcbf6GlILpNuZxgww=
 github.com/acoshift/pgsql v0.13.0/go.mod h1:kAoYUIPMJkdaqLGyUwxJJV73OSm8aY4IOixpHKmRcuI=
+github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 h1:DklsrG3dyBCFEj5IhUbnKptjxatkF07cF2ak3yi77so=
+github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2/go.mod h1:WaHUgvxTVq04UNunO+XhnAqY/wQc+bxr74GqbsZ/Jqw=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/joho/godotenv v1.5.1 h1:7eLL/+HRGLY0ldzfGMeQkb7vMd0as4CfYvUVzLqw0N0=
