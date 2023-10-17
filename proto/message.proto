@@ -20,8 +20,8 @@ message DeviceInformationResponse {
 // to the device
 // which is sent one by one (time point) to the device
 message LightingScheduleRequest {
-  uint32 hh = 1; // 5 bit
-  uint32 mm = 2; // 6 bit
+  uint32 hh = 1;
+  uint32 mm = 2;
   uint32 white = 3;
   uint32 warm_white = 4;
   uint32 red = 5;
