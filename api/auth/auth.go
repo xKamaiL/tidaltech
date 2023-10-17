@@ -8,6 +8,7 @@ import (
 
 	"github.com/acoshift/pgsql/pgctx"
 	"github.com/google/uuid"
+	"github.com/moonrhythm/passwordtool"
 	"github.com/moonrhythm/validator"
 )
 
@@ -27,9 +28,42 @@ type SignInResult struct {
 	Token string `json:"token"`
 }
 
-func SignIn(ctx context.Context, p *SignInParam) (SignInResult, error) {
-	return SignInResult{
-		"token",
+func SignIn(ctx context.Context, p *SignInParam) (*SignInResult, error) {
+
+	if err := p.Valid(); err != nil {
+		return nil, err
+	}
+
+	var userID uuid.UUID
+	var hashedPassword string
+
+	err := pgctx.QueryRow(ctx, `
+			select id,password 
+				from users 
+				where email = $1`,
+		p.Email,
+	).Scan(
+		&userID,
+		&hashedPassword,
+	)
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil, ErrPasswordMismatch
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	if err := passwordtool.Compare(hashedPassword, p.Password); err != nil {
+		return nil, ErrPasswordMismatch
+	}
+
+	token, err := insertToken(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &SignInResult{
+		token,
 	}, nil
 }
 

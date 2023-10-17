@@ -29,8 +29,8 @@ func GetToken(ctx context.Context, hashedToken string) (userID uuid.UUID, err er
 	return
 }
 
-func insertToken(ctx context.Context, userID uuid.UUID) (err error) {
-	token := randstr.Base64(32)
+func insertToken(ctx context.Context, userID uuid.UUID) (token string, err error) {
+	token = randstr.Base64(32)
 	_, err = pgctx.Exec(ctx, `
 		insert into user_auth_tokens (user_id, token, expires_at)
 			values ($1, $2, $3) `,
