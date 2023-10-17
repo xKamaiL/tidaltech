@@ -200,3 +200,17 @@ void onSetColorMode(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connI
 
     // TODO: change color mode ?
 }
+
+void onSetAmbient(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
+    SetAmbientRequest* req = set_ambient_request__unpack(NULL, pCharacteristic->getValue().length(), (uint8_t*)pCharacteristic->getValue().c_str());
+    if (req == NULL) {
+        printf("onSetAmbient: decode message failed\n");
+        return;
+    }
+    int r = req->r;
+    int g = req->g;
+    int b = req->b;
+    set_ambient_request__free_unpacked(req, NULL);
+
+    printf("onSetAmbient: %d,%d,%d\n", r, g, b);
+}
