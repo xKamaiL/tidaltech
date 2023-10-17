@@ -116,7 +116,7 @@ func SignUp(ctx context.Context, p *SignUpParam) (*SignInResult, error) {
 		&userID,
 	)
 	if pgsql.IsUniqueViolation(err) {
-
+		return nil, ErrEmailAlreadyExists
 	}
 	if err != nil {
 		return nil, err
