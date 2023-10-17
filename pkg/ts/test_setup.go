@@ -12,6 +12,8 @@ import (
 
 	"github.com/acoshift/pgsql/pgctx"
 	"github.com/lib/pq"
+
+	"github.com/xkamail/tidaltech/schema"
 )
 
 const masterDBName = "neondb"
@@ -60,6 +62,21 @@ func New() *DB {
 	}
 	x.dbName = dbName
 	x.db = db
+
+	// setup schema
+	if err := schema.Migrate(
+		x.Ctx(),
+	); err != nil {
+		panic(err)
+	}
+
+	// setup fixtures
+	_, err = db.Exec(`
+		insert into users (id, email, password) values ('00000000-0000-0000-0000-000000000001','test@email.com',now())
+	`)
+	if err != nil {
+		panic(err)
+	}
 
 	return &x
 }
