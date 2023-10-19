@@ -19,6 +19,7 @@ typedef struct DeviceInformationRequest DeviceInformationRequest;
 typedef struct DeviceInformationResponse DeviceInformationResponse;
 typedef struct SetColorModeRequest SetColorModeRequest;
 typedef struct SetAmbientRequest SetAmbientRequest;
+typedef struct RTCRequest RTCRequest;
 typedef struct ListTimePointRequest ListTimePointRequest;
 typedef struct ListTimePointRequest__Time ListTimePointRequest__Time;
 typedef struct LightingScheduleRequest LightingScheduleRequest;
@@ -123,6 +124,16 @@ struct  SetAmbientRequest
 #define SET_AMBIENT_REQUEST__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&set_ambient_request__descriptor) \
 , 0, 0, 0 }
+
+
+struct  RTCRequest
+{
+  ProtobufCMessage base;
+  uint32_t timestamp;
+};
+#define RTCREQUEST__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&rtcrequest__descriptor) \
+, 0 }
 
 
 struct  ListTimePointRequest__Time
@@ -319,6 +330,25 @@ SetAmbientRequest *
 void   set_ambient_request__free_unpacked
                      (SetAmbientRequest *message,
                       ProtobufCAllocator *allocator);
+/* RTCRequest methods */
+void   rtcrequest__init
+                     (RTCRequest         *message);
+size_t rtcrequest__get_packed_size
+                     (const RTCRequest   *message);
+size_t rtcrequest__pack
+                     (const RTCRequest   *message,
+                      uint8_t             *out);
+size_t rtcrequest__pack_to_buffer
+                     (const RTCRequest   *message,
+                      ProtobufCBuffer     *buffer);
+RTCRequest *
+       rtcrequest__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data);
+void   rtcrequest__free_unpacked
+                     (RTCRequest *message,
+                      ProtobufCAllocator *allocator);
 /* ListTimePointRequest__Time methods */
 void   list_time_point_request__time__init
                      (ListTimePointRequest__Time         *message);
@@ -488,6 +518,9 @@ typedef void (*SetColorModeRequest_Closure)
 typedef void (*SetAmbientRequest_Closure)
                  (const SetAmbientRequest *message,
                   void *closure_data);
+typedef void (*RTCRequest_Closure)
+                 (const RTCRequest *message,
+                  void *closure_data);
 typedef void (*ListTimePointRequest__Time_Closure)
                  (const ListTimePointRequest__Time *message,
                   void *closure_data);
@@ -529,6 +562,7 @@ extern const ProtobufCMessageDescriptor device_information_request__descriptor;
 extern const ProtobufCMessageDescriptor device_information_response__descriptor;
 extern const ProtobufCMessageDescriptor set_color_mode_request__descriptor;
 extern const ProtobufCMessageDescriptor set_ambient_request__descriptor;
+extern const ProtobufCMessageDescriptor rtcrequest__descriptor;
 extern const ProtobufCMessageDescriptor list_time_point_request__descriptor;
 extern const ProtobufCMessageDescriptor list_time_point_request__time__descriptor;
 extern const ProtobufCMessageDescriptor lighting_schedule_request__descriptor;

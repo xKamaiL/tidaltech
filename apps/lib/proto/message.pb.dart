@@ -235,6 +235,48 @@ class SetAmbientRequest extends $pb.GeneratedMessage {
   void clearB() => clearField(3);
 }
 
+class RTCRequest extends $pb.GeneratedMessage {
+  factory RTCRequest() => create();
+  RTCRequest._() : super();
+  factory RTCRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory RTCRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'RTCRequest', createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'timestamp', $pb.PbFieldType.OU3)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  RTCRequest clone() => RTCRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  RTCRequest copyWith(void Function(RTCRequest) updates) => super.copyWith((message) => updates(message as RTCRequest)) as RTCRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static RTCRequest create() => RTCRequest._();
+  RTCRequest createEmptyInstance() => create();
+  static $pb.PbList<RTCRequest> createRepeated() => $pb.PbList<RTCRequest>();
+  @$core.pragma('dart2js:noInline')
+  static RTCRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RTCRequest>(create);
+  static RTCRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get timestamp => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set timestamp($core.int v) { $_setUnsignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasTimestamp() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTimestamp() => clearField(1);
+}
+
 class ListTimePointRequest_Time extends $pb.GeneratedMessage {
   factory ListTimePointRequest_Time() => create();
   ListTimePointRequest_Time._() : super();

@@ -132,6 +132,18 @@ final $typed_data.Uint8List setAmbientRequestDescriptor = $convert.base64Decode(
     'ChFTZXRBbWJpZW50UmVxdWVzdBIMCgFyGAEgASgNUgFyEgwKAWcYAiABKA1SAWcSDAoBYhgDIA'
     'EoDVIBYg==');
 
+@$core.Deprecated('Use rTCRequestDescriptor instead')
+const RTCRequest$json = {
+  '1': 'RTCRequest',
+  '2': [
+    {'1': 'timestamp', '3': 1, '4': 1, '5': 13, '10': 'timestamp'},
+  ],
+};
+
+/// Descriptor for `RTCRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List rTCRequestDescriptor = $convert.base64Decode(
+    'CgpSVENSZXF1ZXN0EhwKCXRpbWVzdGFtcBgBIAEoDVIJdGltZXN0YW1w');
+
 @$core.Deprecated('Use listTimePointRequestDescriptor instead')
 const ListTimePointRequest$json = {
   '1': 'ListTimePointRequest',

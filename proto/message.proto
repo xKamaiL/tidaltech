@@ -24,6 +24,10 @@ message SetAmbientRequest {
   uint32 b = 3;
 }
 
+message RTCRequest {
+  uint32 timestamp = 1;
+}
+
 message ListTimePointRequest {
   message Time {
     uint32 hh = 1;

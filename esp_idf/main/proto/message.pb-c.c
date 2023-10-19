@@ -187,6 +187,51 @@ void   set_ambient_request__free_unpacked
   assert(message->base.descriptor == &set_ambient_request__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
+void   rtcrequest__init
+                     (RTCRequest         *message)
+{
+  static const RTCRequest init_value = RTCREQUEST__INIT;
+  *message = init_value;
+}
+size_t rtcrequest__get_packed_size
+                     (const RTCRequest *message)
+{
+  assert(message->base.descriptor == &rtcrequest__descriptor);
+  return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
+}
+size_t rtcrequest__pack
+                     (const RTCRequest *message,
+                      uint8_t       *out)
+{
+  assert(message->base.descriptor == &rtcrequest__descriptor);
+  return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
+}
+size_t rtcrequest__pack_to_buffer
+                     (const RTCRequest *message,
+                      ProtobufCBuffer *buffer)
+{
+  assert(message->base.descriptor == &rtcrequest__descriptor);
+  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
+}
+RTCRequest *
+       rtcrequest__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data)
+{
+  return (RTCRequest *)
+     protobuf_c_message_unpack (&rtcrequest__descriptor,
+                                allocator, len, data);
+}
+void   rtcrequest__free_unpacked
+                     (RTCRequest *message,
+                      ProtobufCAllocator *allocator)
+{
+  if(!message)
+    return;
+  assert(message->base.descriptor == &rtcrequest__descriptor);
+  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
+}
 void   list_time_point_request__time__init
                      (ListTimePointRequest__Time         *message)
 {
@@ -761,6 +806,44 @@ const ProtobufCMessageDescriptor set_ambient_request__descriptor =
   set_ambient_request__field_indices_by_name,
   1,  set_ambient_request__number_ranges,
   (ProtobufCMessageInit) set_ambient_request__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCFieldDescriptor rtcrequest__field_descriptors[1] =
+{
+  {
+    "timestamp",
+    1,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(RTCRequest, timestamp),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned rtcrequest__field_indices_by_name[] = {
+  0,   /* field[0] = timestamp */
+};
+static const ProtobufCIntRange rtcrequest__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 1 }
+};
+const ProtobufCMessageDescriptor rtcrequest__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "RTCRequest",
+  "RTCRequest",
+  "RTCRequest",
+  "",
+  sizeof(RTCRequest),
+  1,
+  rtcrequest__field_descriptors,
+  rtcrequest__field_indices_by_name,
+  1,  rtcrequest__number_ranges,
+  (ProtobufCMessageInit) rtcrequest__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
 static const ProtobufCFieldDescriptor list_time_point_request__time__field_descriptors[2] =
