@@ -312,6 +312,7 @@ void on_available_color_time_points(NimBLECharacteristic *pCharacteristic, NimBL
         }
         if (!found) {
             //
+            items[i].ok = false;
             items[i].hh = 0;
             items[i].mm = 0;
         }
