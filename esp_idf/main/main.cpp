@@ -19,24 +19,27 @@
 // LEDLevel
 typedef struct
 {
-    uint32_t hh;
-    uint32_t mm;
-    uint32_t white;
-    uint32_t warm_white;
-    uint32_t red;
-    uint32_t green;
-    uint32_t blue;
-    uint32_t royal_blue;
-    uint32_t ultra_violet;
+    unsigned short hh;
+    unsigned short mm;
+    unsigned short white;
+    unsigned short warm_white;
+    unsigned short red;
+    unsigned short green;
+    unsigned short blue;
+    unsigned short royal_blue;
+    unsigned short ultra_violet;
 } LEDLevel;
 
 // Schdule Item
 typedef struct
 {
-    uint32_t hh;
-    uint32_t mm;
+    unsigned short hh;
+    unsigned short mm;
     LEDLevel leds;
 } Schedule;
+
+esp_err_t write_schedule_to_nvs(Schedule *items);
+Schedule *read_schedule_from_nvs();
 
 /* Handler class for server events */
 class ServerCallbacks : public NimBLEServerCallbacks
@@ -149,6 +152,7 @@ void app_main(void)
         err = nvs_flash_init();
     }
     ESP_ERROR_CHECK(err);
+
     NimBLEDevice::init("TIDAL TECH LIGHTING");
     // NimBLEDevice::setPower(ESP_PWR_LVL_P9); /** +9db */
 
@@ -303,7 +307,7 @@ esp_err_t write_schedule_to_nvs(Schedule *items)
     nvs_handle_t handle;
     esp_err_t err;
 
-    err = nvs_open(STORAGE_SCHEDULE, NVS_READONLY, &handle);
+    err = nvs_open(STORAGE_SCHEDULE, NVS_READWRITE, &handle);
     if (err != ESP_OK)
         return err;
 
@@ -315,8 +319,9 @@ esp_err_t write_schedule_to_nvs(Schedule *items)
         return err;
     }
 
-err = nvs_commit(handle);
-    if (err != ESP_OK) return err;
+    err = nvs_commit(handle);
+    if (err != ESP_OK)
+        return err;
 
     nvs_close(handle);
     return ESP_OK;
