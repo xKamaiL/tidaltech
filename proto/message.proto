@@ -24,7 +24,13 @@ message SetAmbientRequest {
   uint32 b = 3;
 }
 
-
+message ListTimePointRequest {
+  message Time {
+    uint32 hh = 1;
+    uint32 mm = 2;
+  }
+  repeated Time times = 1;
+}
 
 // LightingScheduleRequest is the data that will be sent
 // to the device

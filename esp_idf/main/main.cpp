@@ -10,10 +10,10 @@
 #include "freertos/semphr.h"
 #include "freertos/task.h"
 #include "freertos/timers.h"
+#include "nvs.h"
+#include "nvs_flash.h"
 #include "proto/message.pb-c.h"
 #include "sdkconfig.h"
-#include "nvs_flash.h"
-#include "nvs.h"
 #define STORAGE_SCHEDULE "store"
 
 // LEDLevel
@@ -42,15 +42,12 @@ esp_err_t write_schedule_to_nvs(Schedule *items);
 Schedule *read_schedule_from_nvs();
 
 /* Handler class for server events */
-class ServerCallbacks : public NimBLEServerCallbacks
-{
-    void onConnect(NimBLEServer *pServer, NimBLEConnInfo &connInfo)
-    {
+class ServerCallbacks : public NimBLEServerCallbacks {
+    void onConnect(NimBLEServer *pServer, NimBLEConnInfo &connInfo) {
         printf("Client connected:: %s\n", connInfo.getAddress().toString().c_str());
     };
 
-    void onDisconnect(NimBLEServer *pServer, NimBLEConnInfo &connInfo, int reason)
-    {
+    void onDisconnect(NimBLEServer *pServer, NimBLEConnInfo &connInfo, int reason) {
         printf("Client disconnected\n");
     };
 };
@@ -58,49 +55,44 @@ class ServerCallbacks : public NimBLEServerCallbacks
 void on_add_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
 void on_set_color_mode(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
 void on_set_ambient(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
+void on_available_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
 
-class CharacteristicCallbacks : public NimBLECharacteristicCallbacks
-{
-    void onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
-    {
-        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_GET_COLOR_MODE))
-        {
+class CharacteristicCallbacks : public NimBLECharacteristicCallbacks {
+    void onRead(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_GET_COLOR_MODE)) {
             return;
         }
-        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_GET_CURRENT_TIME))
-        {
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_GET_CURRENT_TIME)) {
             return;
         }
-        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_GET_COLOR_MODE))
-        {
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_GET_COLOR_MODE)) {
             pCharacteristic->setValue(0);
             return;
         }
     };
 
-    void onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
-    {
-        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_ADD_COLOR_TIME_POINT))
-        {
+    void onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_ADD_COLOR_TIME_POINT)) {
             on_add_color_time_points(pCharacteristic, connInfo);
             return;
         }
-        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_SET_COLOR_MODE))
-        {
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_SET_COLOR_MODE)) {
             on_set_color_mode(pCharacteristic, connInfo);
             return;
         }
-        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_SET_AMBIENT))
-        {
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_SET_AMBIENT)) {
             on_set_ambient(pCharacteristic, connInfo);
+            return;
+        }
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_LIST_COLOR_TIME_POINT)) {
+            on_available_color_time_points(pCharacteristic, connInfo);
             return;
         }
     };
 
     void onNotify(NimBLECharacteristic *pCharacteristic){};
 
-    void onStatus(NimBLECharacteristic *pCharacteristic, int code)
-    {
+    void onStatus(NimBLECharacteristic *pCharacteristic, int code) {
         std::string str = ("Notification/Indication status code: ");
         str += ", return code: ";
         str += code;
@@ -109,25 +101,17 @@ class CharacteristicCallbacks : public NimBLECharacteristicCallbacks
         printf(str.c_str());
     };
 
-    void onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue)
-    {
+    void onSubscribe(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo, uint16_t subValue) {
         std::string str = "Client ID: ";
         str += " Address: ";
         str += std::string(connInfo.getAddress()).c_str();
-        if (subValue == 0)
-        {
+        if (subValue == 0) {
             str += " Unsubscribed to ";
-        }
-        else if (subValue == 1)
-        {
+        } else if (subValue == 1) {
             str += " Subscribed to notfications for ";
-        }
-        else if (subValue == 2)
-        {
+        } else if (subValue == 2) {
             str += " Subscribed to indications for ";
-        }
-        else if (subValue == 3)
-        {
+        } else if (subValue == 3) {
             str += " Subscribed to notifications and indications for ";
         }
         str += std::string(pCharacteristic->getUUID()).c_str();
@@ -136,16 +120,13 @@ class CharacteristicCallbacks : public NimBLECharacteristicCallbacks
 };
 static CharacteristicCallbacks chrCallbacks;
 
-extern "C"
-{
-    void app_main(void);
+extern "C" {
+void app_main(void);
 }
 
-void app_main(void)
-{
+void app_main(void) {
     esp_err_t err = nvs_flash_init();
-    if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND)
-    {
+    if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
         // NVS partition was truncated and needs to be erased
         // Retry nvs_flash_init
         ESP_ERROR_CHECK(nvs_flash_erase());
@@ -205,7 +186,7 @@ void app_main(void)
     pAdvertising->addServiceUUID(deviceInformationService->getUUID());
     pAdvertising->addServiceUUID(colorService->getUUID());
     pAdvertising->addServiceUUID(rtcService->getUUID());
-    pAdvertising->setMinPreferred(0x06); // functions that help with iPhone connections issue
+    pAdvertising->setMinPreferred(0x06);  // functions that help with iPhone connections issue
     pAdvertising->setMinPreferred(0x12);
     pAdvertising->setScanResponse(true);
 
@@ -216,11 +197,9 @@ void app_main(void)
     // FreeRTOS task
 }
 
-void on_add_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
-{
+void on_add_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {
     LightingScheduleRequest *req = lighting_schedule_request__unpack(NULL, pCharacteristic->getValue().length(), (uint8_t *)pCharacteristic->getValue().c_str());
-    if (req == NULL)
-    {
+    if (req == NULL) {
         printf("addColorTimePoint: decode message failed\n");
         return;
     }
@@ -240,38 +219,30 @@ void on_add_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnI
     lighting_schedule_request__free_unpacked(req, NULL);
 
     Schedule *schedules = read_schedule_from_nvs();
-    if (schedules == NULL)
-    {
+    if (schedules == NULL) {
         printf("read data from nvs failed");
         return;
     }
-    for (int i = 0; i < (sizeof(*schedules) / sizeof(schedules[0])); i++)
-    {
-        if (schedules[i].hh == hh && schedules[i].mm == mm)
-        {
+    for (int i = 0; i < (sizeof(*schedules) / sizeof(schedules[0])); i++) {
+        if (schedules[i].hh == hh && schedules[i].mm == mm) {
             schedules[i].leds = leds;
             printf("update new time schedule");
             esp_err_t err = write_schedule_to_nvs(schedules);
-            if (err != ESP_OK)
-            {
+            if (err != ESP_OK) {
                 printf("Error naka");
             }
             return;
         }
     }
-    for (int i = 0; i < (sizeof(*schedules) / sizeof(schedules[0])); i++)
-    {
-        if (schedules[i].hh == 0 && schedules[i].mm == 0)
-        {
-
+    for (int i = 0; i < (sizeof(*schedules) / sizeof(schedules[0])); i++) {
+        if (schedules[i].hh == 0 && schedules[i].mm == 0) {
             schedules[i].leds = leds;
             schedules[i].hh = hh;
             schedules[i].mm = mm;
 
             printf("add newe time schedule");
             esp_err_t err = write_schedule_to_nvs(schedules);
-            if (err != ESP_OK)
-            {
+            if (err != ESP_OK) {
                 printf("Error naka");
             }
             return;
@@ -280,11 +251,9 @@ void on_add_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnI
     // if no, add the time point to the list
 }
 
-void on_set_color_mode(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
-{
+void on_set_color_mode(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {
     SetColorModeRequest *req = set_color_mode_request__unpack(NULL, pCharacteristic->getValue().length(), (uint8_t *)pCharacteristic->getValue().c_str());
-    if (req == NULL)
-    {
+    if (req == NULL) {
         printf("onSetColorMode: decode message failed\n");
         return;
     }
@@ -297,11 +266,9 @@ void on_set_color_mode(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &co
     // TODO: change color mode ?
 }
 
-void on_set_ambient(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
-{
+void on_set_ambient(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {
     SetAmbientRequest *req = set_ambient_request__unpack(NULL, pCharacteristic->getValue().length(), (uint8_t *)pCharacteristic->getValue().c_str());
-    if (req == NULL)
-    {
+    if (req == NULL) {
         printf("onSetAmbient: decode message failed\n");
         return;
     }
@@ -315,9 +282,7 @@ void on_set_ambient(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connI
     printf("onSetAmbient: %d,%d,%d\n", r, g, b);
 }
 
-Schedule *read_schedule_from_nvs()
-{
-
+Schedule *read_schedule_from_nvs() {
     nvs_handle_t handle;
     esp_err_t err;
 
@@ -331,8 +296,7 @@ Schedule *read_schedule_from_nvs()
 
     err = nvs_get_blob(handle, "schedule", schedules, &size);
 
-    if (err != ESP_OK)
-    {
+    if (err != ESP_OK) {
         free(schedules);
         return NULL;
     }
@@ -341,9 +305,7 @@ Schedule *read_schedule_from_nvs()
     return schedules;
 }
 
-esp_err_t write_schedule_to_nvs(Schedule *items)
-{
-
+esp_err_t write_schedule_to_nvs(Schedule *items) {
     nvs_handle_t handle;
     esp_err_t err;
 
@@ -354,8 +316,7 @@ esp_err_t write_schedule_to_nvs(Schedule *items)
     size_t size = sizeof(items);
     nvs_set_blob(handle, "schedule", items, size);
 
-    if (err != ESP_OK)
-    {
+    if (err != ESP_OK) {
         return err;
     }
 
@@ -367,7 +328,6 @@ esp_err_t write_schedule_to_nvs(Schedule *items)
     return ESP_OK;
 }
 
-int read_color_mode_from_nvs()
-{
+int read_color_mode_from_nvs() {
     return 0;
 }

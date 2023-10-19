@@ -132,6 +132,30 @@ final $typed_data.Uint8List setAmbientRequestDescriptor = $convert.base64Decode(
     'ChFTZXRBbWJpZW50UmVxdWVzdBIMCgFyGAEgASgNUgFyEgwKAWcYAiABKA1SAWcSDAoBYhgDIA'
     'EoDVIBYg==');
 
+@$core.Deprecated('Use listTimePointRequestDescriptor instead')
+const ListTimePointRequest$json = {
+  '1': 'ListTimePointRequest',
+  '2': [
+    {'1': 'times', '3': 1, '4': 3, '5': 11, '6': '.ListTimePointRequest.Time', '10': 'times'},
+  ],
+  '3': [ListTimePointRequest_Time$json],
+};
+
+@$core.Deprecated('Use listTimePointRequestDescriptor instead')
+const ListTimePointRequest_Time$json = {
+  '1': 'Time',
+  '2': [
+    {'1': 'hh', '3': 1, '4': 1, '5': 13, '10': 'hh'},
+    {'1': 'mm', '3': 2, '4': 1, '5': 13, '10': 'mm'},
+  ],
+};
+
+/// Descriptor for `ListTimePointRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List listTimePointRequestDescriptor = $convert.base64Decode(
+    'ChRMaXN0VGltZVBvaW50UmVxdWVzdBIwCgV0aW1lcxgBIAMoCzIaLkxpc3RUaW1lUG9pbnRSZX'
+    'F1ZXN0LlRpbWVSBXRpbWVzGiYKBFRpbWUSDgoCaGgYASABKA1SAmhoEg4KAm1tGAIgASgNUgJt'
+    'bQ==');
+
 @$core.Deprecated('Use lightingScheduleRequestDescriptor instead')
 const LightingScheduleRequest$json = {
   '1': 'LightingScheduleRequest',
