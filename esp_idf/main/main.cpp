@@ -282,6 +282,41 @@ void on_set_ambient(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connI
     printf("onSetAmbient: %d,%d,%d\n", r, g, b);
 }
 
+void on_available_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {
+    ListTimePointRequest *req = list_time_point_request__unpack(NULL, pCharacteristic->getValue().length(), (uint8_t *)pCharacteristic->getValue().c_str());
+    if (req == NULL) {
+        printf("onAvailableColorTimePoints: decode message failed\n");
+        return;
+    }
+
+    Schedule *items = read_schedule_from_nvs();
+    if (items == NULL) {
+        list_time_point_request__free_unpacked(req, NULL);
+        printf("read data from nvs failed");
+        return;
+    }
+
+    // check if the time point is in the list
+    // if yes,
+    // if no, set it to 0,0
+    for (int i = 0; i < (sizeof(*items) / sizeof(items[0])); i++) {
+        bool found = false;
+        for (int j = 0; j < req->n_times; j++) {
+            if (items[i].hh == req->times[j]->hh && items[i].mm == req->times[j]->mm) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            //
+            items[i].hh = 0;
+            items[i].mm = 0;
+        }
+    }
+
+    list_time_point_request__free_unpacked(req, NULL);
+}
+
 Schedule *read_schedule_from_nvs() {
     nvs_handle_t handle;
     esp_err_t err;
