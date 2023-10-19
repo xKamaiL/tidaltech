@@ -140,6 +140,15 @@ extern "C"
 
 void app_main(void)
 {
+    esp_err_t err = nvs_flash_init();
+    if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND)
+    {
+        // NVS partition was truncated and needs to be erased
+        // Retry nvs_flash_init
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        err = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK(err);
     NimBLEDevice::init("TIDAL TECH LIGHTING");
     // NimBLEDevice::setPower(ESP_PWR_LVL_P9); /** +9db */
 
@@ -278,11 +287,37 @@ Schedule *read_schedule_from_nvs()
 
     err = nvs_get_blob(handle, "schedule", schedules, &size);
 
-    if (err != ESP_OK){
+    if (err != ESP_OK)
+    {
         free(schedules);
         return NULL;
     }
 
     nvs_close(handle);
     return schedules;
+}
+
+esp_err_t write_schedule_to_nvs(Schedule *items)
+{
+
+    nvs_handle_t handle;
+    esp_err_t err;
+
+    err = nvs_open(STORAGE_SCHEDULE, NVS_READONLY, &handle);
+    if (err != ESP_OK)
+        return err;
+
+    size_t size = sizeof(items);
+    nvs_set_blob(handle, "schedule", items, size);
+
+    if (err != ESP_OK)
+    {
+        return err;
+    }
+
+err = nvs_commit(handle);
+    if (err != ESP_OK) return err;
+
+    nvs_close(handle);
+    return ESP_OK;
 }
