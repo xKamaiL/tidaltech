@@ -4,6 +4,8 @@ import 'package:niku/namespace.dart' as n;
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class TimeSelection extends HookConsumerWidget {
+  const TimeSelection({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return n.Column([
@@ -23,7 +25,7 @@ class TimeSelection extends HookConsumerWidget {
                   width: 50,
                   color: Colors.black12,
                   margin: const EdgeInsets.only(right: 6),
-                  child: IntensitySelector(h: index.toString() + ":00")),
+                  child: IntensitySelector(h: "$index:00")),
             )),
       ),
       n.Box()..height = 16
