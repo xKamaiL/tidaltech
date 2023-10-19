@@ -33,6 +33,7 @@ typedef struct
 // Schdule Item
 typedef struct
 {
+    bool ok;
     unsigned short hh;
     unsigned short mm;
     LEDLevel leds;
@@ -247,7 +248,7 @@ void on_add_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnI
     }
     for (int i = 0; i < (sizeof(*schedules) / sizeof(schedules[0])); i++)
     {
-        if (schedules[i].hh == hh && schedules[i].mm == mm)
+        if (schedules[i].hh == hh && schedules[i].mm == mm && schedules[i].ok == true)
         {
             schedules[i].leds = leds;
             printf("update new time schedule");
@@ -261,9 +262,9 @@ void on_add_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnI
     }
     for (int i = 0; i < (sizeof(*schedules) / sizeof(schedules[0])); i++)
     {
-        if (schedules[i].hh == 0 && schedules[i].mm == 0)
+        if (schedules[i].ok == false)
         {
-
+            schedules[i].ok = true;
             schedules[i].leds = leds;
             schedules[i].hh = hh;
             schedules[i].mm = mm;
@@ -277,6 +278,7 @@ void on_add_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnI
             return;
         }
     }
+    printf("full of schedule");
     // if no, add the time point to the list
 }
 
@@ -367,7 +369,14 @@ esp_err_t write_schedule_to_nvs(Schedule *items)
     return ESP_OK;
 }
 
-int read_color_mode_from_nvs()
+Mode *read_color_mode_from_nvs()
 {
+    nvs_handle_t handle2;
+    esp_err_t err;
+
+    err = nvs_open(STORAGE_MODE, NVS_READONLY, &handle2);
+    if (err != ESP_OK)
+        return NULL;
+
     return 0;
 }
