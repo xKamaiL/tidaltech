@@ -245,7 +245,7 @@ void on_add_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnI
         printf("read data from nvs failed");
         return;
     }
-    for (int i = 0; i < sizeof(schedules) / sizeof(schedules[0]); i++)
+    for (int i = 0; i < (sizeof(*schedules) / sizeof(schedules[0])); i++)
     {
         if (schedules[i].hh == hh && schedules[i].mm == mm)
         {
@@ -259,7 +259,7 @@ void on_add_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnI
             return;
         }
     }
-    for (int i = 0; i < sizeof(schedules) / sizeof(schedules[0]); i++)
+    for (int i = 0; i < (sizeof(*schedules) / sizeof(schedules[0])); i++)
     {
         if (schedules[i].hh == 0 && schedules[i].mm == 0)
         {
@@ -365,4 +365,9 @@ esp_err_t write_schedule_to_nvs(Schedule *items)
 
     nvs_close(handle);
     return ESP_OK;
+}
+
+int read_color_mode_from_nvs()
+{
+    return 0;
 }
