@@ -259,8 +259,10 @@ void on_add_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnI
             return;
         }
     }
-    for (int i = 0; i < sizeof(schedules) / sizeof(schedules[0]); i++){
-        if (schedules[i].hh == 0 && schedules[i].mm == 0){
+    for (int i = 0; i < sizeof(schedules) / sizeof(schedules[0]); i++)
+    {
+        if (schedules[i].hh == 0 && schedules[i].mm == 0)
+        {
 
             schedules[i].leds = leds;
             schedules[i].hh = hh;
