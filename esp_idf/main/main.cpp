@@ -226,8 +226,8 @@ void on_add_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnI
     }
     printf("addColorTimePoint: %ld:%ld with sizes %u\n", req->hh, req->mm, pCharacteristic->getValue().length());
 
-    uint32_t hh = req->hh;
-    uint32_t mm = req->mm;
+    unsigned short hh = req->hh;
+    unsigned short mm = req->mm;
 
     LEDLevel leds;
     leds.white = req->white;
@@ -238,6 +238,44 @@ void on_add_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnI
     leds.royal_blue = req->royal_blue;
     leds.ultra_violet = req->ultra_violet;
     lighting_schedule_request__free_unpacked(req, NULL);
+
+    Schedule *schedules = read_schedule_from_nvs();
+    if (schedules == NULL)
+    {
+        printf("read data from nvs failed");
+        return;
+    }
+    for (int i = 0; i < sizeof(schedules) / sizeof(schedules[0]); i++)
+    {
+        if (schedules[i].hh == hh && schedules[i].mm == mm)
+        {
+            schedules[i].leds = leds;
+            printf("update new time schedule");
+            esp_err_t err = write_schedule_to_nvs(schedules);
+            if (err != ESP_OK)
+            {
+                printf("Error naka");
+            }
+            return;
+        }
+    }
+    for (int i = 0; i < sizeof(schedules) / sizeof(schedules[0]); i++){
+        if (schedules[i].hh == 0 && schedules[i].mm == 0){
+
+            schedules[i].leds = leds;
+            schedules[i].hh = hh;
+            schedules[i].mm = mm;
+
+            printf("add newe time schedule");
+            esp_err_t err = write_schedule_to_nvs(schedules);
+            if (err != ESP_OK)
+            {
+                printf("Error naka");
+            }
+            return;
+        }
+    }
+    // if no, add the time point to the list
 }
 
 void on_set_color_mode(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo)
