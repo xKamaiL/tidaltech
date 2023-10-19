@@ -10,10 +10,10 @@
 #include "freertos/semphr.h"
 #include "freertos/task.h"
 #include "freertos/timers.h"
+#include "nvs.h"
+#include "nvs_flash.h"
 #include "proto/message.pb-c.h"
 #include "sdkconfig.h"
-#include "nvs_flash.h"
-#include "nvs.h"
 #define STORAGE_SCHEDULE "store"
 
 // LEDLevel
@@ -59,6 +59,7 @@ class ServerCallbacks : public NimBLEServerCallbacks
 void on_add_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
 void on_set_color_mode(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
 void on_set_ambient(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
+void on_available_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo);
 
 class CharacteristicCallbacks : public NimBLECharacteristicCallbacks
 {
@@ -94,6 +95,11 @@ class CharacteristicCallbacks : public NimBLECharacteristicCallbacks
         if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_SET_AMBIENT))
         {
             on_set_ambient(pCharacteristic, connInfo);
+            return;
+        }
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_LIST_COLOR_TIME_POINT))
+        {
+            on_available_color_time_points(pCharacteristic, connInfo);
             return;
         }
     };
@@ -319,7 +325,6 @@ void on_set_ambient(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connI
 
 Schedule *read_schedule_from_nvs()
 {
-
     nvs_handle_t handle;
     esp_err_t err;
 
@@ -345,7 +350,6 @@ Schedule *read_schedule_from_nvs()
 
 esp_err_t write_schedule_to_nvs(Schedule *items)
 {
-
     nvs_handle_t handle;
     esp_err_t err;
 

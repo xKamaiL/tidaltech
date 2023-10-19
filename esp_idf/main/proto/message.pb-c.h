@@ -19,6 +19,8 @@ typedef struct DeviceInformationRequest DeviceInformationRequest;
 typedef struct DeviceInformationResponse DeviceInformationResponse;
 typedef struct SetColorModeRequest SetColorModeRequest;
 typedef struct SetAmbientRequest SetAmbientRequest;
+typedef struct ListTimePointRequest ListTimePointRequest;
+typedef struct ListTimePointRequest__Time ListTimePointRequest__Time;
 typedef struct LightingScheduleRequest LightingScheduleRequest;
 typedef struct SetSceneRequest SetSceneRequest;
 typedef struct GetSceneResponse GetSceneResponse;
@@ -121,6 +123,28 @@ struct  SetAmbientRequest
 #define SET_AMBIENT_REQUEST__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&set_ambient_request__descriptor) \
 , 0, 0, 0 }
+
+
+struct  ListTimePointRequest__Time
+{
+  ProtobufCMessage base;
+  uint32_t hh;
+  uint32_t mm;
+};
+#define LIST_TIME_POINT_REQUEST__TIME__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&list_time_point_request__time__descriptor) \
+, 0, 0 }
+
+
+struct  ListTimePointRequest
+{
+  ProtobufCMessage base;
+  size_t n_times;
+  ListTimePointRequest__Time **times;
+};
+#define LIST_TIME_POINT_REQUEST__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&list_time_point_request__descriptor) \
+, 0,NULL }
 
 
 /*
@@ -295,6 +319,28 @@ SetAmbientRequest *
 void   set_ambient_request__free_unpacked
                      (SetAmbientRequest *message,
                       ProtobufCAllocator *allocator);
+/* ListTimePointRequest__Time methods */
+void   list_time_point_request__time__init
+                     (ListTimePointRequest__Time         *message);
+/* ListTimePointRequest methods */
+void   list_time_point_request__init
+                     (ListTimePointRequest         *message);
+size_t list_time_point_request__get_packed_size
+                     (const ListTimePointRequest   *message);
+size_t list_time_point_request__pack
+                     (const ListTimePointRequest   *message,
+                      uint8_t             *out);
+size_t list_time_point_request__pack_to_buffer
+                     (const ListTimePointRequest   *message,
+                      ProtobufCBuffer     *buffer);
+ListTimePointRequest *
+       list_time_point_request__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data);
+void   list_time_point_request__free_unpacked
+                     (ListTimePointRequest *message,
+                      ProtobufCAllocator *allocator);
 /* LightingScheduleRequest methods */
 void   lighting_schedule_request__init
                      (LightingScheduleRequest         *message);
@@ -442,6 +488,12 @@ typedef void (*SetColorModeRequest_Closure)
 typedef void (*SetAmbientRequest_Closure)
                  (const SetAmbientRequest *message,
                   void *closure_data);
+typedef void (*ListTimePointRequest__Time_Closure)
+                 (const ListTimePointRequest__Time *message,
+                  void *closure_data);
+typedef void (*ListTimePointRequest_Closure)
+                 (const ListTimePointRequest *message,
+                  void *closure_data);
 typedef void (*LightingScheduleRequest_Closure)
                  (const LightingScheduleRequest *message,
                   void *closure_data);
@@ -477,6 +529,8 @@ extern const ProtobufCMessageDescriptor device_information_request__descriptor;
 extern const ProtobufCMessageDescriptor device_information_response__descriptor;
 extern const ProtobufCMessageDescriptor set_color_mode_request__descriptor;
 extern const ProtobufCMessageDescriptor set_ambient_request__descriptor;
+extern const ProtobufCMessageDescriptor list_time_point_request__descriptor;
+extern const ProtobufCMessageDescriptor list_time_point_request__time__descriptor;
 extern const ProtobufCMessageDescriptor lighting_schedule_request__descriptor;
 extern const ProtobufCMessageDescriptor set_scene_request__descriptor;
 extern const ProtobufCMessageDescriptor get_scene_response__descriptor;

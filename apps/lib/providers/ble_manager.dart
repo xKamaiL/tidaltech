@@ -291,7 +291,6 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
       debugPrint("characteristic is null");
       return;
     }
-    debugPrint("ok");
     for (final p in timePoints) {
       // log bytes length
       final req = p.toProto();
@@ -303,6 +302,27 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
         withoutResponse: true,
       );
     }
+
+    Future.delayed(const Duration(milliseconds: 100)).then((value) async {
+      final c = await _callCharacteristic(
+          BLEServices.color, ColorService.listTimePoint);
+      // send to device
+      if (c == null) {
+        debugPrint("characteristic is null");
+        return;
+      }
+
+      final req = ListTimePointRequest();
+      for (final p in timePoints) {
+        final t = ListTimePointRequest_Time();
+        t.hh = p.hour;
+        t.mm = p.minute;
+        req.times.add(t);
+      }
+      // print value
+      c.write(req.writeToBuffer(), withoutResponse: true);
+      debugPrint("send time points");
+    });
   }
 
 //

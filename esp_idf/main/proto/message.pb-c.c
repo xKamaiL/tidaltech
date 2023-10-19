@@ -187,6 +187,57 @@ void   set_ambient_request__free_unpacked
   assert(message->base.descriptor == &set_ambient_request__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
+void   list_time_point_request__time__init
+                     (ListTimePointRequest__Time         *message)
+{
+  static const ListTimePointRequest__Time init_value = LIST_TIME_POINT_REQUEST__TIME__INIT;
+  *message = init_value;
+}
+void   list_time_point_request__init
+                     (ListTimePointRequest         *message)
+{
+  static const ListTimePointRequest init_value = LIST_TIME_POINT_REQUEST__INIT;
+  *message = init_value;
+}
+size_t list_time_point_request__get_packed_size
+                     (const ListTimePointRequest *message)
+{
+  assert(message->base.descriptor == &list_time_point_request__descriptor);
+  return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
+}
+size_t list_time_point_request__pack
+                     (const ListTimePointRequest *message,
+                      uint8_t       *out)
+{
+  assert(message->base.descriptor == &list_time_point_request__descriptor);
+  return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
+}
+size_t list_time_point_request__pack_to_buffer
+                     (const ListTimePointRequest *message,
+                      ProtobufCBuffer *buffer)
+{
+  assert(message->base.descriptor == &list_time_point_request__descriptor);
+  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
+}
+ListTimePointRequest *
+       list_time_point_request__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data)
+{
+  return (ListTimePointRequest *)
+     protobuf_c_message_unpack (&list_time_point_request__descriptor,
+                                allocator, len, data);
+}
+void   list_time_point_request__free_unpacked
+                     (ListTimePointRequest *message,
+                      ProtobufCAllocator *allocator)
+{
+  if(!message)
+    return;
+  assert(message->base.descriptor == &list_time_point_request__descriptor);
+  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
+}
 void   lighting_schedule_request__init
                      (LightingScheduleRequest         *message)
 {
@@ -710,6 +761,95 @@ const ProtobufCMessageDescriptor set_ambient_request__descriptor =
   set_ambient_request__field_indices_by_name,
   1,  set_ambient_request__number_ranges,
   (ProtobufCMessageInit) set_ambient_request__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCFieldDescriptor list_time_point_request__time__field_descriptors[2] =
+{
+  {
+    "hh",
+    1,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(ListTimePointRequest__Time, hh),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "mm",
+    2,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(ListTimePointRequest__Time, mm),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned list_time_point_request__time__field_indices_by_name[] = {
+  0,   /* field[0] = hh */
+  1,   /* field[1] = mm */
+};
+static const ProtobufCIntRange list_time_point_request__time__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 2 }
+};
+const ProtobufCMessageDescriptor list_time_point_request__time__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "ListTimePointRequest.Time",
+  "Time",
+  "ListTimePointRequest__Time",
+  "",
+  sizeof(ListTimePointRequest__Time),
+  2,
+  list_time_point_request__time__field_descriptors,
+  list_time_point_request__time__field_indices_by_name,
+  1,  list_time_point_request__time__number_ranges,
+  (ProtobufCMessageInit) list_time_point_request__time__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCFieldDescriptor list_time_point_request__field_descriptors[1] =
+{
+  {
+    "times",
+    1,
+    PROTOBUF_C_LABEL_REPEATED,
+    PROTOBUF_C_TYPE_MESSAGE,
+    offsetof(ListTimePointRequest, n_times),
+    offsetof(ListTimePointRequest, times),
+    &list_time_point_request__time__descriptor,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned list_time_point_request__field_indices_by_name[] = {
+  0,   /* field[0] = times */
+};
+static const ProtobufCIntRange list_time_point_request__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 1 }
+};
+const ProtobufCMessageDescriptor list_time_point_request__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "ListTimePointRequest",
+  "ListTimePointRequest",
+  "ListTimePointRequest",
+  "",
+  sizeof(ListTimePointRequest),
+  1,
+  list_time_point_request__field_descriptors,
+  list_time_point_request__field_indices_by_name,
+  1,  list_time_point_request__number_ranges,
+  (ProtobufCMessageInit) list_time_point_request__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
 static const ProtobufCFieldDescriptor lighting_schedule_request__field_descriptors[9] =

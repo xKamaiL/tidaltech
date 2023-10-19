@@ -235,6 +235,94 @@ class SetAmbientRequest extends $pb.GeneratedMessage {
   void clearB() => clearField(3);
 }
 
+class ListTimePointRequest_Time extends $pb.GeneratedMessage {
+  factory ListTimePointRequest_Time() => create();
+  ListTimePointRequest_Time._() : super();
+  factory ListTimePointRequest_Time.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ListTimePointRequest_Time.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ListTimePointRequest.Time', createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'hh', $pb.PbFieldType.OU3)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'mm', $pb.PbFieldType.OU3)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ListTimePointRequest_Time clone() => ListTimePointRequest_Time()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ListTimePointRequest_Time copyWith(void Function(ListTimePointRequest_Time) updates) => super.copyWith((message) => updates(message as ListTimePointRequest_Time)) as ListTimePointRequest_Time;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static ListTimePointRequest_Time create() => ListTimePointRequest_Time._();
+  ListTimePointRequest_Time createEmptyInstance() => create();
+  static $pb.PbList<ListTimePointRequest_Time> createRepeated() => $pb.PbList<ListTimePointRequest_Time>();
+  @$core.pragma('dart2js:noInline')
+  static ListTimePointRequest_Time getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ListTimePointRequest_Time>(create);
+  static ListTimePointRequest_Time? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get hh => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set hh($core.int v) { $_setUnsignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasHh() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearHh() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get mm => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set mm($core.int v) { $_setUnsignedInt32(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasMm() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearMm() => clearField(2);
+}
+
+class ListTimePointRequest extends $pb.GeneratedMessage {
+  factory ListTimePointRequest() => create();
+  ListTimePointRequest._() : super();
+  factory ListTimePointRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ListTimePointRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ListTimePointRequest', createEmptyInstance: create)
+    ..pc<ListTimePointRequest_Time>(1, _omitFieldNames ? '' : 'times', $pb.PbFieldType.PM, subBuilder: ListTimePointRequest_Time.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ListTimePointRequest clone() => ListTimePointRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ListTimePointRequest copyWith(void Function(ListTimePointRequest) updates) => super.copyWith((message) => updates(message as ListTimePointRequest)) as ListTimePointRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static ListTimePointRequest create() => ListTimePointRequest._();
+  ListTimePointRequest createEmptyInstance() => create();
+  static $pb.PbList<ListTimePointRequest> createRepeated() => $pb.PbList<ListTimePointRequest>();
+  @$core.pragma('dart2js:noInline')
+  static ListTimePointRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ListTimePointRequest>(create);
+  static ListTimePointRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<ListTimePointRequest_Time> get times => $_getList(0);
+}
+
 class LightingScheduleRequest extends $pb.GeneratedMessage {
   factory LightingScheduleRequest() => create();
   LightingScheduleRequest._() : super();
