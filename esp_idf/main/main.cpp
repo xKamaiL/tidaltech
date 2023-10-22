@@ -196,7 +196,54 @@ void on_add_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnI
     leds.ultra_violet = req->ultra_violet;
     lighting_schedule_request__free_unpacked(req, NULL);
 
-    // if no, add the time point to the list
+    std::vector<Schedule> schedules;
+    esp_err_t err = read_schedule_from_nvs(schedules);
+    if (err != ESP_OK) {
+        printf("addColorTimePoint: read schedule failed\n");
+        return;
+    }
+    upsert_schedules(schedules, {true, hh, mm, leds});
+
+    err = write_schedule_to_nvs(schedules);
+    if (err != ESP_OK) {
+        printf("addColorTimePoint: write schedule failed\n");
+        return;
+    }
+    return;
+}
+
+void on_available_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {
+    ListTimePointRequest *req = list_time_point_request__unpack(NULL, pCharacteristic->getValue().length(), (uint8_t *)pCharacteristic->getValue().c_str());
+    if (req == NULL) {
+        printf("onAvailableColorTimePoints: decode message failed\n");
+        return;
+    }
+    list_time_point_request__free_unpacked(req, NULL);
+
+    std::vector<Schedule> schedules;
+    esp_err_t err = read_schedule_from_nvs(schedules);
+    if (err != ESP_OK) {
+        printf("onAvailableColorTimePoints: read schedule failed\n");
+        return;
+    }
+
+    filter_schedules(schedules, [&](const Schedule &s) {
+        for (size_t i = 0; i < req->n_times; ++i) {
+            unsigned short hh = req->times[i]->hh;
+            unsigned short mm = req->times[i]->mm;
+            if (s.hh == hh && s.mm == mm) {
+                return true;
+            }
+        }
+        return false;
+    });
+
+    err = write_schedule_to_nvs(schedules);
+    if (err != ESP_OK) {
+        printf("onAvailableColorTimePoints: write schedule failed\n");
+        return;
+    }
+    return;
 }
 
 void on_set_color_mode(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {
@@ -228,16 +275,6 @@ void on_set_ambient(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connI
     // TODO: change ambient R,G,B color
     // but do not change the current color mode
     printf("onSetAmbient: %d,%d,%d\n", r, g, b);
-}
-
-void on_available_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {
-    ListTimePointRequest *req = list_time_point_request__unpack(NULL, pCharacteristic->getValue().length(), (uint8_t *)pCharacteristic->getValue().c_str());
-    if (req == NULL) {
-        printf("onAvailableColorTimePoints: decode message failed\n");
-        return;
-    }
-
-    list_time_point_request__free_unpacked(req, NULL);
 }
 
 Mode *read_color_mode_from_nvs() {
