@@ -61,14 +61,13 @@ std::vector<Schedule> filter_schedules(std::vector<Schedule> &schedules, std::fu
 
 void upsert_schedules(std::vector<Schedule> &schedules, const Schedule &newSchedule) {
     auto it = std::find_if(schedules.begin(), schedules.end(), [&](const Schedule &s) {
-        return s.hh == newSchedule.hh && s.mm == newSchedule.mm;
+        // ok = true mean this is a valid schedule
+        return s.hh == newSchedule.hh && s.mm == newSchedule.mm && s.ok == true;
     });
 
     if (it != schedules.end()) {
-        // Update existing Schedule item
         *it = newSchedule;
     } else {
-        // Insert new Schedule item
         schedules.push_back(newSchedule);
     }
 }
