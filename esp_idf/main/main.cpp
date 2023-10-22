@@ -15,6 +15,7 @@
 #include "nvs_flash.h"
 #include "proto/message.pb-c.h"
 #include "sdkconfig.h"
+#include "wifi_manager.h"  // tidal tech wifi manager
 #define STORAGE_SCHEDULE "store"
 
 /* Handler class for server events */
@@ -32,7 +33,7 @@ void app_main(void) {
         err = nvs_flash_init();
     }
     ESP_ERROR_CHECK(err);
-
+    initialise_wifi();
     initNimble();
     // FreeRTOS task
 }
