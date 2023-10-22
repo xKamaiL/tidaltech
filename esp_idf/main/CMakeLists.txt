@@ -2,7 +2,7 @@
 set(COMPONENT_REQUIRES )
 set(COMPONENT_PRIV_REQUIRES )
 
-set(COMPONENT_SRCS "schedule.cpp" "main.cpp" "proto/message.pb-c.c" )
+set(COMPONENT_SRCS "schedule.cpp" "main.cpp" "callback.cpp" "ble_manager.cpp" "proto/message.pb-c.c" )
 set(COMPONENT_ADD_INCLUDEDIRS ".")
 
 register_component()
