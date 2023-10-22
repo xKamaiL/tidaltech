@@ -1,7 +1,9 @@
 #include <inttypes.h>
 #include <stdio.h>
 
+#include <algorithm>
 #include <string>
+#include <vector>
 
 #include "NimBLEDevice.h"
 #include "definations.h"
@@ -15,32 +17,7 @@
 #include "proto/message.pb-c.h"
 #include "sdkconfig.h"
 #define STORAGE_SCHEDULE "store"
-
-// LEDLevel
-typedef struct
-{
-    unsigned short hh;
-    unsigned short mm;
-    unsigned short white;
-    unsigned short warm_white;
-    unsigned short red;
-    unsigned short green;
-    unsigned short blue;
-    unsigned short royal_blue;
-    unsigned short ultra_violet;
-} LEDLevel;
-
-// Schdule Item
-typedef struct
-{
-    bool ok;
-    unsigned short hh;
-    unsigned short mm;
-    LEDLevel leds;
-} Schedule;
-
-esp_err_t write_schedule_to_nvs(Schedule *items);
-Schedule *read_schedule_from_nvs();
+#include "schedule.h"
 
 /* Handler class for server events */
 class ServerCallbacks : public NimBLEServerCallbacks {
@@ -219,38 +196,6 @@ void on_add_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnI
     leds.ultra_violet = req->ultra_violet;
     lighting_schedule_request__free_unpacked(req, NULL);
 
-    Schedule *schedules = read_schedule_from_nvs();
-    if (schedules == NULL) {
-        printf("read data from nvs failed");
-        return;
-    }
-    for (int i = 0; i < (sizeof(*schedules) / sizeof(schedules[0])); i++) {
-        if (schedules[i].hh == hh && schedules[i].mm == mm && schedules[i].ok == true) {
-            schedules[i].leds = leds;
-            printf("update new time schedule");
-            esp_err_t err = write_schedule_to_nvs(schedules);
-            if (err != ESP_OK) {
-                printf("Error naka");
-            }
-            return;
-        }
-    }
-    for (int i = 0; i < (sizeof(*schedules) / sizeof(schedules[0])); i++) {
-        if (schedules[i].ok == false) {
-            schedules[i].ok = true;
-            schedules[i].leds = leds;
-            schedules[i].hh = hh;
-            schedules[i].mm = mm;
-
-            printf("add newe time schedule");
-            esp_err_t err = write_schedule_to_nvs(schedules);
-            if (err != ESP_OK) {
-                printf("Error naka");
-            }
-            return;
-        }
-    }
-    printf("full of schedule");
     // if no, add the time point to the list
 }
 
@@ -292,86 +237,14 @@ void on_available_color_time_points(NimBLECharacteristic *pCharacteristic, NimBL
         return;
     }
 
-    Schedule *items = read_schedule_from_nvs();
-    if (items == NULL) {
-        list_time_point_request__free_unpacked(req, NULL);
-        printf("read data from nvs failed");
-        return;
-    }
-
-    // check if the time point is in the list
-    // if yes,
-    // if no, set it to 0,0
-    for (int i = 0; i < (sizeof(*items) / sizeof(items[0])); i++) {
-        bool found = false;
-        for (int j = 0; j < req->n_times; j++) {
-            if (items[i].hh == req->times[j]->hh && items[i].mm == req->times[j]->mm) {
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            //
-            items[i].ok = false;
-            items[i].hh = 0;
-            items[i].mm = 0;
-        }
-    }
-
     list_time_point_request__free_unpacked(req, NULL);
-}
-
-Schedule *read_schedule_from_nvs() {
-    nvs_handle_t handle;
-    esp_err_t err;
-
-    err = nvs_open(STORAGE_SCHEDULE, NVS_READONLY, &handle);
-    if (err != ESP_OK)
-        return NULL;
-
-    size_t max = 5;
-    Schedule *schedules = (Schedule *)malloc(max * sizeof(Schedule));
-    size_t size = sizeof(schedules);
-
-    err = nvs_get_blob(handle, "schedule", schedules, &size);
-
-    if (err != ESP_OK) {
-        free(schedules);
-        return NULL;
-    }
-
-    nvs_close(handle);
-    return schedules;
-}
-
-esp_err_t write_schedule_to_nvs(Schedule *items) {
-    nvs_handle_t handle;
-    esp_err_t err;
-
-    err = nvs_open(STORAGE_SCHEDULE, NVS_READWRITE, &handle);
-    if (err != ESP_OK)
-        return err;
-
-    size_t size = sizeof(items);
-    nvs_set_blob(handle, "schedule", items, size);
-
-    if (err != ESP_OK) {
-        return err;
-    }
-
-    err = nvs_commit(handle);
-    if (err != ESP_OK)
-        return err;
-
-    nvs_close(handle);
-    return ESP_OK;
 }
 
 Mode *read_color_mode_from_nvs() {
     nvs_handle_t handle2;
     esp_err_t err;
 
-    err = nvs_open(STORAGE_MODE, NVS_READONLY, &handle2);
+    err = nvs_open(STORAGE_SCHEDULE, NVS_READONLY, &handle2);
     if (err != ESP_OK)
         return NULL;
 

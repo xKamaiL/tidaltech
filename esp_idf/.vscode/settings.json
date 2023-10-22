@@ -70,7 +70,8 @@
         "unordered_set": "cpp",
         "variant": "cpp",
         "vector": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "functional": "cpp"
     },
     "idf.adapterTargetName": "esp32",
     "C_Cpp.errorSquiggles": "enabled"
