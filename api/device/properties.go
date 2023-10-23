@@ -1,21 +1,11 @@
 package device
 
-import "github.com/xkamail/tidaltech/pkg/led"
+import "github.com/xkamail/tidaltech/pkg/schedule"
 
 type Date string
 
 type Properties struct {
-	Power    bool     `json:"power"`
-	Mode     Mode     `json:"mode"`
-	Schedule Schedule `json:"schedule"`
-}
-
-type Schedule struct {
-	Points []*TimePoint `json:"points"`
-}
-
-type TimePoint struct {
-	// Time in hh:mm
-	Time       string                  `json:"time"`
-	Brightness map[led.Color]led.Level `json:"brightness"`
+	Power    bool              `json:"power"`
+	Mode     Mode              `json:"mode"`
+	Schedule schedule.Schedule `json:"schedule"`
 }
