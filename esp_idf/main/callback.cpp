@@ -34,6 +34,8 @@ void on_add_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnI
     upsert_schedules(schedules, {true, hh, mm, leds});
 
     err = write_schedule_to_nvs(schedules);
+    schedules.clear();
+    schedules.shrink_to_fit();
     if (err != ESP_OK) {
         printf("addColorTimePoint: write schedule failed\n");
         return;
@@ -47,11 +49,11 @@ void on_available_color_time_points(NimBLECharacteristic *pCharacteristic, NimBL
         printf("onAvailableColorTimePoints: decode message failed\n");
         return;
     }
-    list_time_point_request__free_unpacked(req, NULL);
 
     std::vector<Schedule> schedules;
     esp_err_t err = read_schedule_from_nvs(schedules);
     if (err != ESP_OK) {
+        list_time_point_request__free_unpacked(req, NULL);
         printf("onAvailableColorTimePoints: read schedule failed\n");
         return;
     }
@@ -67,7 +69,11 @@ void on_available_color_time_points(NimBLECharacteristic *pCharacteristic, NimBL
         return false;
     });
 
+    list_time_point_request__free_unpacked(req, NULL);
+
     err = write_schedule_to_nvs(schedules);
+    schedules.clear();
+    schedules.shrink_to_fit();
     if (err != ESP_OK) {
         printf("onAvailableColorTimePoints: write schedule failed\n");
         return;
