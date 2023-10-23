@@ -34,3 +34,14 @@ create table devices
 );
 
 create unique index devices_token_uindex on devices (token);
+
+create table schedule_presets
+(
+    id          uuid      default gen_random_uuid(),
+    user_id     uuid      default null,
+    name        varchar not null,
+    description text    not null,
+    time_points jsonb   not null,
+    created_at  timestamp default now(),
+    primary key (id)
+);
