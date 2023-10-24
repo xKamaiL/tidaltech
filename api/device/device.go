@@ -11,6 +11,7 @@ import (
 	"github.com/acoshift/pgsql/pgctx"
 	"github.com/acoshift/pgsql/pgstmt"
 	"github.com/google/uuid"
+	"github.com/moonrhythm/validator"
 
 	"github.com/xkamail/tidaltech/api/auth"
 )
@@ -96,10 +97,21 @@ func Get(ctx context.Context, p *GetParam) (*Device, error) {
 }
 
 type PairParam struct {
+	ID uuid.UUID `json:"id"`
+}
+
+func (p PairParam) Valid() error {
+	v := validator.New()
+	v.Must(p.ID != uuid.Nil, "id is required")
+	return v.Error()
 }
 
 func Pair(ctx context.Context, p *PairParam) error {
-	panic("not implemented")
+	if err := p.Valid(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 type UnPairParam struct {

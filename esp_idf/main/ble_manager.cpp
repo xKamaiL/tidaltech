@@ -107,6 +107,9 @@ void initNimble() {
     NimBLECharacteristic *addColorTimePointCh = colorService->createCharacteristic(CHARACTERISTIC_UUID_ADD_COLOR_TIME_POINT, NIMBLE_PROPERTY::WRITE_NR);
     addColorTimePointCh->setCallbacks(&chrCallbacks);
 
+    NimBLECharacteristic *listColorTimePointCh = colorService->createCharacteristic(CHARACTERISTIC_UUID_LIST_COLOR_TIME_POINT, NIMBLE_PROPERTY::WRITE_NR);
+    listColorTimePointCh->setCallbacks(&chrCallbacks);
+
     // get current mode
     // add time points
     // get time point list

@@ -98,8 +98,8 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
     });
   }
 
-  void stopScan() {
-    FlutterBluePlus.stopScan();
+  Future<void> stopScan() async {
+    await FlutterBluePlus.stopScan();
     state = state.copyWith(isScanning: false);
   }
 
@@ -120,7 +120,8 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
     state = state.copyWith(isScanning: true);
   }
 
-  void startConnect(BluetoothDevice device) {
+  void startConnect(BluetoothDevice device) async {
+    await stopScan();
     device.connect();
     state = state.copyWith(connectedDevice: device, isOnline: true);
   }
@@ -139,7 +140,7 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
     });
   }
 
-  void addScanResult(ScanResult s) {
+  void addScanResult(ScanResult s) async {
     if (s.device.localName.isEmpty) return;
     if (state.scanResults
         .any((element) => element.remoteId == s.device.remoteId)) {
@@ -191,12 +192,20 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
       reconnect();
       return;
     }
+    await stopScan();
 
+    final s = await conn.connectionState.first;
+    if (s == BluetoothConnectionState.connected) {
+      debugPrint("connected");
+      setOnline();
+      return;
+    }
     try {
       //
+      // FlutterBluePlus.setLogLevel(LogLevel.verbose);
 
       await conn.connect(
-        timeout: const Duration(seconds: 1),
+        timeout: const Duration(seconds: 15),
         autoConnect: false,
       );
 
@@ -231,6 +240,7 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
       debugPrint("conn is null");
       return null;
     }
+    await stopScan();
 
     final connState = await conn.connectionState.first;
     if (connState != BluetoothConnectionState.connected) {
@@ -303,7 +313,7 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
       );
     }
 
-    Future.delayed(const Duration(milliseconds: 100)).then((value) async {
+    await Future.delayed(const Duration(milliseconds: 100)).then((value) async {
       final c = await _callCharacteristic(
           BLEServices.color, ColorService.listTimePoint);
       // send to device
@@ -321,7 +331,6 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
       }
       // print value
       c.write(req.writeToBuffer(), withoutResponse: true);
-      debugPrint("send time points");
     });
   }
 

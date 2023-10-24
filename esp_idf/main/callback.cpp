@@ -10,7 +10,6 @@ void on_add_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnI
         printf("addColorTimePoint: decode message failed\n");
         return;
     }
-    printf("addColorTimePoint: %ld:%ld with sizes %u\n", req->hh, req->mm, pCharacteristic->getValue().length());
 
     unsigned short hh = req->hh;
     unsigned short mm = req->mm;
@@ -58,7 +57,7 @@ void on_available_color_time_points(NimBLECharacteristic *pCharacteristic, NimBL
         return;
     }
 
-    filter_schedules(schedules, [&](const Schedule &s) {
+    schedules = filter_schedules(schedules, [&](const Schedule &s) {
         for (size_t i = 0; i < req->n_times; ++i) {
             unsigned short hh = req->times[i]->hh;
             unsigned short mm = req->times[i]->mm;
@@ -78,6 +77,9 @@ void on_available_color_time_points(NimBLECharacteristic *pCharacteristic, NimBL
         printf("onAvailableColorTimePoints: write schedule failed\n");
         return;
     }
+
+    debug_schedules();
+
     return;
 }
 

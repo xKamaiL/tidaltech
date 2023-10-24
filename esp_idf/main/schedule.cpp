@@ -32,6 +32,12 @@ esp_err_t read_schedule_from_nvs(std::vector<Schedule> &schedules) {
 
     err = nvs_open(NAMESPACE, NVS_READONLY, &handle);
     if (err != ESP_OK) {
+        if (err == ESP_ERR_NVS_NOT_FOUND) {
+            // No schedule found, return empty vector
+            // with size 5
+            schedules.resize(5 / sizeof(Schedule));
+            return ESP_OK;
+        }
         return err;
     }
 
@@ -70,4 +76,30 @@ void upsert_schedules(std::vector<Schedule> &schedules, const Schedule &newSched
     } else {
         schedules.push_back(newSchedule);
     }
+}
+
+void debug_schedules() {
+    printf("\n\n");
+    std::vector<Schedule> schedules;
+    esp_err_t err = read_schedule_from_nvs(schedules);
+    if (err == ESP_OK) {
+        for (auto &s : schedules) {
+            printf("schedule: %d %hu:%hu (%hu %hu %hu %hu %hu %hu %hu)\n",
+                   s.ok,
+                   s.hh, s.mm,
+                   s.leds.white,
+                   s.leds.warm_white,
+                   s.leds.red,
+                   s.leds.green,
+                   s.leds.blue,
+                   s.leds.royal_blue,
+                   s.leds.ultra_violet
+                   //
+            );
+        }
+    } else {
+        printf("read schedule from nvs failed\n");
+    }
+    printf("\n\n");
+    schedules.clear();
 }
