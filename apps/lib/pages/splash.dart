@@ -46,6 +46,8 @@ class _SplashPageState extends ConsumerState<SplashPage> {
                 final b = await Permission.bluetooth.request();
                 if (b != PermissionStatus.granted) {
                   openAppSettings(); // open app setting
+                } else {
+                  context.go("/landing");
                 }
               }
           ],
