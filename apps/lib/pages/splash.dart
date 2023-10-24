@@ -44,7 +44,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
               ..px = 14
               ..onPressed = () async {
                 final b = await Permission.bluetooth.request();
-                if (b == PermissionStatus.granted) {
+                if (b != PermissionStatus.granted) {
                   openAppSettings(); // open app setting
                 }
               }
