@@ -36,7 +36,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children:  [
+          children: [
             n.Text('Please allow permission.')..bodyLarge,
             const SizedBox(height: 24),
             n.Button("Allow Permission".n)
@@ -44,7 +44,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
               ..px = 14
               ..onPressed = () async {
                 final b = await Permission.bluetooth.request();
-                if (b == PermissionStatus.permanentlyDenied) {
+                if (b == PermissionStatus.granted) {
                   openAppSettings(); // open app setting
                 }
               }
