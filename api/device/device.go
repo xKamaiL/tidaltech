@@ -26,7 +26,7 @@ type ListItem struct {
 	CreatedAt time.Time `json:"createdAt"`
 }
 type ListResult struct {
-	Item []*ListItem `json:"item"`
+	Items []*ListItem `json:"items"`
 }
 
 func List(ctx context.Context) (*ListResult, error) {
@@ -36,6 +36,7 @@ func List(ctx context.Context) (*ListResult, error) {
 
 	err := pgstmt.Select(func(b pgstmt.SelectStatement) {
 		b.Columns("id", "name", "created_at")
+		b.From("devices")
 		b.Where(func(b pgstmt.Cond) {
 			b.Mode().And()
 			b.Eq("pair_user_id", userID)
@@ -50,7 +51,7 @@ func List(ctx context.Context) (*ListResult, error) {
 			return err
 		}
 
-		result.Item = append(result.Item, &x)
+		result.Items = append(result.Items, &x)
 		return nil
 	})
 	if err != nil {
@@ -131,7 +132,7 @@ func Pair(ctx context.Context, p *PairParam) (err error) {
 		if err != nil {
 			return err
 		}
-		if rows != 0 {
+		if rows != 1 {
 			return ErrNotFound
 		}
 		return nil
@@ -174,8 +175,7 @@ func UnPair(ctx context.Context, p *UnPairParam) error {
 		if err != nil {
 			return err
 		}
-
-		if rows != 0 {
+		if rows != 1 {
 			return ErrNotFound
 		}
 		return nil
