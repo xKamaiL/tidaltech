@@ -77,7 +77,8 @@ func Get(ctx context.Context, p *GetParam) (*Device, error) {
 	userID := auth.GetAccountID(ctx)
 	var d Device
 	err := pgctx.QueryRow(ctx, `
-		select id, token, name, pair_user_id, pair_at, properties, created_at from devices 
+		select id, token, name, pair_user_id, pair_at, properties, created_at 
+		from devices 
 		where pair_user_id = $1`,
 		userID,
 		true,
