@@ -8,6 +8,7 @@ import (
 
 	"github.com/xkamail/tidaltech/api/auth"
 	"github.com/xkamail/tidaltech/api/device"
+	"github.com/xkamail/tidaltech/api/preset"
 )
 
 func Mount(m *httpmux.Mux, am *arpc.Manager) {
@@ -32,6 +33,14 @@ func Mount(m *httpmux.Mux, am *arpc.Manager) {
 		m.Handle("/devices.Get", am.Handler(device.Get))
 		m.Handle("/devices.Pair", am.Handler(device.Pair))
 		m.Handle("/devices.UnPair", am.Handler(device.UnPair))
+	}
+	// presets
+	{
+		m.Handle("/presets.ListPublic", am.Handler(preset.ListPublic))
+		m.Handle("/presets.List", am.Handler(preset.List))
+		m.Handle("/presets.Create", am.Handler(preset.Create))
+		m.Handle("/presets.Update", am.Handler(preset.Update))
+		m.Handle("/presets.Delete", am.Handler(preset.Delete))
 	}
 }
 
