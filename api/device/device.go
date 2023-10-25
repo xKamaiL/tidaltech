@@ -75,9 +75,11 @@ type Device struct {
 func Get(ctx context.Context, p *GetParam) (*Device, error) {
 	userID := auth.GetAccountID(ctx)
 	var d Device
-	err := pgctx.QueryRow(ctx, `select * from devices where pair_user_id = $1 and id = $2`,
+	err := pgctx.QueryRow(ctx, `
+		select id, token, name, pair_user_id, pair_at, properties, created_at from devices 
+		where pair_user_id = $1`,
 		userID,
-		p.ID,
+		true,
 	).Scan(
 		&d.ID,
 		&d.Name,
@@ -92,7 +94,6 @@ func Get(ctx context.Context, p *GetParam) (*Device, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return &d, nil
 }
 
@@ -106,17 +107,81 @@ func (p PairParam) Valid() error {
 	return v.Error()
 }
 
-func Pair(ctx context.Context, p *PairParam) error {
+func Pair(ctx context.Context, p *PairParam) (err error) {
+	userID := auth.GetAccountID(ctx)
+	if err := p.Valid(); err != nil {
+		return err
+	}
+	err = pgctx.RunInTxOptions(ctx, &pgsql.TxOptions{
+		TxOptions: sql.TxOptions{
+			Isolation: sql.LevelReadUncommitted,
+		},
+	}, func(ctx context.Context) error {
+		result, err := pgctx.Exec(ctx, `
+		update devices 
+			set pair_user_id = $2, pair_at = now()
+			where id = $1 and pair_user_id is null`,
+			p.ID,
+			userID,
+		)
+		if err != nil {
+			return err
+		}
+		rows, err := result.RowsAffected()
+		if err != nil {
+			return err
+		}
+		if rows != 0 {
+			return ErrNotFound
+		}
+		return nil
+	})
+	return
+}
+
+type UnPairParam struct {
+	ID uuid.UUID `json:"id"`
+}
+
+func (p UnPairParam) Valid() error {
+	v := validator.New()
+	v.Must(p.ID != uuid.Nil, "id is required")
+	return v.Error()
+}
+
+func UnPair(ctx context.Context, p *UnPairParam) error {
+	userID := auth.GetAccountID(ctx)
 	if err := p.Valid(); err != nil {
 		return err
 	}
 
+	err := pgctx.RunInTxOptions(ctx, &pgsql.TxOptions{
+		TxOptions: sql.TxOptions{
+			Isolation: sql.LevelReadUncommitted,
+		},
+	}, func(ctx context.Context) error {
+		result, err := pgctx.Exec(ctx, `
+			update devices
+				set pair_user_id = null, pair_at = null
+			where id = $1 and pair_user_id = $2`,
+			p.ID,
+			userID,
+		)
+		if err != nil {
+			return err
+		}
+		rows, err := result.RowsAffected()
+		if err != nil {
+			return err
+		}
+
+		if rows != 0 {
+			return ErrNotFound
+		}
+		return nil
+	})
+	if err != nil {
+		return err
+	}
 	return nil
-}
-
-type UnPairParam struct {
-}
-
-func UnPair(ctx context.Context, p *UnPairParam) error {
-	panic("not implemented")
 }
