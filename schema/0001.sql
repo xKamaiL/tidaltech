@@ -45,3 +45,15 @@ create table schedule_presets
     created_at  timestamp default now(),
     primary key (id)
 );
+
+insert into devices (id, token, name, pair_user_id, pair_at, properties, created_at)
+values ('83ac6d47-82fd-403a-b903-1a7df6248d46', 'TOKEN', 'TIDAL TECH LIGHTING', null, null,
+        '{
+          "power": true,
+          "mode": "schedule",
+          "schedule": {
+            "points": [],
+            "weekday": "0000000"
+          }
+        }',
+        now());
