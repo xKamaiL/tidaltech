@@ -262,11 +262,15 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
       return null;
     }
 
-    final c = service.characteristics
-        .where((element) =>
-            element.characteristicUuid.toString() == characteristicGuid)
-        .first;
-    return c;
+    try {
+      final c = service.characteristics
+          .where((element) =>
+              element.characteristicUuid.toString() == characteristicGuid)
+          .first;
+      return c;
+    } catch (e) {
+      return null;
+    }
   }
 
   void checkRTC() async {
@@ -298,7 +302,6 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
         await _callCharacteristic(BLEServices.color, ColorService.addTimePoint);
     // send to device
     if (c == null) {
-      debugPrint("characteristic is null");
       return;
     }
     for (final p in timePoints) {
@@ -318,7 +321,6 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
           BLEServices.color, ColorService.listTimePoint);
       // send to device
       if (c == null) {
-        debugPrint("characteristic is null");
         return;
       }
 
