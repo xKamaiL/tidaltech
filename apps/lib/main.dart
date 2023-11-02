@@ -1,14 +1,23 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tidal_tech/models/token.dart';
 import 'package:tidal_tech/providers/router.dart';
 import 'package:tidal_tech/theme/colors.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  final dio = Dio();
+  dio.options.headers['Content-Type'] = 'application/json';
+  dio.options.headers['Accept'] = 'application/json';
+  dio.options.connectTimeout = const Duration(seconds: 3);
+  dio.options.receiveTimeout = const Duration(seconds: 3);
+  dio.interceptors.add(TokenInterceptor());
+
   runApp(
     const ProviderScope(
       overrides: [],
