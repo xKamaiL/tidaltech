@@ -99,5 +99,15 @@ abstract class RestClient {
   })
   Future<APIFormat<DeviceItem>> fetchDevice(@Body() PairParam param);
 
+  @POST("/devices.Get")
+  @Headers(<String, dynamic>{
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  })
+  Future<APIFormat> unPair(@Body() UnPairParam param);
+
+  @POST("/devices.Pair")
+  Future<APIFormat> pair(@Body() PairParam param);
+
 //
 }

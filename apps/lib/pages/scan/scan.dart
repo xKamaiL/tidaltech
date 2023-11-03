@@ -6,6 +6,8 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tidal_tech/constants/ble_services_ids.dart';
+import 'package:tidal_tech/models/devices.dart';
+import 'package:tidal_tech/models/models.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import '../../stores/bottom_bar.dart';
 import '../../styles/button.dart';
@@ -242,7 +244,20 @@ class DeviceItem extends HookConsumerWidget {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
 
                 await prefs.setString("id", device.remoteId.toString());
+
+                final res = await api.pair(PairParam(id: "83ac6d47-82fd-403a-b903-1a7df6248d46"));
+
                 loading.value = false;
+                if (!res.ok) {
+                  print(res.error?.message);
+                  showTopSnackBar(
+                    Overlay.of(context),
+                     XSnackBar.error(
+                      message: "Cannot Pair: ${res.error!.message ?? ""}",
+                    ),
+                  );
+                  return;
+                }
                 showTopSnackBar(
                   Overlay.of(context),
                   const XSnackBar.success(

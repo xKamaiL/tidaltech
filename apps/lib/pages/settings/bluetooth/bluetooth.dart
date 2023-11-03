@@ -3,9 +3,12 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:niku/namespace.dart' as n;
+import 'package:tidal_tech/stores/device.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../../../providers/ble_manager.dart';
 import '../../../theme/colors.dart';
+import '../../../ui/snackbar.dart';
 import '../widgets/scaffold.dart';
 
 class BluetoothSettingPage extends HookConsumerWidget {
@@ -42,8 +45,26 @@ class BluetoothSettingPage extends HookConsumerWidget {
             ..fontSize = 12.0,
           trailing: n.Icon(Icons.remove)..color = Colors.red,
           onTap: () async {
-            ref.read(bleManagerProvider.notifier).forgot();
-            context.go("/scan");
+            final msg = await ref.read(deviceProvider.notifier).forgot();
+            if (msg.isEmpty) {
+              ref.read(bleManagerProvider.notifier).forgot();
+              showTopSnackBar(
+                Overlay.of(context),
+                const XSnackBar.success(
+                  message: "Un pair device successfully",
+                ),
+              );
+              await Future.delayed(Duration(seconds: 1), () {
+                context.go("/scan");
+              });
+            } else {
+              showTopSnackBar(
+                Overlay.of(context),
+                XSnackBar.error(
+                  message: "Failed: $msg",
+                ),
+              );
+            }
           },
         )..mt = 8 * 4,
       ])

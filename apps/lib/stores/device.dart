@@ -38,6 +38,16 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
     state = xState;
   }
 
+  Future<String> forgot() async {
+    if (state.device == null) return "no device connected";
+
+    final res = await api.unPair(UnPairParam(id: state.device!.id));
+    if (res.ok) {
+      return "";
+    }
+    return res.error!.message ?? "unknown error";
+  }
+
 //
 }
 
