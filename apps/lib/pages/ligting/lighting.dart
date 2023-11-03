@@ -6,6 +6,7 @@ import 'package:tidal_tech/pages/ligting/feeder/index.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'package:tidal_tech/pages/ligting/time_selection.dart';
+import 'package:tidal_tech/stores/device.dart';
 import 'package:tidal_tech/stores/lighting.dart';
 import 'package:tidal_tech/theme/colors.dart';
 import 'package:tidal_tech/ui/BluetoothStatusIcon.dart';
@@ -78,11 +79,16 @@ class LightingIndexPage extends HookConsumerWidget {
 class ModeSelection extends HookConsumerWidget {
   final TabController tabController;
 
-  const ModeSelection(this.tabController, {Key? key}) : super(key: key);
+  const ModeSelection(this.tabController, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final mode = ref.watch(lightingModeProvider);
+
+    // iterate
+    ref.listen(lightingModeProvider, (_, next) {
+      tabController.animateTo(LightingMode.ambient == next ? 1 : 0);
+    });
 
     return Container(
       decoration: BoxDecoration(
@@ -125,10 +131,10 @@ class ModeSelection extends HookConsumerWidget {
               ),
             ),
             onTap: () {
-              tabController.animateTo(0);
               ref
                   .read(lightingModeProvider.notifier)
                   .setMode(LightingMode.feed);
+              ref.read(deviceProvider.notifier).setMode(LightingMode.feed);
             },
           ),
         ),
@@ -166,10 +172,11 @@ class ModeSelection extends HookConsumerWidget {
               ),
             ),
             onTap: () {
-              tabController.animateTo(1);
               ref
                   .read(lightingModeProvider.notifier)
                   .setMode(LightingMode.ambient);
+              ref.read(deviceProvider.notifier).setMode(LightingMode.ambient);
+
             },
           ),
         ),

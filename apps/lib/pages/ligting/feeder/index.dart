@@ -45,8 +45,6 @@ class _FeederControlState extends ConsumerState<ConsumerStatefulWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final manager = ref.read(bleManagerProvider.notifier);
-
     return n.Column(
       const [
         FeederTimeHeader(),
