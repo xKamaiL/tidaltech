@@ -51,7 +51,7 @@ class BluetoothSettingPage extends HookConsumerWidget {
               showTopSnackBar(
                 Overlay.of(context),
                 const XSnackBar.success(
-                  message: "Un pair device successfully",
+                  message: "Remove device successfully",
                 ),
               );
               await Future.delayed(Duration(seconds: 1), () {

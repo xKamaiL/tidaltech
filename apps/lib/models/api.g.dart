@@ -233,7 +233,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/devices.Get',
+              '/devices.UnPair',
               queryParameters: queryParameters,
               data: _data,
             )
