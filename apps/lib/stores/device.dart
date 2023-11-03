@@ -47,6 +47,11 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
               : LightingMode.ambient,
         );
     int i = 0;
+    final currentTimePoints = ref.read(timePointsNotifier);
+    if (currentTimePoints.isNotEmpty) {
+      return;
+    }
+
     final tps = res.result!.properties.schedule.points?.map<TimePoint>((t) {
           Map<LED, ColorPoint> defaultTimePointIntensity = {
             LED.white: ColorPoint(LED.white, t.brightness["white"]!),
@@ -64,7 +69,7 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
           int hh = int.parse(t.time.substring(0, 2));
           int mm = int.parse(t.time.substring(3, 5));
           return TimePoint(
-            i,
+            0,
             hh,
             mm,
             defaultTimePointIntensity,
@@ -73,6 +78,15 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
           growable: true,
         ) ??
         [];
+
+    tps.sort((a, b) {
+      if (a.hour == b.hour) return a.minute.compareTo(b.minute);
+      return a.hour.compareTo(b.hour);
+    });
+
+    for (int i = 0; i < tps.length; i++) {
+      tps[i] = tps[i].copyWith(id: i);
+    }
 
     ref.read(timePointsNotifier.notifier).initTimePoint(tps);
     if (tps.isNotEmpty) {
