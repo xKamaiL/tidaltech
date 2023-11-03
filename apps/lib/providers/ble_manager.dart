@@ -349,5 +349,22 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
     //
   }
 
+  void setStaticColor(int rgb) async {
+    final c = await _callCharacteristic(
+        BLEServices.color, ColorService.setStaticColor);
+    // send to device
+    if (c == null) {
+
+      return;
+    }
+    final req = SetAmbientRequest();
+
+    req.r = (rgb >> 16) & 0xFF;
+    req.g = (rgb >> 8) & 0xFF;
+    req.b = rgb & 0xFF;
+    // print value
+    c.write(req.writeToBuffer(), withoutResponse: true);
+  }
+
 //
 }
