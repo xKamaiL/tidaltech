@@ -16,23 +16,25 @@ Map<String, dynamic> _$TokenResultToJson(TokenResult instance) =>
     };
 
 SignInParam _$SignInParamFromJson(Map<String, dynamic> json) => SignInParam(
-      username: json['username'] as String,
+      email: json['email'] as String,
       password: json['password'] as String,
     );
 
 Map<String, dynamic> _$SignInParamToJson(SignInParam instance) =>
     <String, dynamic>{
-      'username': instance.username,
+      'email': instance.email,
       'password': instance.password,
     };
 
 SignUpParam _$SignUpParamFromJson(Map<String, dynamic> json) => SignUpParam(
       email: json['email'] as String,
       password: json['password'] as String,
+      confirmPassword: json['confirmPassword'] as String,
     );
 
 Map<String, dynamic> _$SignUpParamToJson(SignUpParam instance) =>
     <String, dynamic>{
       'email': instance.email,
       'password': instance.password,
+      'confirmPassword': instance.confirmPassword,
     };

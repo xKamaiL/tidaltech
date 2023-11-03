@@ -25,7 +25,7 @@ func (p SignInParam) Valid() error {
 	v.Must(len(p.Email) > 0, "email is required")
 	v.Must(govalidator.IsEmail(p.Email), "email is invalid")
 	v.Must(len(p.Password) > 0, "password is required")
-	v.Must(len(p.Password) > 8, "password must be at least 8 characters")
+	v.Must(len(p.Password) >= 8, "password must be at least 8 characters")
 	return v.Error()
 }
 

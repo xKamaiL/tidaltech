@@ -1,26 +1,21 @@
-import 'package:tidal_tech/stores/bottom_bar.dart';
-import 'package:tidal_tech/styles/button.dart';
-import 'package:tidal_tech/theme/colors.dart';
-import 'package:tidal_tech/ui/snackbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:niku/namespace.dart' as n;
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:tidal_tech/models/auth.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
-import '../models/auth.dart';
 import '../models/models.dart';
-import '../stores/stores.dart';
+import '../styles/button.dart';
+import '../theme/colors.dart';
+import '../ui/snackbar.dart';
 
-class LoginPage extends HookConsumerWidget {
+class SignUpPage extends HookConsumerWidget {
   final _formKey = GlobalKey<FormState>();
 
-  // can you create password visible state ?
-
-  LoginPage({Key? key}) : super(key: key);
-
-  void togglePassword() {}
+  SignUpPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,8 +23,7 @@ class LoginPage extends HookConsumerWidget {
     final loading = useState(false);
     final email = useTextEditingController();
     final password = useTextEditingController();
-
-    final user = ref.watch(userProvider);
+    final confirmPassword = useTextEditingController();
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -40,18 +34,9 @@ class LoginPage extends HookConsumerWidget {
             child: Form(
               key: _formKey,
               child: n.Column([
-                n.Image(
-                  const ExactAssetImage("assets/icon/icon_transparent.png"),
-                )
-                  ..cover
-                  ..width = 150
-                  ..height = 150
-                  ..rounded = 10
-                  ..useCircleProgress(
-                    color: ThemeColors.foreground,
-                  ),
+                n.Box()..h = 60,
                 n.RichText(
-                  n.TextSpan("Tidal Tech")
+                  n.TextSpan("Sign up")
                     ..color = ThemeColors.primary
                     ..fontSize = 32
                     ..fontFamily = "NotoSansThai_regular"
@@ -132,7 +117,53 @@ class LoginPage extends HookConsumerWidget {
                     }
                     return null;
                   },
-                n.Button("Sign In".n)
+                n.TextFormField()
+                  ..controller = confirmPassword
+                  ..noUnderline
+                  ..isFilled
+                  ..scrollPhysics = const NeverScrollableScrollPhysics()
+                  ..scrollPadding = EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom - 16 * 4)
+                  ..rounded = 12
+                  ..fontSize = 14
+                  ..textInputAction = TextInputAction.go
+                  ..isCollapsed = true
+                  ..textAlignVertical = TextAlignVertical.center
+                  ..prefixIcon = const Icon(
+                    Icons.lock,
+                    color: ThemeColors.foreground,
+                  )
+                  ..suffixIcon = IconButton(
+                      onPressed: () => {
+                            isShowPassword.value = !isShowPassword.value,
+                          },
+                      splashRadius: 20,
+                      icon: const Icon(
+                        Icons.visibility,
+                        color: ThemeColors.foreground,
+                      ))
+                  ..onEditingComplete = () {
+                    // hide keyboard
+                    FocusManager.instance.primaryFocus?.unfocus();
+                  }
+                  ..bg = ThemeColors.zinc.shade100
+                  ..color = ThemeColors.foreground
+                  ..hintText = "Confirm Password"
+                  ..maxLines = 1
+                  ..asPassword = !isShowPassword.value
+                  ..validator = (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter confirm password';
+                    }
+                    if (value.length < 6) {
+                      return 'Confirm Password must be at least 6 characters long';
+                    }
+                    if (value != password.value.text) {
+                      return 'Confirm password incorrect';
+                    }
+                    return null;
+                  },
+                n.Button("Create an account".n)
                   ..apply = XButtonStyle.confirm(
                     loading: loading.value,
                     label: "Sign In",
@@ -143,9 +174,14 @@ class LoginPage extends HookConsumerWidget {
                       FocusManager.instance.primaryFocus?.unfocus();
 
                       loading.value = true;
-                      final res = await api.signIn(SignInParam(
+                      final res = await api.signUp(
+                        //
+                        SignUpParam(
                           email: email.value.text,
-                          password: password.value.text));
+                          password: password.value.text,
+                          confirmPassword: confirmPassword.value.text
+                        ),
+                      );
 
                       loading.value = false;
                       // show alert message
@@ -159,13 +195,7 @@ class LoginPage extends HookConsumerWidget {
                         return;
                       }
 
-                      showTopSnackBar(
-                        Overlay.of(context),
-                        const XSnackBar.success(message: "Sign up successfully"),
-                      );
-
-                      ref.read(bottomBarProvider.notifier).setPosition(0);
-                      context.go("/home");
+                      context.go("/sign-in");
                     }
                   }
                   ..fullWidth,
@@ -176,21 +206,16 @@ class LoginPage extends HookConsumerWidget {
                   endIndent: 50,
                 ),
                 n.Column([
-                  n.Text("Don't have any account?")
+                  n.Text("Already have account")
                     ..center
                     ..fullWidth
                     ..fontSize = 14,
-                  n.Button("Sign Up".n)
+                  n.Button("Go Sign in".n)
                     ..onPressed = () {
                       //
-                      context.go("/sign-up");
+                      context.go("/sign-in");
                     },
-                ]),
-                n.Box()
-                  ..height = 100
-                  ..bg = ThemeColors.zinc.shade100
-                  ..rounded = 16
-                  ..width = 100,
+                ])
                 // sign in with google
               ])
                 ..mainCenter

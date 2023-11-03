@@ -9,11 +9,13 @@ part of 'api.dart';
 APIError _$APIErrorFromJson(Map<String, dynamic> json) => APIError(
       message: json['message'] as String?,
       code: json['code'] as String?,
-    );
+    )..items =
+        (json['items'] as List<dynamic>?)?.map((e) => e as String).toList();
 
 Map<String, dynamic> _$APIErrorToJson(APIError instance) => <String, dynamic>{
       'message': instance.message,
       'code': instance.code,
+      'items': instance.items,
     };
 
 APIFormat<T> _$APIFormatFromJson<T>(
@@ -23,7 +25,9 @@ APIFormat<T> _$APIFormatFromJson<T>(
     APIFormat<T>(
       result: _$nullableGenericFromJson(json['result'], fromJsonT),
       ok: json['ok'] as bool,
-      error: APIError.fromJson(json['error'] as Map<String, dynamic>),
+      error: json['error'] == null
+          ? null
+          : APIError.fromJson(json['error'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$APIFormatToJson<T>(

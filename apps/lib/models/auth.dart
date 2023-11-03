@@ -16,10 +16,10 @@ class TokenResult {
 
 @JsonSerializable()
 class SignInParam {
-  String username;
+  String email;
   String password;
 
-  SignInParam({required this.username, required this.password});
+  SignInParam({required this.email, required this.password});
 
   factory SignInParam.fromJson(Map<String, dynamic> json) =>
       _$SignInParamFromJson(json);
@@ -31,8 +31,13 @@ class SignInParam {
 class SignUpParam {
   String email;
   String password;
+  String confirmPassword;
 
-  SignUpParam({required this.email, required this.password});
+  SignUpParam({
+    required this.email,
+    required this.password,
+    required this.confirmPassword,
+  });
 
   factory SignUpParam.fromJson(Map<String, dynamic> json) =>
       _$SignUpParamFromJson(json);

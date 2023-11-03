@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:dio/dio.dart' hide Headers;
+import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:tidal_tech/models/user.dart';
@@ -13,12 +15,23 @@ part 'api.g.dart';
 class APIError {
   final String? message;
   final String? code;
+  @JsonKey(name: "items")
+  List<String>? items = [];
+
+  bool isValidate() {
+    if (code == null) return false;
+    return code == "VALIDATE_ERROR";
+  }
 
   String errorMessage() {
     final x = message;
     if (x == null) {
       return "Internal Server Error";
     } else {
+      if (isValidate()) {
+        if (items == null) return "";
+        return items!.join(" ");
+      }
       return x;
     }
   }
@@ -37,7 +50,7 @@ class APIError {
 class APIFormat<T> {
   final T? result;
   final bool ok;
-  final APIError error;
+  final APIError? error;
 
   APIFormat({required this.result, required this.ok, required this.error});
 
