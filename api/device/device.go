@@ -81,7 +81,6 @@ func Get(ctx context.Context, p *GetParam) (*Device, error) {
 		from devices 
 		where pair_user_id = $1`,
 		userID,
-		true,
 	).Scan(
 		&d.ID,
 		&d.Name,
