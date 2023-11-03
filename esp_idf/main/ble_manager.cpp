@@ -89,7 +89,7 @@ void initNimble() {
 
     NimBLECharacteristic *deviceNameCharacteristic = deviceInformationService->createCharacteristic(
         CHARACTERISTIC_UUID_DEVICE_ID, NIMBLE_PROPERTY::READ);
-    deviceNameCharacteristic->setValue(NimBLEUUID(""));
+    deviceNameCharacteristic->setValue(NimBLEUUID("83ac6d47-82fd-403a-b903-1a7df6248d46"));
 
     deviceNameCharacteristic->setCallbacks(&chrCallbacks);
 
