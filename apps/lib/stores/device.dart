@@ -106,7 +106,8 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
     return res.error!.message ?? "unknown error";
   }
 
-  Future<void> setMode(LightingMode mode) async {
+  Future<void>
+  setMode(LightingMode mode) async {
     await api.updateMode(UpdateModeParam(
       mode: mode == LightingMode.feed ? "schedule" : "manual",
     ));
