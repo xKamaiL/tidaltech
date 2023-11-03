@@ -99,3 +99,13 @@ Map<String, dynamic> _$UpdateScheduleParamToJson(
     <String, dynamic>{
       'schedule': instance.schedule,
     };
+
+UpdateModeParam _$UpdateModeParamFromJson(Map<String, dynamic> json) =>
+    UpdateModeParam(
+      mode: json['mode'] as String,
+    );
+
+Map<String, dynamic> _$UpdateModeParamToJson(UpdateModeParam instance) =>
+    <String, dynamic>{
+      'mode': instance.mode,
+    };

@@ -107,7 +107,9 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
   }
 
   Future<void> setMode(LightingMode mode) async {
-    // TODO: call api
+    await api.updateMode(UpdateModeParam(
+      mode: mode == LightingMode.feed ? "schedule" : "manual",
+    ));
   }
 
   Future<void> updateSchedule({required List<TimePoint> timePoints}) async {

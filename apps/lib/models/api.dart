@@ -112,5 +112,8 @@ abstract class RestClient {
   @POST("/devices.updateSchedule")
   Future<APIFormat> updateSchedule(@Body() UpdateScheduleParam param);
 
+  @POST("/devices.setMode")
+  Future<APIFormat> updateMode(@Body() UpdateModeParam param);
+
 //
 }

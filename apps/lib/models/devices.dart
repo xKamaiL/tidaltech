@@ -115,3 +115,15 @@ class UpdateScheduleParam {
 
   Map<String, dynamic> toJson() => _$UpdateScheduleParamToJson(this);
 }
+
+@JsonSerializable()
+class UpdateModeParam {
+  final String mode;
+
+  UpdateModeParam({required this.mode});
+
+  factory UpdateModeParam.fromJson(Map<String, dynamic> json) =>
+      _$UpdateModeParamFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UpdateModeParamToJson(this);
+}
