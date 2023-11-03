@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:niku/namespace.dart' as n;
+import 'package:tidal_tech/styles/button.dart';
 import 'package:tidal_tech/theme/colors.dart';
 
 class TaskRoute extends StatefulWidget {
@@ -83,23 +84,28 @@ class TaskRouteState extends State<TaskRoute> {
               final result = _results.toList(growable: false)[index];
               return Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        const Text('BSSID: '),
-                        Text(result.bssid),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        const Text('IP: '),
-                        Text(result.ip),
-                      ],
-                    )
-                  ],
-                ),
+                child: n.Column([
+                  n.Icon(Icons.check_circle_outline)
+                    ..color = ThemeColors.zinc.shade300
+                    ..size = 64 * 2.5,
+                  n.Box()..h = 16,
+                  n.Text("IP: ${result.ip}")
+                    ..color = ThemeColors.foreground
+                    ..fontSize = 16,
+                  n.Text("Device connect to WiFi.")
+                    ..color = ThemeColors.foreground
+                    ..fontSize = 20,
+                  n.Box()..h = 24,
+                  n.Button("Done".n)
+                    ..apply = XButtonStyle.confirm()
+                    ..fullWidth
+                    ..onPressed = () {
+                      context.go("/lighting");
+                    },
+                ])
+                  ..px = 16
+                  ..mt = 24
+                  ..gap = 4,
               );
             },
           ),

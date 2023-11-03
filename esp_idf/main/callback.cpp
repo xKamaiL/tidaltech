@@ -94,9 +94,10 @@ void on_set_color_mode(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &co
     Mode mode = req->mode;
     set_color_mode_request__free_unpacked(req, NULL);
 
-    printf("onSetColorMode: %d\n", mode);
-
     int saveMode = mode == MODE__MODE_MANUAL ? 1 : 0;
+
+    printf("onSetColorMode: %d\n", saveMode);
+
     esp_err_t err = write_light_mode_to_nvs(saveMode);
     if (err != ESP_OK) {
         printf("onSetColorMode: write mode failed\n");
