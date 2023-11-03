@@ -6,6 +6,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:niku/namespace.dart' as n;
 import 'package:tidal_tech/stores/stores.dart';
 
+import '../stores/device.dart';
 import '../styles/button.dart';
 
 class SplashPage extends ConsumerStatefulWidget {
@@ -20,6 +21,8 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   void initState() {
     super.initState();
     ref.read(userProvider.notifier).fetchMe();
+    ref.read(deviceProvider.notifier).fetchCurrentDevice();
+
     Permission.bluetooth.isGranted.then((isGranted) {
       if (!isGranted) {
         Permission.bluetooth.request().then((value) => {

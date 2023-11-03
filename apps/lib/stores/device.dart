@@ -8,28 +8,30 @@ class DeviceProvider {
   bool isLoading = true;
   DeviceItem? device;
   bool isNotPair = false;
+  bool isError = false;
 }
 
 class DeviceNotifier extends StateNotifier<DeviceProvider> {
   DeviceNotifier(super.state);
 
   Future<void> fetchCurrentDevice() async {
-    print("fetchCurrentDevice");
     final res = await api.fetchDevice(PairParam(id: "id"));
-    state.isLoading = false;
+    final xState = state;
     if (!res.ok) {
       if (res.error?.code == "DEVICE_NOT_FOUND") {
-        state.isNotPair = true;
+        xState.isNotPair = true;
       } else {
-        print(res.error!.message);
+        xState.isError = true;
       }
-      state = state;
+      xState.isLoading = false;
+      state = xState;
       return;
     }
-    print("fetchCurrentDevice: ok");
-    state.isNotPair = false;
-    state.device = res.result!;
-    state = state;
+    xState.isLoading = false;
+    xState.isError = false;
+    xState.isNotPair = false;
+    xState.device = res.result!;
+    state = xState;
   }
 
 //

@@ -70,6 +70,7 @@ type Device struct {
 	PairAt     time.Time  `json:"pairAt"`
 	Properties Properties `json:"properties"`
 	CreatedAt  time.Time  `json:"createdAt"`
+	Token      string     `json:"token"`
 }
 
 func Get(ctx context.Context) (*Device, error) {
@@ -82,6 +83,7 @@ func Get(ctx context.Context) (*Device, error) {
 		userID,
 	).Scan(
 		&d.ID,
+		&d.Token,
 		&d.Name,
 		&d.PairUserID,
 		&d.PairAt,
