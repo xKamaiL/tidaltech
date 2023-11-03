@@ -33,5 +33,5 @@ func WrapError(err error) error {
 
 	slog.Error("error", "err", err)
 	// reveal error
-	return Error{err}
+	return err
 }
