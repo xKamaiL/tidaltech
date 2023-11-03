@@ -65,10 +65,10 @@ class TaskRouteState extends State<TaskRoute> {
   }
 
   Widget noneState(BuildContext context) {
-    return const Center(
+    return Center(
         child: Text(
-      'None',
-      style: TextStyle(fontSize: 24),
+      'No devices connect to ${widget.ssid ?? '-'}',
+      style: const TextStyle(fontSize: 24),
     ));
   }
 
