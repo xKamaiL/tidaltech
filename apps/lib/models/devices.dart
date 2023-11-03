@@ -127,3 +127,15 @@ class UpdateModeParam {
 
   Map<String, dynamic> toJson() => _$UpdateModeParamToJson(this);
 }
+
+@JsonSerializable()
+class UpdateStaticColorParam {
+  final int color;
+
+  UpdateStaticColorParam({required this.color});
+
+  factory UpdateStaticColorParam.fromJson(Map<String, dynamic> json) =>
+      _$UpdateStaticColorParamFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UpdateStaticColorParamToJson(this);
+}

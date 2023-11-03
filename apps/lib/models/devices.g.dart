@@ -109,3 +109,15 @@ Map<String, dynamic> _$UpdateModeParamToJson(UpdateModeParam instance) =>
     <String, dynamic>{
       'mode': instance.mode,
     };
+
+UpdateStaticColorParam _$UpdateStaticColorParamFromJson(
+        Map<String, dynamic> json) =>
+    UpdateStaticColorParam(
+      color: json['color'] as int,
+    );
+
+Map<String, dynamic> _$UpdateStaticColorParamToJson(
+        UpdateStaticColorParam instance) =>
+    <String, dynamic>{
+      'color': instance.color,
+    };

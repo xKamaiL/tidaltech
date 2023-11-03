@@ -115,5 +115,8 @@ abstract class RestClient {
   @POST("/devices.setMode")
   Future<APIFormat> updateMode(@Body() UpdateModeParam param);
 
+  @POST("/devices.updateStaticColor")
+  Future<APIFormat> updateStaticColor(@Body() UpdateStaticColorParam param);
+
 //
 }
