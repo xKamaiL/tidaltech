@@ -114,6 +114,20 @@ func Pair(ctx context.Context, p *PairParam) (err error) {
 	if err := p.Valid(); err != nil {
 		return err
 	}
+
+	var b bool
+
+	err = pgctx.QueryRow(ctx, `select exists(
+	select from devices where id = $1 and pair_user_id is not null)`,
+		p.ID,
+	).Scan(&b)
+	if err != nil {
+		return err
+	}
+	if b {
+		return arpc.NewErrorCode("DEVICE_ALREADY_PAIR", "device is already paired")
+	}
+
 	err = pgctx.RunInTxOptions(ctx, &pgsql.TxOptions{
 		TxOptions: sql.TxOptions{
 			Isolation: sql.LevelReadUncommitted,
