@@ -79,13 +79,25 @@ abstract class RestClient {
   Future<APIFormat<TokenResult>> signIn(@Body() SignInParam param);
 
   @POST("/auth.Me")
+  @Headers(<String, dynamic>{
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  })
   Future<APIFormat<User>> me();
 
   @POST("/auth.SignUp")
+  @Headers(<String, dynamic>{
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  })
   Future<APIFormat<TokenResult>> signUp(@Body() SignUpParam param);
 
   @POST("/devices.Get")
-  Future<APIFormat<DeviceItem>> fetchDevice();
+  @Headers(<String, dynamic>{
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  })
+  Future<APIFormat<DeviceItem>> fetchDevice(@Body() PairParam param);
 
 //
 }

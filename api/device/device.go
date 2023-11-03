@@ -61,7 +61,6 @@ func List(ctx context.Context) (*ListResult, error) {
 }
 
 type GetParam struct {
-	ID uuid.UUID `json:"id"`
 }
 
 type Device struct {
@@ -73,7 +72,7 @@ type Device struct {
 	CreatedAt  time.Time  `json:"createdAt"`
 }
 
-func Get(ctx context.Context, p *GetParam) (*Device, error) {
+func Get(ctx context.Context) (*Device, error) {
 	userID := auth.GetAccountID(ctx)
 	var d Device
 	err := pgctx.QueryRow(ctx, `

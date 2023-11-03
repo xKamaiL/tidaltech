@@ -3,19 +3,43 @@ import 'dart:ui';
 import 'package:flutter/scheduler.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tidal_tech/models/models.dart';
 import 'package:tidal_tech/stores/bottom_bar.dart';
+import 'package:tidal_tech/stores/device.dart';
 import 'package:tidal_tech/ui/widget/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class DashboardScreen extends HookConsumerWidget {
+class DashboardScreen extends ConsumerStatefulWidget {
   final Widget child;
-  static const blur = 5.0;
 
   const DashboardScreen(this.child, {super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<DashboardScreen> createState() {
+    return _DashboardScreenState();
+  }
+}
+
+class _DashboardScreenState extends ConsumerState<DashboardScreen> {
+  static const blur = 5.0;
+
+  @override
+  initState() {
+    // TODO: implement initState
+    super.initState();
+    //
+    ref.read(deviceProvider.notifier).fetchCurrentDevice().then((value) {
+      final x = ref.read(deviceProvider);
+      if (x.isNotPair) {
+        context.go("/scan");
+        return;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final position = ref.watch(bottomBarProvider.select((value) => value));
     final isHome = position == 0;
 
@@ -25,7 +49,7 @@ class DashboardScreen extends HookConsumerWidget {
       extendBodyBehindAppBar: true,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: !isHome
-          ? SafeArea(child: child)
+          ? SafeArea(child: widget.child)
           : Container(
               decoration: BoxDecoration(
                 image: isHome
@@ -44,7 +68,7 @@ class DashboardScreen extends HookConsumerWidget {
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
                   child: SafeArea(
-                    child: child,
+                    child: widget.child,
                   ),
                 ),
               ),

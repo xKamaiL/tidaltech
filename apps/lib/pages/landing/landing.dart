@@ -13,7 +13,7 @@ import '../../providers/ble_manager.dart';
 import 'package:collection/collection.dart';
 
 class LandingPage extends ConsumerStatefulWidget {
-  const LandingPage({Key? key}) : super(key: key);
+  const LandingPage({super.key});
 
   @override
   ConsumerState<LandingPage> createState() => _LandingPageState();
