@@ -162,11 +162,6 @@ class RouterNotifier extends ChangeNotifier {
     }
     if (isFistLoad) {
       debugPrint(" fist load");
-      await _ref.read(userProvider.notifier).fetchMe();
-      if (!isLoggedIn) {
-        return "/sign-in";
-      }
-      debugPrint("ok you are logged in");
       return null;
     }
 

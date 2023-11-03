@@ -309,7 +309,6 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
       final req = p.toProto();
       final bytes = req.writeToBuffer();
       // print value
-      debugPrint("bytes length: ${bytes.length} ${bytes.toString()}");
       c.write(
         bytes,
         withoutResponse: true,
