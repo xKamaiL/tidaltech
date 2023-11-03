@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:esp_smartconfig/esp_smartconfig.dart';
@@ -10,7 +11,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:niku/namespace.dart' as n;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tidal_tech/styles/button.dart';
-import 'package:network_info_plus/network_info_plus.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 import '../../theme/colors.dart';
 
@@ -27,6 +28,11 @@ class _WiFiSettingPagesState extends ConsumerState<WiFiSettingPages> {
   final _formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final provisioner = Provisioner.espTouch();
 
@@ -40,6 +46,11 @@ class _WiFiSettingPagesState extends ConsumerState<WiFiSettingPages> {
     final loading = useState(false);
     final name = useTextEditingController();
     final password = useTextEditingController();
+
+    useEffect(() {
+      //
+      return null;
+    }, []);
 
     return Scaffold(
       appBar: AppBar(
@@ -131,15 +142,11 @@ class _WiFiSettingPagesState extends ConsumerState<WiFiSettingPages> {
                   FocusManager.instance.primaryFocus?.unfocus();
                 }
                 loading.value = true;
-                final info = NetworkInfo();
-                final wifiName = await info.getWifiName();
-                final wifiBSSID = await info.getWifiBSSID();
-                print(wifiName);
                 // --
                 try {
                   await provisioner.start(ProvisioningRequest.fromStrings(
                     ssid: "xkamail",
-                    bssid: wifiBSSID!,
+                    bssid: "00:0a:f5:00:7f:7f",
                     password: "0931367693",
                   ));
 
