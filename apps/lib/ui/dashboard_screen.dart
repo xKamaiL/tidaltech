@@ -20,8 +20,10 @@ class DashboardScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final position = ref.watch(bottomBarProvider.select((value) => value));
-    final isHome = position == 0;
+    final isHome =
+        GoRouter.of(context).routerDelegate.currentConfiguration.fullPath ==
+            '/home';
+    //
     useEffect(() {
       ref.read(deviceProvider.notifier).fetchCurrentDevice();
       return null;

@@ -186,7 +186,6 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
   }
 
   void healthCheck() async {
-    debugPrint("health check");
     final conn = state.connectedDevice;
     if (conn == null) {
       reconnect();
@@ -196,7 +195,6 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
 
     final s = await conn.connectionState.first;
     if (s == BluetoothConnectionState.connected) {
-      debugPrint("connected");
       setOnline();
       return;
     }
