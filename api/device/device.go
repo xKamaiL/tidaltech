@@ -14,6 +14,7 @@ import (
 	"github.com/moonrhythm/validator"
 
 	"github.com/xkamail/tidaltech/api/auth"
+	"github.com/xkamail/tidaltech/pkg/schedule"
 )
 
 var (
@@ -230,6 +231,46 @@ func SetMode(ctx context.Context, p *SetModeParam) error {
 	//
 
 	properties.Mode = p.Mode
+
+	// update value
+	_, err = pgctx.Exec(ctx, `update devices set properties = $1 where id = $2`,
+		pgsql.JSON(&properties),
+		deviceID,
+	)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type UpdateScheduleParam struct {
+	Schedule schedule.Schedule `json:"schedule"`
+}
+
+func UpdateSchedule(ctx context.Context, p *UpdateScheduleParam) error {
+	userID := auth.GetAccountID(ctx)
+
+	var (
+		deviceID   uuid.UUID
+		properties Properties
+	)
+
+	err := pgctx.QueryRow(ctx, `
+			select id, properties from devices where pair_user_id = $1`,
+		userID,
+	).Scan(
+		&deviceID,
+		pgsql.JSON(&properties),
+	)
+	if errors.Is(err, sql.ErrNoRows) {
+		return ErrDeviceNotPair
+	}
+	if err != nil {
+		return err
+	}
+	//
+
+	properties.Schedule = p.Schedule
 
 	// update value
 	_, err = pgctx.Exec(ctx, `update devices set properties = $1 where id = $2`,
