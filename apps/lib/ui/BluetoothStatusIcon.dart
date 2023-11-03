@@ -13,7 +13,7 @@ import 'package:top_snackbar_flutter/top_snack_bar.dart';
 class BluetoothStatusIcon extends ConsumerStatefulWidget {
   final bool isDark;
 
-  const BluetoothStatusIcon({Key? key, this.isDark = false}) : super(key: key);
+  const BluetoothStatusIcon({super.key, this.isDark = false});
 
   @override
   ConsumerState<BluetoothStatusIcon> createState() =>

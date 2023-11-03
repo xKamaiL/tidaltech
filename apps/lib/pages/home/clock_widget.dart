@@ -27,7 +27,6 @@ class _ClockWidgetState extends ConsumerState<ClockWidget> {
   }
 
   void checkRTC() {
-    debugPrint("checkRTC");
     final conn = ref.read(bleManagerProvider.notifier);
     conn.checkRTC();
   }

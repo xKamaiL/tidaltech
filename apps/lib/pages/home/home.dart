@@ -18,6 +18,8 @@ import 'package:tidal_tech/ui/BluetoothStatusIcon.dart';
 import 'package:tidal_tech/ui/widget/scene_card.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+import '../../ui/WiFiStatusIcon.dart';
+
 class HomeIndexPage extends HookConsumerWidget {
   const HomeIndexPage({super.key});
 
@@ -32,6 +34,9 @@ class HomeIndexPage extends HookConsumerWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: const [
+          WiFiStatusIcon(
+            isDark: false,
+          ),
           BluetoothStatusIcon(
             isDark: false,
           ),

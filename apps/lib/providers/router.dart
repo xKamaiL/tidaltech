@@ -7,6 +7,7 @@ import 'package:tidal_tech/pages/scenes/scenes.dart';
 import 'package:tidal_tech/pages/settings/bluetooth/bluetooth.dart';
 import 'package:tidal_tech/pages/settings/settings.dart';
 import 'package:tidal_tech/pages/sign_up.dart';
+import 'package:tidal_tech/pages/wifi/wifi.dart';
 import 'package:tidal_tech/stores/bottom_bar.dart';
 import 'package:tidal_tech/stores/stores.dart';
 import 'package:tidal_tech/ui/dashboard_screen.dart';
@@ -78,6 +79,15 @@ class RouterNotifier extends ChangeNotifier {
             child,
           ),
           routes: [
+            GoRoute(
+              path: "/wifi-settings",
+              name: "wifi-settings",
+              pageBuilder: (_, state) => MaterialPage(
+                restorationId: state.pageKey.value,
+                child: const WiFiSettingPages(),
+                key: state.pageKey,
+              ),
+            ),
             GoRoute(
               name: "home",
               path: '/home',
