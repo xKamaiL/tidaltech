@@ -1,6 +1,7 @@
 #include "callback.h"
 
 #include "NimBLEDevice.h"
+#include "light_mode.h"
 #include "proto/message.pb-c.h"
 #include "schedule.h"
 
@@ -95,7 +96,14 @@ void on_set_color_mode(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &co
 
     printf("onSetColorMode: %d\n", mode);
 
-    // TODO: change color mode ?
+    int saveMode = mode == MODE__MODE_MANUAL ? 1 : 0;
+    esp_err_t err = write_light_mode_to_nvs(saveMode);
+    if (err != ESP_OK) {
+        printf("onSetColorMode: write mode failed\n");
+        return;
+    }
+
+    // TODO: trigger some function ?
 }
 
 void on_set_ambient(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {

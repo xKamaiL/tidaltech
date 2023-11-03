@@ -11,6 +11,7 @@
 #include "freertos/semphr.h"
 #include "freertos/task.h"
 #include "freertos/timers.h"
+#include "light_mode.h"
 #include "nvs.h"
 #include "nvs_flash.h"
 #include "proto/message.pb-c.h"
