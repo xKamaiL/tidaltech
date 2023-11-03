@@ -38,6 +38,7 @@ DeviceProperties _$DevicePropertiesFromJson(Map<String, dynamic> json) =>
       mode: json['mode'] as String,
       schedule:
           DeviceSchedule.fromJson(json['schedule'] as Map<String, dynamic>),
+      color: json['color'] as int?,
     );
 
 Map<String, dynamic> _$DevicePropertiesToJson(DeviceProperties instance) =>
@@ -45,6 +46,7 @@ Map<String, dynamic> _$DevicePropertiesToJson(DeviceProperties instance) =>
       'power': instance.power,
       'mode': instance.mode,
       'schedule': instance.schedule,
+      'color': instance.color,
     };
 
 DeviceItem _$DeviceItemFromJson(Map<String, dynamic> json) => DeviceItem(

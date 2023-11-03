@@ -116,6 +116,12 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
     await api.updateStaticColor(UpdateStaticColorParam(
       color: rgb,
     ));
+    final x = state;
+    x.device = x.device!.properties.copyWith(
+      color: rgb,
+    );
+
+    state = state;
   }
 
   Future<void> updateSchedule({required List<TimePoint> timePoints}) async {

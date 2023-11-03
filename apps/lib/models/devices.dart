@@ -40,17 +40,33 @@ class DeviceProperties {
   final bool power;
   final String mode;
   final DeviceSchedule schedule;
+  final int? color;
 
   DeviceProperties({
     required this.power,
     required this.mode,
     required this.schedule,
+    required this.color,
   });
 
   factory DeviceProperties.fromJson(Map<String, dynamic> json) =>
       _$DevicePropertiesFromJson(json);
 
   Map<String, dynamic> toJson() => _$DevicePropertiesToJson(this);
+
+  copyWith({
+    bool? power,
+    String? mode,
+    DeviceSchedule? schedule,
+    int? color,
+  }) {
+    return DeviceProperties(
+      power: power ?? this.power,
+      mode: mode ?? this.mode,
+      schedule: schedule ?? this.schedule,
+      color: color ?? this.color,
+    );
+  }
 //
 }
 

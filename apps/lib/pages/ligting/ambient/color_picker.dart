@@ -3,6 +3,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:niku/namespace.dart' as n;
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tidal_tech/stores/device.dart';
 import 'package:tidal_tech/theme/colors.dart';
 
 class ColorPicker extends HookConsumerWidget {
@@ -10,13 +11,18 @@ class ColorPicker extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final color = useState(ThemeColors.primary.shade500);
+    final color = ref.watch(deviceProvider
+        .select((value) => Color(value.device?.properties.color ?? 0)));
+    final _color = useState(color);
+
     return n.Column([
       HueRingPicker(
-        pickerColor: color.value,
+        pickerColor: _color.value,
         displayThumbColor: false,
         onColorChanged: (c) {
-          color.value = c;
+          //
+          ref.read(deviceProvider.notifier).setStaticColor(c.value);
+          _color.value = c;
         },
         pickerAreaBorderRadius: BorderRadius.circular(16),
         colorPickerHeight: MediaQuery.of(context).size.height * 0.3,
@@ -25,9 +31,11 @@ class ColorPicker extends HookConsumerWidget {
         enableAlpha: false,
       ),
       BlockPicker(
-        pickerColor: color.value,
+        pickerColor: color,
         onColorChanged: (c) {
-          color.value = c;
+          ref.read(deviceProvider.notifier).setStaticColor(c.value);
+          _color.value = c;
+
         },
         layoutBuilder:
             (BuildContext context, List<Color> colors, PickerItem child) {
