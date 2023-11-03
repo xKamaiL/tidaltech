@@ -8,6 +8,7 @@ import 'package:tidal_tech/pages/settings/bluetooth/bluetooth.dart';
 import 'package:tidal_tech/pages/settings/settings.dart';
 import 'package:tidal_tech/pages/sign_up.dart';
 import 'package:tidal_tech/pages/wifi/wifi.dart';
+import 'package:tidal_tech/pages/wifi/wifi_broadcast.dart';
 import 'package:tidal_tech/stores/bottom_bar.dart';
 import 'package:tidal_tech/stores/stores.dart';
 import 'package:tidal_tech/ui/dashboard_screen.dart';
@@ -85,6 +86,18 @@ class RouterNotifier extends ChangeNotifier {
               pageBuilder: (_, state) => MaterialPage(
                 restorationId: state.pageKey.value,
                 child: const WiFiSettingPages(),
+                key: state.pageKey,
+              ),
+            ),
+            GoRoute(
+              path: "/wifi/broadcast/:ssid/:password",
+              name: "wifi-broadcast",
+              pageBuilder: (_, state) => MaterialPage(
+                restorationId: state.pageKey.value,
+                child: TaskRoute(
+                  ssid: state.pathParameters["ssid"] ?? "",
+                  password: state.pathParameters["password"] ?? "",
+                ),
                 key: state.pageKey,
               ),
             ),

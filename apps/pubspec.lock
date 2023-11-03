@@ -249,6 +249,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.11"
+  esptouch_smartconfig:
+    dependency: "direct main"
+    description:
+      name: esptouch_smartconfig
+      sha256: b9791c90c588992d7b1875d29e99034b9a43283ec4f320c1f609edc5e48c64fe
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   fake_async:
     dependency: transitive
     description:
