@@ -54,25 +54,25 @@ class _BluetoothStatusIconState extends ConsumerState<BluetoothStatusIcon> {
 
     final textColor = widget.isDark ? Colors.blueAccent : Colors.white;
 
-    return n.Padding(
-      top: 8,
-      right: 8,
-      bottom: 8,
-      left: 8,
-      child: GestureDetector(
-        onTap: () async {
-          if (!ok) {
-            showTopSnackBar(
-              Overlay.of(context),
-              const XSnackBar.error(
-                message:
-                    "Cannot connect to device. Please check light indicator on device.",
-              ),
-            );
-          }
-          if (device.isReconnecting) return;
-          manager.reconnect();
-        },
+    return InkWell(
+      onTap: () async {
+        if (!ok) {
+          showTopSnackBar(
+            Overlay.of(context),
+            const XSnackBar.error(
+              message:
+                  "Cannot connect to device. Please check light indicator on device.",
+            ),
+          );
+        }
+        if (device.isReconnecting) return;
+        manager.reconnect();
+      },
+      child: n.Padding(
+        top: 8,
+        right: 16,
+        bottom: 8,
+        left: 16,
         child: n.Icon(
           !isConnect
               ? isScanning

@@ -22,15 +22,15 @@ class _WiFiStatusIconState extends ConsumerState<WiFiStatusIcon> {
   Widget build(BuildContext context) {
     final textColor = widget.isDark ? ThemeColors.danger : ThemeColors.danger;
 
-    return n.Padding(
-      top: 8,
-      right: 8,
-      bottom: 8,
-      left: 8,
-      child: GestureDetector(
-        onTap: () async {
-          context.go("/wifi-settings");
-        },
+    return InkWell(
+      onTap: () async {
+        context.push("/wifi-settings");
+      },
+      child: n.Padding(
+        top: 8,
+        right: 16,
+        bottom: 8,
+        left: 16,
         child: n.Icon(
           Icons.wifi_off,
           color: textColor,
