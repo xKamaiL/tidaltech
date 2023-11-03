@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tidal_tech/models/devices.dart';
@@ -110,7 +111,7 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
   }
 
   Future<void> updateSchedule({required List<TimePoint> timePoints}) async {
-    api.updateSchedule(UpdateScheduleParam(
+    final res = await api.updateSchedule(UpdateScheduleParam(
         schedule: DeviceSchedule(
       points: timePoints.map<DeviceTimePoint>((e) {
         return DeviceTimePoint(
@@ -130,6 +131,12 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
       // TODO: add weekday
       weekday: 0,
     )));
+
+    if (!res.ok) {
+      debugPrint("updateSchedule: ${res.error?.message}");
+      return;
+    }
+
   }
 
 //
