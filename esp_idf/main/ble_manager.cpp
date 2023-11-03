@@ -1,6 +1,8 @@
 
 #include "ble_manager.h"
 
+#include <string>
+
 #include "NimBLEDevice.h"
 #include "callback.h"
 
@@ -78,6 +80,8 @@ class CharacteristicCallbacks : public NimBLECharacteristicCallbacks {
 
 static CharacteristicCallbacks chrCallbacks;
 
+static std::string device_uuid = "83ac6d47-82fd-403a-b903-1a7df6248d46";
+
 void initNimble() {
     NimBLEDevice::init("TIDAL TECH LIGHTING");
     // NimBLEDevice::setPower(ESP_PWR_LVL_P9); /** +9db */
@@ -87,16 +91,13 @@ void initNimble() {
 
     NimBLEService *deviceInformationService = srv->createService(DEVICE_INFORMATION_SERVICE_UUID);
 
-    NimBLECharacteristic *deviceNameCharacteristic = deviceInformationService->createCharacteristic(
-        CHARACTERISTIC_UUID_DEVICE_ID, NIMBLE_PROPERTY::READ);
-    deviceNameCharacteristic->setValue(NimBLEUUID("83ac6d47-82fd-403a-b903-1a7df6248d46"));
-
-    deviceNameCharacteristic->setCallbacks(&chrCallbacks);
-
     NimBLECharacteristic *deviceIdCharacteristic = deviceInformationService->createCharacteristic(
+        CHARACTERISTIC_UUID_DEVICE_ID, NIMBLE_PROPERTY::READ);
+    deviceIdCharacteristic->setValue(device_uuid);
+
+    NimBLECharacteristic *deviceNameCharacteristic = deviceInformationService->createCharacteristic(
         CHARACTERISTIC_UUID_DEVICE_NAME, NIMBLE_PROPERTY::READ);
-    deviceIdCharacteristic->setValue("TIDAL TECH LIGHTING");
-    deviceIdCharacteristic->setCallbacks(&chrCallbacks);
+    deviceNameCharacteristic->setValue("TIDAL TECH LIGHTING");
 
     NimBLEService *colorService = srv->createService(COLOR_SERVICE_UUID);
     NimBLECharacteristic *getCurrentMode = colorService->createCharacteristic(CHARACTERISTIC_UUID_GET_COLOR_MODE, NIMBLE_PROPERTY::READ);
