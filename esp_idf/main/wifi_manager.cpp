@@ -13,6 +13,8 @@
 #include "freertos/task.h"
 #include "nvs_flash.h"
 
+const char* TAG = "wifi_manager";
+
 void initialise_wifi(void);
 
 /* FreeRTOS event group to signal when we are connected & ready to make a request */
@@ -29,11 +31,12 @@ static void smartconfig_example_task(void* parm);
 static void event_handler(void* arg, esp_event_base_t event_base,
                           int32_t event_id, void* event_data) {
     if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
-        xTaskCreate(smartconfig_example_task, "smartconfig_example_task", 4096, NULL, 3, NULL);
+        //
     } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED) {
         esp_wifi_connect();
         xEventGroupClearBits(s_wifi_event_group, CONNECTED_BIT);
     } else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
+        printf("Got IP\n");
         xEventGroupSetBits(s_wifi_event_group, CONNECTED_BIT);
     } else if (event_base == SC_EVENT && event_id == SC_EVENT_SCAN_DONE) {
         printf("Scan done\n");
@@ -93,6 +96,22 @@ void initialise_wifi(void) {
 
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
     ESP_ERROR_CHECK(esp_wifi_start());
+
+    wifi_config_t conf;
+    esp_err_t ret;
+    ret = esp_wifi_get_config(WIFI_IF_STA, &conf);
+    if (ret == ESP_OK) {
+        ESP_LOGI(TAG, "Wifi configuration already stored in flash partition called NVS");
+        ESP_LOGI(TAG, "%s", conf.sta.ssid);
+        ESP_LOGI(TAG, "%s", conf.sta.password);
+        ESP_ERROR_CHECK(esp_wifi_disconnect());
+        ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &conf));
+        esp_wifi_connect();
+    } else {
+        ESP_LOGI(TAG, "Wifi configuration not found, starting smartconfig");
+        //
+        xTaskCreate(smartconfig_example_task, "smartconfig_example_task", 4096, NULL, 3, NULL);
+    }
 }
 
 static void smartconfig_example_task(void* parm) {
