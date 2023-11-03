@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:tidal_tech/models/auth.dart';
+import 'package:tidal_tech/models/models.dart';
 
 @immutable
 class User {
@@ -26,11 +28,7 @@ class UserNotifier extends StateNotifier<User?> {
 
   get isLogin => state != null;
 
-  Future<void> login(
-      {required String username, required String password}) async {
-    await Future.delayed(const Duration(seconds: 3));
-    setUser(User("1", username, "John Doe", id: "1"));
-  }
+
 
   Future<void> fetchUser() async {
     await Future.delayed(const Duration(seconds: 2));

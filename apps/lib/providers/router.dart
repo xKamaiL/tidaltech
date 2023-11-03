@@ -142,19 +142,22 @@ class RouterNotifier extends ChangeNotifier {
 
   Future<String?> _redirectLogic(BuildContext buildContext,
       GoRouterState state) async {
-    //
-    if (state.path == null) {
+    final nextPath = state.fullPath;
+    if (nextPath == null) {
       return null;
     }
-    if (state.path == "/") {
+    if (nextPath == "/") {
       return null;
     }
-    final user = _ref.read(userProvider);
-    final areWeOnSignInPage = state.path == '/sign-in';
 
-    if (user == null && !areWeOnSignInPage) {
+    debugPrint("current path is $nextPath");
+    final user = _ref.read(userProvider);
+
+    final onSignInPage = state.path == '/sign-in';
+
+    if (user == null && !onSignInPage) {
       return '/sign-in';
-    } else if (user != null && areWeOnSignInPage) {
+    } else if (user != null && onSignInPage) {
       return '/';
     }
 
@@ -172,5 +175,5 @@ final currentRouteProvider = Provider((ref) {
   return ref
       .watch(routeInformationProvider)
       .value
-      .location;
+      .uri;
 });

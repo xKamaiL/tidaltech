@@ -2,6 +2,7 @@ package xapi
 
 import (
 	"errors"
+	"log/slog"
 
 	"github.com/acoshift/arpc/v2"
 	"github.com/moonrhythm/validator"
@@ -26,11 +27,11 @@ var _ arpc.OKError = Error{}
 
 func WrapError(err error) error {
 
-	var v validator.Error
-	if ok := errors.Is(err, &v); ok {
-		return ValidatorError{v}
+	if e := (*validator.Error)(nil); errors.As(err, &e) {
+		return wrapValidateError(err)
 	}
 
+	slog.Error("error", "err", err)
 	// reveal error
 	return Error{err}
 }

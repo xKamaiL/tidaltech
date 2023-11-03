@@ -2,31 +2,43 @@ package xapi
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/moonrhythm/validator"
 )
 
-type ValidatorError struct {
-	e validator.Error
+const ValidateErrorCode = "VALIDATE_ERROR"
+
+type ValidateError struct {
+	err error
 }
 
-func (e ValidatorError) Error() string {
-	return e.e.Error()
+func wrapValidateError(err error) error {
+	return &ValidateError{err}
 }
 
-func (e ValidatorError) OKError() {
+func (*ValidateError) OKError() {}
+
+func (e *ValidateError) Error() string {
+	return "validate error (" + e.err.Error() + ")"
 }
 
-func (e ValidatorError) MarshalJSON() ([]byte, error) {
-	type x struct {
-		Field   []string `json:"field"`
-		Message string   `json:"message"`
-		Code    string   `json:"code"`
+func (e *ValidateError) Unwrap() error {
+	return e.err
+}
+
+func (e *ValidateError) MarshalJSON() ([]byte, error) {
+	xs := make([]string, 0)
+
+	if err := (*validator.Error)(nil); errors.As(e.err, &err) {
+		xs = append(xs, err.Strings()...)
+	} else {
+		xs = append(xs, e.err.Error())
 	}
 
-	return json.Marshal(x{
-		Field:   e.e.Strings(),
-		Message: "validation error",
-		Code:    "VALIDATION_ERROR",
-	})
+	return json.Marshal(struct {
+		Code    string   `json:"code"`
+		Message string   `json:"message"`
+		Items   []string `json:"items"`
+	}{ValidateErrorCode, "validate error", xs})
 }

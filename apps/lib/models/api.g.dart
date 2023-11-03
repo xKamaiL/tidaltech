@@ -7,8 +7,8 @@ part of 'api.dart';
 // **************************************************************************
 
 APIError _$APIErrorFromJson(Map<String, dynamic> json) => APIError(
-      message: json['message'] as String,
-      code: json['code'] as String,
+      message: json['message'] as String?,
+      code: json['code'] as String?,
     );
 
 Map<String, dynamic> _$APIErrorToJson(APIError instance) => <String, dynamic>{

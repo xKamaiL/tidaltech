@@ -11,8 +11,17 @@ part 'api.g.dart';
 
 @JsonSerializable()
 class APIError {
-  final String message;
-  final String code;
+  final String? message;
+  final String? code;
+
+  String errorMessage() {
+    final x = message;
+    if (x == null) {
+      return "Internal Server Error";
+    } else {
+      return x;
+    }
+  }
 
   APIError({required this.message, required this.code});
 
@@ -47,7 +56,6 @@ class APIFormat<T> {
 @RestApi(baseUrl: "https://tidaltech.fly.dev")
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
-
 
   @POST("/auth.SignIn")
   @Headers(<String, dynamic>{

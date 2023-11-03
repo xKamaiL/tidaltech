@@ -9,6 +9,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:niku/namespace.dart' as n;
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
+import '../models/auth.dart';
+import '../models/models.dart';
 import '../stores/stores.dart';
 
 class LoginPage extends HookConsumerWidget {
@@ -141,20 +143,22 @@ class LoginPage extends HookConsumerWidget {
                       FocusManager.instance.primaryFocus?.unfocus();
 
                       loading.value = true;
-                      await ref.read(userProvider.notifier).login(
-                            username: username.text,
-                            password: password.text,
-                          );
+                      final res = await api.signIn(SignInParam(
+                          username: username.value.text,
+                          password: password.value.text));
 
                       loading.value = false;
                       // show alert message
-                      showTopSnackBar(
-                        Overlay.of(context),
-                        XSnackBar.success(
-                          message:
-                              "Good job, your release is successful. Have a nice day",
-                        ),
-                      );
+                      if (!res.ok) {
+                        showTopSnackBar(
+                          Overlay.of(context),
+                          XSnackBar.error(
+                            message: res.error.errorMessage(),
+                          ),
+                        );
+                        return;
+                      }
+
                       ref.read(bottomBarProvider.notifier).setPosition(0);
                       context.go("/home");
                     }

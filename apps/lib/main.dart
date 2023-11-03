@@ -27,7 +27,7 @@ void main() async {
 }
 
 class WrapApp extends StatelessWidget {
-  const WrapApp({Key? key}) : super(key: key);
+  const WrapApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class WrapApp extends StatelessWidget {
 }
 
 class MyApp extends ConsumerStatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() {

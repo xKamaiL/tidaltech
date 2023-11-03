@@ -16,10 +16,10 @@ class TokenResult {
 
 @JsonSerializable()
 class SignInParam {
-  String email;
+  String username;
   String password;
 
-  SignInParam({required this.email, required this.password});
+  SignInParam({required this.username, required this.password});
 
   factory SignInParam.fromJson(Map<String, dynamic> json) =>
       _$SignInParamFromJson(json);
