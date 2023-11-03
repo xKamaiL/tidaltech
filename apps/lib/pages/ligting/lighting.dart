@@ -4,6 +4,7 @@ import 'package:niku/namespace.dart' as n;
 import 'package:tidal_tech/pages/ligting/ambient/color_picker.dart';
 import 'package:tidal_tech/pages/ligting/feeder/index.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:tidal_tech/providers/ble_manager.dart';
 
 import 'package:tidal_tech/stores/device.dart';
 import 'package:tidal_tech/stores/lighting.dart';
@@ -137,6 +138,9 @@ class ModeSelection extends HookConsumerWidget {
                   .read(lightingModeProvider.notifier)
                   .setMode(LightingMode.feed);
               ref.read(deviceProvider.notifier).setMode(LightingMode.feed);
+              ref
+                  .read(bleManagerProvider.notifier)
+                  .setLightMode(LightingMode.feed);
             },
           ),
         ),
@@ -178,6 +182,9 @@ class ModeSelection extends HookConsumerWidget {
                   .read(lightingModeProvider.notifier)
                   .setMode(LightingMode.ambient);
               ref.read(deviceProvider.notifier).setMode(LightingMode.ambient);
+              ref
+                  .read(bleManagerProvider.notifier)
+                  .setLightMode(LightingMode.ambient);
             },
           ),
         ),

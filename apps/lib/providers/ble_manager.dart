@@ -174,7 +174,6 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
   void refreshScan() {
     startScan();
     clearScanResult();
-
   }
 
   void connect() async {
@@ -332,6 +331,22 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
       // print value
       c.write(req.writeToBuffer(), withoutResponse: true);
     });
+  }
+
+  void setLightMode(LightingMode mode) async {
+    final c =
+        await _callCharacteristic(BLEServices.color, ColorService.setLightMode);
+    // send to device
+    if (c == null) {
+      return;
+    }
+    final req = SetColorModeRequest();
+    req.mode =
+        mode == LightingMode.ambient ? Mode.MODE_MANUAL : Mode.MODE_SCHEDULE;
+    // print value
+    c.write(req.writeToBuffer(), withoutResponse: true);
+
+    //
   }
 
 //
