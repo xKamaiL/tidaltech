@@ -7,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:niku/namespace.dart' as n;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:responsive_grid/responsive_grid.dart';
+import 'package:tidal_tech/models/models.dart';
 import 'package:tidal_tech/pages/home/clock_widget.dart';
 import 'package:tidal_tech/pages/home/history_widget.dart';
 import 'package:tidal_tech/pages/home/moonlight_widget.dart';
@@ -22,6 +23,7 @@ class HomeIndexPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    //
     return Scaffold(
       appBar: AppBar(
         title: n.Text('Your Home')
@@ -29,7 +31,7 @@ class HomeIndexPage extends HookConsumerWidget {
           ..fontSize = 18.0,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        actions:  const [
+        actions: const [
           BluetoothStatusIcon(
             isDark: false,
           ),

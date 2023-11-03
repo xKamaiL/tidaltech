@@ -12,7 +12,11 @@ class DeviceTimePoint {
     required this.time,
     required this.brightness,
   });
-//
+
+  factory DeviceTimePoint.fromJson(Map<String, dynamic> json) =>
+      _$DeviceTimePointFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DeviceTimePointToJson(this);
 }
 
 @JsonSerializable()
@@ -24,6 +28,11 @@ class DeviceSchedule {
     required this.points,
     required this.weekday,
   });
+
+  factory DeviceSchedule.fromJson(Map<String, dynamic> json) =>
+      _$DeviceScheduleFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DeviceScheduleToJson(this);
 }
 
 @JsonSerializable()
@@ -37,6 +46,11 @@ class DeviceProperties {
     required this.mode,
     required this.schedule,
   });
+
+  factory DeviceProperties.fromJson(Map<String, dynamic> json) =>
+      _$DevicePropertiesFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DevicePropertiesToJson(this);
 //
 }
 
@@ -60,5 +74,32 @@ class DeviceItem {
     required this.properties,
   });
 
-//
+  factory DeviceItem.fromJson(Map<String, dynamic> json) =>
+      _$DeviceItemFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DeviceItemToJson(this);
+}
+
+@JsonSerializable()
+class PairParam {
+  final String id;
+
+  PairParam({required this.id});
+
+  factory PairParam.fromJson(Map<String, dynamic> json) =>
+      _$PairParamFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PairParamToJson(this);
+}
+
+@JsonSerializable()
+class UnPairParam {
+  final String id;
+
+  UnPairParam({required this.id});
+
+  factory UnPairParam.fromJson(Map<String, dynamic> json) =>
+      _$UnPairParamFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UnPairParamToJson(this);
 }

@@ -5,6 +5,7 @@ import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:retrofit/retrofit.dart';
+import 'package:tidal_tech/models/devices.dart';
 import 'package:tidal_tech/models/user.dart';
 
 import 'auth.dart';
@@ -82,6 +83,9 @@ abstract class RestClient {
 
   @POST("/auth.SignUp")
   Future<APIFormat<TokenResult>> signUp(@Body() SignUpParam param);
+
+  @POST("/devices.Get")
+  Future<APIFormat<DeviceItem>> fetchDevice();
 
 //
 }

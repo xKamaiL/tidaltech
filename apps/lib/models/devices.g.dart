@@ -70,3 +70,20 @@ Map<String, dynamic> _$DeviceItemToJson(DeviceItem instance) =>
       'createdAt': instance.createdAt?.toIso8601String(),
       'properties': instance.properties,
     };
+
+PairParam _$PairParamFromJson(Map<String, dynamic> json) => PairParam(
+      id: json['id'] as String,
+    );
+
+Map<String, dynamic> _$PairParamToJson(PairParam instance) => <String, dynamic>{
+      'id': instance.id,
+    };
+
+UnPairParam _$UnPairParamFromJson(Map<String, dynamic> json) => UnPairParam(
+      id: json['id'] as String,
+    );
+
+Map<String, dynamic> _$UnPairParamToJson(UnPairParam instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+    };
