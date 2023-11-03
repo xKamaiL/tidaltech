@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:niku/namespace.dart' as n;
-import 'package:permission_handler/permission_handler.dart';
 import 'package:responsive_grid/responsive_grid.dart';
-import 'package:tidal_tech/models/models.dart';
 import 'package:tidal_tech/pages/home/clock_widget.dart';
 import 'package:tidal_tech/pages/home/history_widget.dart';
 import 'package:tidal_tech/pages/home/moonlight_widget.dart';
@@ -16,7 +14,6 @@ import 'package:tidal_tech/pages/home/sunrise_widget.dart';
 import 'package:tidal_tech/pages/home/water_temp_widget.dart';
 import 'package:tidal_tech/ui/BluetoothStatusIcon.dart';
 import 'package:tidal_tech/ui/widget/scene_card.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../../ui/WiFiStatusIcon.dart';
 
