@@ -17,7 +17,8 @@ import (
 )
 
 var (
-	ErrNotFound = arpc.NewErrorCode("DEVICE_NOT_FOUND", "device: device not found")
+	ErrNotFound      = arpc.NewErrorCode("DEVICE_NOT_FOUND", "device: device not found")
+	ErrDeviceNotPair = arpc.NewErrorCode("DEVICE_NOT_PAIR", "device: device is not pair")
 )
 
 type ListItem struct {
@@ -195,6 +196,46 @@ func UnPair(ctx context.Context, p *UnPairParam) error {
 		}
 		return nil
 	})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type SetModeParam struct {
+	Mode Mode `json:"mode"`
+}
+
+func SetMode(ctx context.Context, p *SetModeParam) error {
+	userID := auth.GetAccountID(ctx)
+
+	var (
+		deviceID   uuid.UUID
+		properties Properties
+	)
+
+	err := pgctx.QueryRow(ctx, `
+			select id, properties from devices where pair_user_id = $1`,
+		userID,
+	).Scan(
+		&deviceID,
+		pgsql.JSON(&properties),
+	)
+	if errors.Is(err, sql.ErrNoRows) {
+		return ErrDeviceNotPair
+	}
+	if err != nil {
+		return err
+	}
+	//
+
+	properties.Mode = p.Mode
+
+	// update value
+	_, err = pgctx.Exec(ctx, `update devices set properties = $1 where id = $2`,
+		pgsql.JSON(&properties),
+		deviceID,
+	)
 	if err != nil {
 		return err
 	}
