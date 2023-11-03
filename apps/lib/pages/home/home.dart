@@ -31,9 +31,6 @@ class HomeIndexPage extends HookConsumerWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: const [
-          WiFiStatusIcon(
-            isDark: false,
-          ),
           BluetoothStatusIcon(
             isDark: false,
           ),
