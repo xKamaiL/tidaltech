@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:niku/namespace.dart' as n;
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tidal_tech/models/auth.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
@@ -177,10 +178,9 @@ class SignUpPage extends HookConsumerWidget {
                       final res = await api.signUp(
                         //
                         SignUpParam(
-                          email: email.value.text,
-                          password: password.value.text,
-                          confirmPassword: confirmPassword.value.text
-                        ),
+                            email: email.value.text,
+                            password: password.value.text,
+                            confirmPassword: confirmPassword.value.text),
                       );
 
                       loading.value = false;
@@ -195,7 +195,28 @@ class SignUpPage extends HookConsumerWidget {
                         return;
                       }
 
-                      context.go("/sign-in");
+                      final prefs = await SharedPreferences.getInstance();
+
+                      prefs.setString("token", res.result!.token);
+
+                      final meResult = await api.me();
+
+                      if (!meResult.ok) {
+                        showTopSnackBar(
+                          Overlay.of(context),
+                          XSnackBar.success(
+                            message: meResult.error!.errorMessage(),
+                          ),
+                        );
+                        return;
+                      }
+
+                      showTopSnackBar(
+                        Overlay.of(context),
+                        const XSnackBar.success(
+                            message: "Sign up successfully"),
+                      );
+                      context.go("/home");
                     }
                   }
                   ..fullWidth,

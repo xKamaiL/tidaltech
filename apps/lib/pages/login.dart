@@ -159,10 +159,7 @@ class LoginPage extends HookConsumerWidget {
                         return;
                       }
 
-                      showTopSnackBar(
-                        Overlay.of(context),
-                        const XSnackBar.success(message: "Sign up successfully"),
-                      );
+
 
                       ref.read(bottomBarProvider.notifier).setPosition(0);
                       context.go("/home");
