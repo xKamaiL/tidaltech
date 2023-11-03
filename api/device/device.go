@@ -173,7 +173,7 @@ func UnPair(ctx context.Context, p *UnPairParam) error {
 
 	err := pgctx.RunInTxOptions(ctx, &pgsql.TxOptions{
 		TxOptions: sql.TxOptions{
-			Isolation: sql.LevelReadUncommitted,
+			//Isolation: sql.LevelReadUncommitted,
 		},
 	}, func(ctx context.Context) error {
 		result, err := pgctx.Exec(ctx, `
