@@ -11,12 +11,6 @@ import 'package:tidal_tech/theme/colors.dart';
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  final dio = Dio();
-  dio.options.headers['Content-Type'] = 'application/json';
-  dio.options.headers['Accept'] = 'application/json';
-  dio.options.connectTimeout = const Duration(seconds: 3);
-  dio.options.receiveTimeout = const Duration(seconds: 3);
-  dio.interceptors.add(TokenInterceptor());
 
   runApp(
     const ProviderScope(

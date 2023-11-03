@@ -69,7 +69,6 @@ class SettingsIndexPage extends HookConsumerWidget {
             ..center
             ..bold,
           onTap: () {
-            ref.read(userProvider.notifier).signOut();
             context.go("/sign-in");
           },
         )

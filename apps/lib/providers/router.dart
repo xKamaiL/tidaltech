@@ -150,14 +150,16 @@ class RouterNotifier extends ChangeNotifier {
       return null;
     }
 
-    debugPrint("current path is $nextPath");
-    final user = _ref.read(userProvider);
+    final isLoggedIn =
+        _ref.read(userProvider.select((value) => value.isLoggedIn));
 
     final onSignInPage = nextPath == '/sign-in' || nextPath == '/sign-up';
 
-    if (user == null && !onSignInPage) {
+    print(isLoggedIn);
+
+    if (!isLoggedIn && !onSignInPage) {
       return '/sign-in';
-    } else if (user != null && onSignInPage) {
+    } else if (isLoggedIn && onSignInPage) {
       return '/';
     }
 

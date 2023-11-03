@@ -62,6 +62,7 @@ dependencies:
   equatable: ^2.0.5
   json_annotation: ^4.8.1
   retrofit: '>=4.0.0 <5.0.0'
+  uuid: ^4.1.0
 
 
 dev_dependencies:
