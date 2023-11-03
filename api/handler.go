@@ -34,7 +34,7 @@ func Mount(m *httpmux.Mux, am *arpc.Manager) {
 		m.Handle("/devices.Pair", am.Handler(device.Pair))
 		m.Handle("/devices.UnPair", am.Handler(device.UnPair))
 		m.Handle("/devices.setMode", am.Handler(device.SetMode))
-		m.Handle("/devices.UpdateTimePoint", am.Handler(device.UpdateSchedule))
+		m.Handle("/devices.updateSchedule", am.Handler(device.UpdateSchedule))
 	}
 	// presets
 	{
