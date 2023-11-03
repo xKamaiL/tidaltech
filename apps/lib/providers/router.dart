@@ -1,4 +1,5 @@
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tidal_tech/pages/landing/landing.dart';
 import 'package:tidal_tech/pages/ligting/feeder/profile/index.dart';
 import 'package:tidal_tech/pages/ligting/lighting.dart';
@@ -149,18 +150,30 @@ class RouterNotifier extends ChangeNotifier {
     if (nextPath == "/") {
       return null;
     }
-
     final isLoggedIn =
         _ref.read(userProvider.select((value) => value.isLoggedIn));
 
-    final onSignInPage = nextPath == '/sign-in' || nextPath == '/sign-up';
+    final isFistLoad =
+        _ref.read(userProvider.select((value) => value.isFistLoad));
 
-    print(isLoggedIn);
+    if (isFistLoad) {
+      debugPrint(" fist load");
+      await _ref.read(userProvider.notifier).fetchMe();
+      if (!isLoggedIn) {
+        return "/sign-in";
+      }
+
+      debugPrint("ok you are logged in");
+
+      return null;
+    }
+
+    final onSignInPage = nextPath == '/sign-in' || nextPath == '/sign-up';
 
     if (!isLoggedIn && !onSignInPage) {
       return '/sign-in';
     } else if (isLoggedIn && onSignInPage) {
-      return '/';
+      return '/home';
     }
 
     return null;

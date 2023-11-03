@@ -33,24 +33,29 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            n.Text('Please allow permission.')..bodyLarge,
-            const SizedBox(height: 24),
-            n.Button("Allow Permission".n)
-              ..apply = XButtonStyle.confirm()
-              ..px = 14
-              ..onPressed = () async {
-                final b = await Permission.bluetooth.request();
-                if (b != PermissionStatus.granted) {
-                  openAppSettings(); // open app setting
-                } else {
-                  context.go("/landing");
-                }
-              }
-          ],
+      body: SafeArea(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 30, bottom: 30),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const SizedBox(height: 24),
+                n.Text('Please allow permission')..bodyLarge,
+                n.Button("Allow Permission".n)
+                  ..apply = XButtonStyle.confirm()
+                  ..px = 14
+                  ..onPressed = () async {
+                    final b = await Permission.bluetooth.request();
+                    if (b != PermissionStatus.granted) {
+                      openAppSettings(); // open app setting
+                    } else {
+                      context.go("/landing");
+                    }
+                  }
+              ],
+            ),
+          ),
         ),
       ),
     );

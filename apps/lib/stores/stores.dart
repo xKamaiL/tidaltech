@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tidal_tech/models/auth.dart';
 import 'package:tidal_tech/models/models.dart';
 import 'package:uuid/uuid.dart';
 
 class UserState {
+  bool isFistLoad = true;
   bool isLoggedIn = false;
 
   late User profile;
@@ -13,18 +15,24 @@ class UserState {
 class UserNotifier extends StateNotifier<UserState> {
   UserNotifier(super.state);
 
-  void fetchMe() async {
+  Future<void> fetchMe() async {
+    state.isFistLoad = false;
+    state = state;
     final res = await api.me();
     if (res.ok) {
       setUser(res.result!);
+      return;
     }
 
-    setSignOut();
+    signOut();
   }
 
-  void setSignOut() {
+  void signOut() {
     state.isLoggedIn = false;
     state = state;
+    SharedPreferences.getInstance().then((value) {
+      value.remove("token");
+    });
   }
 
   void setUser(User user) {
