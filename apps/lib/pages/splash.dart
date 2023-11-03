@@ -24,25 +24,18 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     ref.read(userProvider.notifier).fetchMe();
     ref.read(deviceProvider.notifier).fetchCurrentDevice();
     [
-      Permission.locationAlways,
       Permission.locationWhenInUse,
-      Permission.accessMediaLocation,
-      Permission.activityRecognition
-    ].request();
-
-    Permission.bluetooth.isGranted.then((isGranted) {
-      if (!isGranted) {
-        Permission.bluetooth.request().then((value) => {
-              if (value.isGranted)
-                {
-                  //  context.go("/landing")
-                }
-              //
-            });
-        return;
+      Permission.locationAlways,
+      Permission.bluetooth,
+    ].request().then((value) {
+      if ((value[Permission.locationAlways]!.isGranted ||
+              value[Permission.locationWhenInUse]!.isGranted) &&
+          value[Permission.bluetooth]!.isGranted) {
+        context.go("/landing");
       }
-      // context.go("/landing");
     }).then((value) => FlutterNativeSplash.remove());
+
+    // context.go("/landing");
   }
 
   @override
