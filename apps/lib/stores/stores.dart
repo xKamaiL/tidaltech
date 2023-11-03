@@ -16,9 +16,9 @@ class UserNotifier extends StateNotifier<UserState> {
   UserNotifier(super.state);
 
   Future<void> fetchMe() async {
-    state.isFistLoad = false;
-    state = state;
+
     final res = await api.me();
+
     if (res.ok) {
       setUser(res.result!);
       return;
@@ -36,6 +36,7 @@ class UserNotifier extends StateNotifier<UserState> {
   }
 
   void setUser(User user) {
+    state.isFistLoad = false;
     state.isLoggedIn = true;
     state.profile = user;
     state = state;

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:niku/namespace.dart' as n;
+import 'package:tidal_tech/stores/stores.dart';
 
 import '../styles/button.dart';
 
@@ -18,10 +19,13 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   @override
   void initState() {
     super.initState();
+    ref.read(userProvider.notifier).fetchMe();
     Permission.bluetooth.isGranted.then((isGranted) {
       if (!isGranted) {
         Permission.bluetooth.request().then((value) => {
-              if (value.isGranted) {context.go("/landing")}
+              if (value.isGranted) {
+                context.go("/landing")
+              }
               //
             });
         return;

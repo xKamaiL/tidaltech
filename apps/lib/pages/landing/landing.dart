@@ -29,9 +29,14 @@ class _LandingPageState extends ConsumerState<LandingPage> {
     ref.read(bleManagerProvider.notifier).init();
     SharedPreferences.getInstance().then((prefs) {
       // try to find device from local storage
+      final token = prefs.getString("token");
       final id = prefs.getString("id");
       if (id == null) {
         FlutterNativeSplash.remove();
+        if (token == null) {
+          context.go("/sign-in");
+          return;
+        }
         context.go("/scan");
         return;
       }
@@ -39,6 +44,10 @@ class _LandingPageState extends ConsumerState<LandingPage> {
       FlutterNativeSplash.remove();
       // decide to re-connect immediately
       ref.read(bleManagerProvider.notifier).reconnect();
+      if (token == null) {
+        context.go("/sign-in");
+        return;
+      }
       context.go("/home");
       return;
     });

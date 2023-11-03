@@ -144,27 +144,29 @@ class RouterNotifier extends ChangeNotifier {
   Future<String?> _redirectLogic(
       BuildContext buildContext, GoRouterState state) async {
     final nextPath = state.fullPath;
+    debugPrint("current Path $nextPath");
     if (nextPath == null) {
       return null;
     }
     if (nextPath == "/") {
       return null;
     }
+
     final isLoggedIn =
         _ref.read(userProvider.select((value) => value.isLoggedIn));
 
     final isFistLoad =
         _ref.read(userProvider.select((value) => value.isFistLoad));
-
+    if (nextPath == "/landing" || nextPath == "/scan") {
+      return null;
+    }
     if (isFistLoad) {
       debugPrint(" fist load");
       await _ref.read(userProvider.notifier).fetchMe();
       if (!isLoggedIn) {
         return "/sign-in";
       }
-
       debugPrint("ok you are logged in");
-
       return null;
     }
 
