@@ -154,7 +154,7 @@ class RouterNotifier extends ChangeNotifier {
   Future<String?> _redirectLogic(
       BuildContext buildContext, GoRouterState state) async {
     final nextPath = state.fullPath;
-    debugPrint("current Path $nextPath");
+
     if (nextPath == null) {
       return null;
     }
