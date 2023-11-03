@@ -46,7 +46,7 @@ class BluetoothSettingPage extends HookConsumerWidget {
           trailing: n.Icon(Icons.remove)..color = Colors.red,
           onTap: () async {
             final msg = await ref.read(deviceProvider.notifier).forgot();
-            if (msg.isEmpty) {
+            if (msg.isEmpty || msg == "no device connected") {
               ref.read(bleManagerProvider.notifier).forgot();
               showTopSnackBar(
                 Overlay.of(context),
@@ -54,7 +54,7 @@ class BluetoothSettingPage extends HookConsumerWidget {
                   message: "Remove device successfully",
                 ),
               );
-              await Future.delayed(Duration(seconds: 1), () {
+              await Future.delayed(Duration(seconds: 3), () {
                 context.go("/scan");
               });
             } else {
