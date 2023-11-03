@@ -87,3 +87,15 @@ Map<String, dynamic> _$UnPairParamToJson(UnPairParam instance) =>
     <String, dynamic>{
       'id': instance.id,
     };
+
+UpdateScheduleParam _$UpdateScheduleParamFromJson(Map<String, dynamic> json) =>
+    UpdateScheduleParam(
+      schedule:
+          DeviceSchedule.fromJson(json['schedule'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$UpdateScheduleParamToJson(
+        UpdateScheduleParam instance) =>
+    <String, dynamic>{
+      'schedule': instance.schedule,
+    };

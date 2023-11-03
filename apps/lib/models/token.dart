@@ -18,6 +18,14 @@ class TokenInterceptor extends Interceptor {
     //
     super.onResponse(response, handler);
   }
+  @override
+  void onError(
+      DioException err,
+      ErrorInterceptorHandler handler,
+      ) {
+    debugPrint(err.toString());
+    handler.next(err);
+  }
 }
 
 Future<String> getToken() async {

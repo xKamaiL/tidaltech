@@ -134,7 +134,7 @@ class _WiFiSettingPagesState extends ConsumerState<WiFiSettingPages> {
                 final info = NetworkInfo();
                 final wifiName = await info.getWifiName();
                 final wifiBSSID = await info.getWifiBSSID();
-                print(wifiBSSID);
+                print(wifiName);
                 // --
                 try {
                   await provisioner.start(ProvisioningRequest.fromStrings(

@@ -109,6 +109,29 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
     // TODO: call api
   }
 
+  Future<void> updateSchedule({required List<TimePoint> timePoints}) async {
+    api.updateSchedule(UpdateScheduleParam(
+        schedule: DeviceSchedule(
+      points: timePoints.map<DeviceTimePoint>((e) {
+        return DeviceTimePoint(
+          time:
+              "${e.hour.toString().padLeft(2, '0')}:${e.minute.toString().padLeft(2, '0')}",
+          brightness: {
+            "white": e.colors[LED.white]!.intensity,
+            "blue": e.colors[LED.blue]!.intensity,
+            "royalBlue": e.colors[LED.royalBlue]!.intensity,
+            "warmWhite": e.colors[LED.warmWhite]!.intensity,
+            "ultraViolet": e.colors[LED.ultraViolet]!.intensity,
+            "red": e.colors[LED.red]!.intensity,
+            "green": e.colors[LED.green]!.intensity,
+          },
+        );
+      }).toList(),
+      // TODO: add weekday
+      weekday: 0,
+    )));
+  }
+
 //
 }
 

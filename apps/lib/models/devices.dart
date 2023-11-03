@@ -103,3 +103,15 @@ class UnPairParam {
 
   Map<String, dynamic> toJson() => _$UnPairParamToJson(this);
 }
+
+@JsonSerializable()
+class UpdateScheduleParam {
+  final DeviceSchedule schedule;
+
+  UpdateScheduleParam({required this.schedule});
+
+  factory UpdateScheduleParam.fromJson(Map<String, dynamic> json) =>
+      _$UpdateScheduleParamFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UpdateScheduleParamToJson(this);
+}

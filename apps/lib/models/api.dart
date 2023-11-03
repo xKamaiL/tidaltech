@@ -109,5 +109,8 @@ abstract class RestClient {
   @POST("/devices.Pair")
   Future<APIFormat> pair(@Body() PairParam param);
 
+  @POST("/devices.updateSchedule")
+  Future<APIFormat> updateSchedule(@Body() UpdateScheduleParam param);
+
 //
 }
