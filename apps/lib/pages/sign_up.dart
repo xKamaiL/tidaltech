@@ -6,6 +6,7 @@ import 'package:niku/namespace.dart' as n;
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tidal_tech/models/auth.dart';
+import 'package:tidal_tech/stores/stores.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../models/models.dart';
@@ -211,12 +212,16 @@ class SignUpPage extends HookConsumerWidget {
                         return;
                       }
 
+                      ref.read(userProvider.notifier).setUser(
+                            meResult.result!,
+                          );
+
                       showTopSnackBar(
                         Overlay.of(context),
                         const XSnackBar.success(
                             message: "Sign up successfully"),
                       );
-                      context.go("/home");
+                      // context.go("/home");
                     }
                   }
                   ..fullWidth,

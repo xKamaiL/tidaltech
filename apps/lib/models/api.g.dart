@@ -110,13 +110,18 @@ class _RestClient implements RestClient {
   Future<APIFormat<User>> me() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'Content-Type': 'application/json',
+      r'Accept': 'application/json',
+    };
+    _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<APIFormat<User>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
+      contentType: 'application/json',
     )
             .compose(
               _dio.options,
@@ -140,7 +145,11 @@ class _RestClient implements RestClient {
   Future<APIFormat<TokenResult>> signUp(SignUpParam param) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'Content-Type': 'application/json',
+      r'Accept': 'application/json',
+    };
+    _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(param.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
@@ -148,6 +157,7 @@ class _RestClient implements RestClient {
       method: 'POST',
       headers: _headers,
       extra: _extra,
+      contentType: 'application/json',
     )
             .compose(
               _dio.options,
@@ -163,6 +173,203 @@ class _RestClient implements RestClient {
     final value = APIFormat<TokenResult>.fromJson(
       _result.data!,
       (json) => TokenResult.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
+  Future<APIFormat<DeviceItem>> fetchDevice(PairParam param) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'Content-Type': 'application/json',
+      r'Accept': 'application/json',
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(param.toJson());
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<APIFormat<DeviceItem>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'application/json',
+    )
+            .compose(
+              _dio.options,
+              '/devices.Get',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = APIFormat<DeviceItem>.fromJson(
+      _result.data!,
+      (json) => DeviceItem.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
+  Future<APIFormat<dynamic>> unPair(UnPairParam param) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'Content-Type': 'application/json',
+      r'Accept': 'application/json',
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(param.toJson());
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<APIFormat<dynamic>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'application/json',
+    )
+            .compose(
+              _dio.options,
+              '/devices.UnPair',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = APIFormat<dynamic>.fromJson(
+      _result.data!,
+      (json) => json as dynamic,
+    );
+    return value;
+  }
+
+  @override
+  Future<APIFormat<dynamic>> pair(PairParam param) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(param.toJson());
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<APIFormat<dynamic>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/devices.Pair',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = APIFormat<dynamic>.fromJson(
+      _result.data!,
+      (json) => json as dynamic,
+    );
+    return value;
+  }
+
+  @override
+  Future<APIFormat<dynamic>> updateSchedule(UpdateScheduleParam param) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(param.toJson());
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<APIFormat<dynamic>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/devices.updateSchedule',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = APIFormat<dynamic>.fromJson(
+      _result.data!,
+      (json) => json as dynamic,
+    );
+    return value;
+  }
+
+  @override
+  Future<APIFormat<dynamic>> updateMode(UpdateModeParam param) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(param.toJson());
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<APIFormat<dynamic>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/devices.setMode',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = APIFormat<dynamic>.fromJson(
+      _result.data!,
+      (json) => json as dynamic,
+    );
+    return value;
+  }
+
+  @override
+  Future<APIFormat<dynamic>> updateStaticColor(
+      UpdateStaticColorParam param) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(param.toJson());
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<APIFormat<dynamic>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/devices.updateStaticColor',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = APIFormat<dynamic>.fromJson(
+      _result.data!,
+      (json) => json as dynamic,
     );
     return value;
   }

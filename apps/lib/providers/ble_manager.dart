@@ -172,8 +172,8 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
   }
 
   void refreshScan() {
-    // clearScanResult();
     startScan();
+    clearScanResult();
   }
 
   void connect() async {
@@ -186,7 +186,6 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
   }
 
   void healthCheck() async {
-    debugPrint("health check");
     final conn = state.connectedDevice;
     if (conn == null) {
       reconnect();
@@ -196,7 +195,6 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
 
     final s = await conn.connectionState.first;
     if (s == BluetoothConnectionState.connected) {
-      debugPrint("connected");
       setOnline();
       return;
     }
@@ -309,7 +307,6 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
       final req = p.toProto();
       final bytes = req.writeToBuffer();
       // print value
-      debugPrint("bytes length: ${bytes.length} ${bytes.toString()}");
       c.write(
         bytes,
         withoutResponse: true,
@@ -334,6 +331,39 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
       // print value
       c.write(req.writeToBuffer(), withoutResponse: true);
     });
+  }
+
+  void setLightMode(LightingMode mode) async {
+    final c =
+        await _callCharacteristic(BLEServices.color, ColorService.setLightMode);
+    // send to device
+    if (c == null) {
+      return;
+    }
+    final req = SetColorModeRequest();
+    req.mode =
+        mode == LightingMode.ambient ? Mode.MODE_MANUAL : Mode.MODE_SCHEDULE;
+    // print value
+    c.write(req.writeToBuffer(), withoutResponse: true);
+
+    //
+  }
+
+  void setStaticColor(int rgb) async {
+    final c = await _callCharacteristic(
+        BLEServices.color, ColorService.setStaticColor);
+    // send to device
+    if (c == null) {
+
+      return;
+    }
+    final req = SetAmbientRequest();
+
+    req.r = (rgb >> 16) & 0xFF;
+    req.g = (rgb >> 8) & 0xFF;
+    req.b = rgb & 0xFF;
+    // print value
+    c.write(req.writeToBuffer(), withoutResponse: true);
   }
 
 //

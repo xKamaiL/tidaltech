@@ -1,8 +1,13 @@
 #include "callback.h"
 
 #include "NimBLEDevice.h"
+#include "esp_log.h"
+#include "esp_wifi.h"
+#include "light_mode.h"
 #include "proto/message.pb-c.h"
 #include "schedule.h"
+
+static const char *TAG = "callback";
 
 void on_add_color_time_points(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {
     LightingScheduleRequest *req = lighting_schedule_request__unpack(NULL, pCharacteristic->getValue().length(), (uint8_t *)pCharacteristic->getValue().c_str());
@@ -93,9 +98,17 @@ void on_set_color_mode(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &co
     Mode mode = req->mode;
     set_color_mode_request__free_unpacked(req, NULL);
 
-    printf("onSetColorMode: %d\n", mode);
+    int saveMode = mode == MODE__MODE_MANUAL ? 1 : 0;
 
-    // TODO: change color mode ?
+    printf("onSetColorMode: %d\n", saveMode);
+
+    esp_err_t err = write_light_mode_to_nvs(saveMode);
+    if (err != ESP_OK) {
+        printf("onSetColorMode: write mode failed\n");
+        return;
+    }
+
+    // TODO: trigger some function ?
 }
 
 void on_set_ambient(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {
@@ -112,4 +125,54 @@ void on_set_ambient(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connI
     // TODO: change ambient R,G,B color
     // but do not change the current color mode
     printf("onSetAmbient: %d,%d,%d\n", r, g, b);
+}
+
+void on_wifi_status(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {
+    //
+    wifi_ap_record_t ap_info;
+    esp_err_t err = esp_wifi_sta_get_ap_info(&ap_info);
+    if (err != ESP_OK) {
+        if (err == ESP_ERR_WIFI_NOT_CONNECT) {
+            printf("onWifiStatus: not connected\n");
+            pCharacteristic->setValue(0);
+        } else {
+            printf("onWifiStatus: get ap info failed\n");
+        }
+        return;
+    }
+    printf("onWifiStatus: connected\n");
+    pCharacteristic->setValue(1);
+}
+
+void on_wifi_read_ssid(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {
+    wifi_ap_record_t ap_info;
+    esp_err_t err = esp_wifi_sta_get_ap_info(&ap_info);
+    if (err != ESP_OK) {
+        pCharacteristic->setValue("");
+        if (err == ESP_ERR_WIFI_NOT_CONNECT) {
+            printf("onWifiReadSSID: not connected\n");
+        } else {
+            printf("onWifiReadSSID: get ap info failed\n");
+        }
+        return;
+    }
+    printf("onWifiReadSSID: %s\n", ap_info.ssid);
+    pCharacteristic->setValue(ap_info.ssid);
+}
+
+void on_wifi_read_ip(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {
+    esp_netif_ip_info_t ip_info;
+    esp_err_t err = esp_netif_get_ip_info(esp_netif_get_handle_from_ifkey("WIFI_STA_DEF"), &ip_info);
+    if (err != ESP_OK) {
+        pCharacteristic->setValue("");
+        printf("onWifiReadIP: get ip info failed\n");
+        return;
+    }
+    ESP_LOGI(TAG, "got ip:" IPSTR, IP2STR(&ip_info.ip));
+
+    char ip[16];
+    sprintf(ip, IPSTR, IP2STR(&ip_info.ip));
+
+    printf("onWifiReadIP: %s\n", ip);
+    pCharacteristic->setValue(ip);
 }

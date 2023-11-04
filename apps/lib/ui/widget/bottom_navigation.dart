@@ -9,7 +9,7 @@ import 'package:tidal_tech/stores/bottom_bar.dart';
 import 'package:tidal_tech/theme/colors.dart';
 
 class BottomNavigationWidget extends ConsumerStatefulWidget {
-  const BottomNavigationWidget({Key? key}) : super(key: key);
+  const BottomNavigationWidget({super.key});
 
   @override
   ConsumerState<BottomNavigationWidget> createState() =>
@@ -22,45 +22,36 @@ class _BottomNavigationWidgetState
   Widget build(BuildContext context) {
     final position = ref.watch(bottomBarProvider.select((value) => value));
 
-    final isHomePage = position == 0;
+    final isHomePage =
+        GoRouter.of(context).routerDelegate.currentConfiguration.fullPath ==
+            '/home';
 
-    return ClipRRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-        child: BottomNavigationBar(
-          currentIndex: position,
-          enableFeedback: true,
-          elevation: 1,
-          // more aquarium colors ?
-          selectedItemColor: isHomePage ? Colors.white : ThemeColors.primary,
-          selectedFontSize: 12,
-          unselectedItemColor: !isHomePage
-              ? ThemeColors.zinc.shade500
-              : Colors.white.withOpacity(0.80),
-          backgroundColor:
-              !isHomePage ? Colors.white.withOpacity(0.95) : Colors.white.withOpacity(0.09),
-          type: BottomNavigationBarType.fixed,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.light_mode),
-              label: 'Lighting',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.movie_creation),
-              label: 'Scenes',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: 'Setting',
-            ),
-          ],
-          onTap: onTabTapped,
+    return CupertinoTabBar(
+      currentIndex: position,
+      backgroundColor: Colors.transparent,
+      activeColor: isHomePage ? Colors.white : ThemeColors.primary,
+      inactiveColor: isHomePage
+          ? Colors.white.withOpacity(0.7)
+          : ThemeColors.mutedForeground,
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Home',
         ),
-      ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.light_mode),
+          label: 'Lighting',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.movie_creation),
+          label: 'Scenes',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.settings),
+          label: 'Setting',
+        ),
+      ],
+      onTap: onTabTapped,
     );
   }
 

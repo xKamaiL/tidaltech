@@ -1,4 +1,5 @@
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tidal_tech/pages/landing/landing.dart';
 import 'package:tidal_tech/pages/ligting/feeder/profile/index.dart';
 import 'package:tidal_tech/pages/ligting/lighting.dart';
@@ -6,6 +7,8 @@ import 'package:tidal_tech/pages/scenes/scenes.dart';
 import 'package:tidal_tech/pages/settings/bluetooth/bluetooth.dart';
 import 'package:tidal_tech/pages/settings/settings.dart';
 import 'package:tidal_tech/pages/sign_up.dart';
+import 'package:tidal_tech/pages/wifi/wifi.dart';
+import 'package:tidal_tech/pages/wifi/wifi_broadcast.dart';
 import 'package:tidal_tech/stores/bottom_bar.dart';
 import 'package:tidal_tech/stores/stores.dart';
 import 'package:tidal_tech/ui/dashboard_screen.dart';
@@ -78,6 +81,27 @@ class RouterNotifier extends ChangeNotifier {
           ),
           routes: [
             GoRoute(
+              path: "/wifi-settings",
+              name: "wifi-settings",
+              pageBuilder: (_, state) => MaterialPage(
+                restorationId: state.pageKey.value,
+                child: const WiFiSettingPages(),
+                key: state.pageKey,
+              ),
+            ),
+            GoRoute(
+              path: "/wifi/broadcast/:ssid/:password",
+              name: "wifi-broadcast",
+              pageBuilder: (_, state) => MaterialPage(
+                restorationId: state.pageKey.value,
+                child: TaskRoute(
+                  ssid: state.pathParameters["ssid"] ?? "",
+                  password: state.pathParameters["password"] ?? "",
+                ),
+                key: state.pageKey,
+              ),
+            ),
+            GoRoute(
               name: "home",
               path: '/home',
               pageBuilder: (_, state) => NoTransitionPage(
@@ -143,6 +167,7 @@ class RouterNotifier extends ChangeNotifier {
   Future<String?> _redirectLogic(
       BuildContext buildContext, GoRouterState state) async {
     final nextPath = state.fullPath;
+
     if (nextPath == null) {
       return null;
     }
@@ -150,15 +175,25 @@ class RouterNotifier extends ChangeNotifier {
       return null;
     }
 
-    debugPrint("current path is $nextPath");
-    final user = _ref.read(userProvider);
+    final isLoggedIn =
+        _ref.read(userProvider.select((value) => value.isLoggedIn));
+
+    final isFistLoad =
+        _ref.read(userProvider.select((value) => value.isFistLoad));
+    if (nextPath == "/landing" || nextPath == "/scan") {
+      return null;
+    }
+    if (isFistLoad) {
+      debugPrint(" fist load");
+      return null;
+    }
 
     final onSignInPage = nextPath == '/sign-in' || nextPath == '/sign-up';
 
-    if (user == null && !onSignInPage) {
+    if (!isLoggedIn && !onSignInPage) {
       return '/sign-in';
-    } else if (user != null && onSignInPage) {
-      return '/';
+    } else if (isLoggedIn && onSignInPage) {
+      return '/home';
     }
 
     return null;

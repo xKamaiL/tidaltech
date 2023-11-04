@@ -10,8 +10,7 @@ class NormalScreen extends StatefulWidget {
   // background image
   final String? backgroundImage;
 
-  const NormalScreen({Key? key, required this.child, this.backgroundImage})
-      : super(key: key);
+  const NormalScreen({super.key, required this.child, this.backgroundImage});
 
   @override
   State<NormalScreen> createState() => _NormalScreenState();
@@ -19,8 +18,13 @@ class NormalScreen extends StatefulWidget {
 
 class _NormalScreenState extends State<NormalScreen> {
   static const blur = 5.0;
-  // final flutterReactiveBle = FlutterReactiveBle();
 
+  // final flutterReactiveBle = FlutterReactiveBle();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,18 +36,18 @@ class _NormalScreenState extends State<NormalScreen> {
         decoration: BoxDecoration(
           image: widget.backgroundImage != null
               ? DecorationImage(
-            // load assets from network
-            image: ExactAssetImage("assets/${widget.backgroundImage}"),
-            fit: BoxFit.fill,
-          )
+                  // load assets from network
+                  image: ExactAssetImage("assets/${widget.backgroundImage}"),
+                  fit: BoxFit.fill,
+                )
               : null,
         ),
         child: Container(
           // blur image
           decoration: widget.backgroundImage != null
               ? BoxDecoration(
-            color: Colors.black.withOpacity(0), // brightness
-          )
+                  color: Colors.black.withOpacity(0), // brightness
+                )
               : null,
 
           child: BackdropFilter(

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:niku/namespace.dart' as n;
 import 'package:tidal_tech/providers/ble_manager.dart';
@@ -10,10 +11,10 @@ import 'package:tidal_tech/theme/colors.dart';
 import 'package:tidal_tech/ui/snackbar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
-class BluetoothStatusIcon extends ConsumerStatefulWidget {
+class BluetoothStatusIcon extends StatefulHookConsumerWidget {
   final bool isDark;
 
-  const BluetoothStatusIcon({Key? key, this.isDark = false}) : super(key: key);
+  const BluetoothStatusIcon({super.key, this.isDark = false});
 
   @override
   ConsumerState<BluetoothStatusIcon> createState() =>
@@ -22,63 +23,47 @@ class BluetoothStatusIcon extends ConsumerStatefulWidget {
 
 class _BluetoothStatusIconState extends ConsumerState<BluetoothStatusIcon> {
   _BluetoothStatusIconState() : super();
-  Timer? timer;
-
-  @override
-  void initState() {
-    super.initState();
-    // loop every
-    timer =
-        Timer.periodic(const Duration(seconds: 15), (Timer t) => healthCheck());
-  }
-
-  void healthCheck() {
-    final conn = ref.read(bleManagerProvider.notifier);
-    conn.healthCheck();
-  }
-
-  @override
-  void dispose() {
-    timer?.cancel();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     final manager = ref.read(bleManagerProvider.notifier);
     final device = ref.watch(bleManagerProvider);
 
-    final ok = device.isOnline;
-    final isConnect = device.isConnected;
-    final isScanning = device.isScanning;
+    final state = useStream<BluetoothConnectionState>(
+      FlutterBluePlus.connectedDevices.isEmpty
+          ? null
+          : FlutterBluePlus.connectedDevices[0].connectionState,
+      initialData: BluetoothConnectionState.disconnected,
+    );
+
+    final ok = state.connectionState == ConnectionState.active ||
+        state.connectionState == ConnectionState.waiting;
+
+    final isConnect = ok;
 
     final textColor = widget.isDark ? Colors.blueAccent : Colors.white;
 
-    return n.Padding(
-      top: 8,
-      right: 8,
-      bottom: 8,
-      left: 8,
-      child: GestureDetector(
-        onTap: () async {
-          if (!ok) {
-            showTopSnackBar(
-              Overlay.of(context),
-              const XSnackBar.error(
-                message:
-                    "Cannot connect to device. Please check light indicator on device.",
-              ),
-            );
-          }
-          if (device.isReconnecting) return;
-          manager.reconnect();
-        },
+    return InkWell(
+      onTap: () async {
+        if (!ok) {
+          showTopSnackBar(
+            Overlay.of(context),
+            const XSnackBar.error(
+              message:
+                  "Cannot connect to device. Please check light indicator on device.",
+            ),
+          );
+        }
+        if (device.isReconnecting) return;
+        manager.reconnect();
+      },
+      child: n.Padding(
+        top: 8,
+        right: 16,
+        bottom: 8,
+        left: 16,
         child: n.Icon(
-          !isConnect
-              ? isScanning
-                  ? Icons.bluetooth_searching
-                  : Icons.bluetooth_disabled
-              : Icons.bluetooth_connected,
+          !isConnect ? Icons.bluetooth_disabled : Icons.bluetooth_connected,
           color: isConnect
               ? textColor.withOpacity(ok ? 1 : 0.5)
               : ThemeColors.danger,

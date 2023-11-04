@@ -161,6 +161,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.2"
+  connectivity_plus:
+    dependency: "direct main"
+    description:
+      name: connectivity_plus
+      sha256: b502a681ba415272ecc41400bd04fe543ed1a62632137dc84d25a91e7746f55f
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.1"
+  connectivity_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: connectivity_plus_platform_interface
+      sha256: cf1d1c28f4416f8c654d7dc3cd638ec586076255d407cef3ddbdaf178272a71a
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.4"
   convert:
     dependency: transitive
     description:
@@ -201,6 +217,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.2"
+  dbus:
+    dependency: transitive
+    description:
+      name: dbus
+      sha256: "6f07cba3f7b3448d42d015bfd3d53fe12e5b36da2423f23838efc1d5fb31a263"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.8"
   dio:
     dependency: "direct main"
     description:
@@ -217,6 +241,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.5"
+  esp_smartconfig:
+    dependency: "direct main"
+    description:
+      name: esp_smartconfig
+      sha256: "7dab804ac19459f89356af786ca4bc7fe72dca27aa2344a0d77881a577bd4647"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.11"
+  esptouch_smartconfig:
+    dependency: "direct main"
+    description:
+      name: esptouch_smartconfig
+      sha256: b9791c90c588992d7b1875d29e99034b9a43283ec4f320c1f609edc5e48c64fe
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   fake_async:
     dependency: transitive
     description:
@@ -544,6 +584,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  loggerx:
+    dependency: transitive
+    description:
+      name: loggerx
+      sha256: "93862b99a05f1a78ac26d0901e55cd3864f5f7741b94d07ff3f3b60db18810a1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.6"
   logging:
     dependency: transitive
     description:
@@ -584,6 +632,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  network_info_plus:
+    dependency: "direct main"
+    description:
+      name: network_info_plus
+      sha256: "2d9e88b9a459e5d4e224f828d26cc38ea140511e89b943116939994324be5c96"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.0"
+  network_info_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: network_info_plus_platform_interface
+      sha256: "881f5029c5edaf19c616c201d3d8b366c5b1384afd5c1da5a49e4345de82fb8b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.3"
   niku:
     dependency: "direct main"
     description:
@@ -592,6 +656,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.2"
+  nm:
+    dependency: transitive
+    description:
+      name: nm
+      sha256: "2c9aae4127bdc8993206464fcc063611e0e36e72018696cd9631023a31b24254"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.0"
   package_config:
     dependency: transitive
     description:
@@ -933,6 +1005,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.10.0"
+  sprintf:
+    dependency: transitive
+    description:
+      name: sprintf
+      sha256: "1fc9ffe69d4df602376b52949af107d8f5703b77cda567c4d7d86a0693120f23"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.0"
   stack_trace:
     dependency: transitive
     description:
@@ -1045,6 +1125,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.2"
+  uuid:
+    dependency: "direct main"
+    description:
+      name: uuid
+      sha256: b715b8d3858b6fa9f68f87d20d98830283628014750c2b09b6f516c1da4af2a7
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.0"
   vector_math:
     dependency: transitive
     description:
@@ -1077,6 +1165,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.0"
+  wifi_info_flutter:
+    dependency: "direct main"
+    description:
+      name: wifi_info_flutter
+      sha256: "9662240e4edb8a91b572efa0b4e4c72ee644e25611525633580afc3257386a48"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
+  wifi_info_flutter_platform_interface:
+    dependency: transitive
+    description:
+      name: wifi_info_flutter_platform_interface
+      sha256: "844a9a5f23d1a639cf5fd8b4f007ee4d60526ad63beb35e1cbe2512f1a9921e4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   win32:
     dependency: transitive
     description:

@@ -14,6 +14,10 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
 
   TimePointsNotifier(this.ref) : super([]);
 
+  void initTimePoint(List<TimePoint> tps) {
+    state = tps;
+  }
+
   void addTimePoint() {
     if (state.isEmpty) {
       state = [

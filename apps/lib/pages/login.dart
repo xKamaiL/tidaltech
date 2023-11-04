@@ -1,3 +1,4 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tidal_tech/stores/bottom_bar.dart';
 import 'package:tidal_tech/styles/button.dart';
 import 'package:tidal_tech/theme/colors.dart';
@@ -159,7 +160,18 @@ class LoginPage extends HookConsumerWidget {
                         return;
                       }
 
+                      final prefs = await SharedPreferences.getInstance();
+                      prefs.setString("token", res.result!.token);
 
+                      final meResult = await api.me();
+
+                      if (!meResult.ok) {
+                        return;
+                      }
+
+                      ref.read(userProvider.notifier).setUser(
+                            meResult.result!,
+                          );
 
                       ref.read(bottomBarProvider.notifier).setPosition(0);
                       context.go("/home");

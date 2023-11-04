@@ -1,6 +1,8 @@
 
 #include "ble_manager.h"
 
+#include <string>
+
 #include "NimBLEDevice.h"
 #include "callback.h"
 
@@ -26,6 +28,18 @@ class CharacteristicCallbacks : public NimBLECharacteristicCallbacks {
             pCharacteristic->setValue(0);
             return;
         }
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_WIFI_STATUS)) {
+            on_wifi_status(pCharacteristic, connInfo);
+            return;
+        }
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_WIFI_SSID)) {
+            on_wifi_read_ssid(pCharacteristic, connInfo);
+            return;
+        }
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_WIFI_IP)) {
+            on_wifi_read_ip(pCharacteristic, connInfo);
+            return;
+        }
     };
 
     void onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {
@@ -47,7 +61,13 @@ class CharacteristicCallbacks : public NimBLECharacteristicCallbacks {
         }
     };
 
-    void onNotify(NimBLECharacteristic *pCharacteristic){};
+    void onNotify(NimBLECharacteristic *pCharacteristic) {
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_WIFI_STATUS)) {
+            printf("onNotify: wifi status\n");
+            return;
+        }
+        //
+    };
 
     void onStatus(NimBLECharacteristic *pCharacteristic, int code) {
         std::string str = ("Notification/Indication status code: ");
@@ -78,6 +98,8 @@ class CharacteristicCallbacks : public NimBLECharacteristicCallbacks {
 
 static CharacteristicCallbacks chrCallbacks;
 
+static std::string device_uuid = "83ac6d47-82fd-403a-b903-1a7df6248d46";
+
 void initNimble() {
     NimBLEDevice::init("TIDAL TECH LIGHTING");
     // NimBLEDevice::setPower(ESP_PWR_LVL_P9); /** +9db */
@@ -87,16 +109,25 @@ void initNimble() {
 
     NimBLEService *deviceInformationService = srv->createService(DEVICE_INFORMATION_SERVICE_UUID);
 
-    NimBLECharacteristic *deviceNameCharacteristic = deviceInformationService->createCharacteristic(
-        CHARACTERISTIC_UUID_DEVICE_ID, NIMBLE_PROPERTY::READ);
-    deviceNameCharacteristic->setValue(NimBLEUUID(""));
-
-    deviceNameCharacteristic->setCallbacks(&chrCallbacks);
-
     NimBLECharacteristic *deviceIdCharacteristic = deviceInformationService->createCharacteristic(
+        CHARACTERISTIC_UUID_DEVICE_ID, NIMBLE_PROPERTY::READ);
+    deviceIdCharacteristic->setValue(device_uuid);
+
+    NimBLECharacteristic *deviceNameCharacteristic = deviceInformationService->createCharacteristic(
         CHARACTERISTIC_UUID_DEVICE_NAME, NIMBLE_PROPERTY::READ);
-    deviceIdCharacteristic->setValue("TIDAL TECH LIGHTING");
-    deviceIdCharacteristic->setCallbacks(&chrCallbacks);
+    deviceNameCharacteristic->setValue("TIDAL TECH LIGHTING");
+
+    NimBLECharacteristic *wifiStatusCharacteristic = deviceInformationService->createCharacteristic(
+        CHARACTERISTIC_UUID_WIFI_STATUS, NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::NOTIFY);
+    wifiStatusCharacteristic->setCallbacks(&chrCallbacks);
+
+    NimBLECharacteristic *wifiSSIDCharacteristic = deviceInformationService->createCharacteristic(
+        CHARACTERISTIC_UUID_WIFI_SSID, NIMBLE_PROPERTY::READ);
+    wifiSSIDCharacteristic->setCallbacks(&chrCallbacks);
+
+    NimBLECharacteristic *wifiIPCharacteristic = deviceInformationService->createCharacteristic(
+        CHARACTERISTIC_UUID_WIFI_IP, NIMBLE_PROPERTY::READ);
+    wifiIPCharacteristic->setCallbacks(&chrCallbacks);
 
     NimBLEService *colorService = srv->createService(COLOR_SERVICE_UUID);
     NimBLECharacteristic *getCurrentMode = colorService->createCharacteristic(CHARACTERISTIC_UUID_GET_COLOR_MODE, NIMBLE_PROPERTY::READ);
@@ -109,6 +140,9 @@ void initNimble() {
 
     NimBLECharacteristic *listColorTimePointCh = colorService->createCharacteristic(CHARACTERISTIC_UUID_LIST_COLOR_TIME_POINT, NIMBLE_PROPERTY::WRITE_NR);
     listColorTimePointCh->setCallbacks(&chrCallbacks);
+
+    NimBLECharacteristic *setAmbientCh = colorService->createCharacteristic(CHARACTERISTIC_UUID_SET_AMBIENT, NIMBLE_PROPERTY::WRITE_NR);
+    setAmbientCh->setCallbacks(&chrCallbacks);
 
     // get current mode
     // add time points

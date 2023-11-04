@@ -11,6 +11,7 @@ import 'package:tidal_tech/pages/ligting/spectrum_card.dart';
 import 'package:tidal_tech/providers/ble_manager.dart';
 import 'package:tidal_tech/providers/feeder.dart';
 import 'package:tidal_tech/providers/lighting.dart';
+import 'package:tidal_tech/stores/device.dart';
 
 class FeederControl extends ConsumerStatefulWidget {
   const FeederControl({super.key});
@@ -22,30 +23,31 @@ class FeederControl extends ConsumerStatefulWidget {
 }
 
 class _FeederControlState extends ConsumerState<ConsumerStatefulWidget> {
-  Timer? timer;
+  Timer? _timer;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    timer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      final timePoints = ref.read(timePointsNotifier);
-      ref
-          .read(bleManagerProvider.notifier)
-          .sendTimePoints(timePoints: timePoints);
-    });
   }
 
   @override
   void dispose() {
     super.dispose();
-    timer?.cancel();
+    _timer?.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
-    final manager = ref.read(bleManagerProvider.notifier);
+    ref.listen(timePointsNotifier, (_, value) {
+      if (_timer?.isActive ?? false) _timer?.cancel();
+      _timer = Timer(const Duration(milliseconds: 500), () {
+        debugPrint("timePointsNotifier: $value");
+        ref.read(bleManagerProvider.notifier).sendTimePoints(timePoints: value);
+        ref.read(deviceProvider.notifier).updateSchedule(timePoints: value);
+        //
+      });
+    });
 
     return n.Column(
       const [

@@ -4,15 +4,16 @@ import 'package:niku/namespace.dart' as n;
 import 'package:tidal_tech/pages/ligting/ambient/color_picker.dart';
 import 'package:tidal_tech/pages/ligting/feeder/index.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:tidal_tech/providers/ble_manager.dart';
 
-import 'package:tidal_tech/pages/ligting/time_selection.dart';
+import 'package:tidal_tech/stores/device.dart';
 import 'package:tidal_tech/stores/lighting.dart';
 import 'package:tidal_tech/theme/colors.dart';
 import 'package:tidal_tech/ui/BluetoothStatusIcon.dart';
-import 'package:tidal_tech/ui/panel.dart';
+import 'package:tidal_tech/ui/WiFiStatusIcon.dart';
 
 class LightingIndexPage extends HookConsumerWidget {
-  const LightingIndexPage({Key? key}) : super(key: key);
+  const LightingIndexPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -30,6 +31,9 @@ class LightingIndexPage extends HookConsumerWidget {
         elevation: 0,
         backgroundColor: Colors.white,
         actions: const [
+          WiFiStatusIcon(
+            isDark: true,
+          ),
           BluetoothStatusIcon(
             isDark: true,
           ),
@@ -70,7 +74,7 @@ class LightingIndexPage extends HookConsumerWidget {
   // ambient mode
   List<Widget> renderPreset() {
     return [
-      ColorPicker(),
+      const ColorPicker(),
     ];
   }
 }
@@ -78,11 +82,16 @@ class LightingIndexPage extends HookConsumerWidget {
 class ModeSelection extends HookConsumerWidget {
   final TabController tabController;
 
-  const ModeSelection(this.tabController, {Key? key}) : super(key: key);
+  const ModeSelection(this.tabController, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final mode = ref.watch(lightingModeProvider);
+
+    // iterate
+    ref.listen(lightingModeProvider, (_, next) {
+      tabController.animateTo(LightingMode.ambient == next ? 1 : 0);
+    });
 
     return Container(
       decoration: BoxDecoration(
@@ -111,7 +120,7 @@ class ModeSelection extends HookConsumerWidget {
                             ? ThemeColors.foreground
                             : ThemeColors.zinc.shade500
                         ..size = 14.0,
-                      n.Text("Feed Mode")
+                      n.Text("Schedule Mode")
                         ..fontWeight = FontWeight.w500
                         ..textAlign = TextAlign.center
                         ..color = mode == LightingMode.feed
@@ -125,10 +134,13 @@ class ModeSelection extends HookConsumerWidget {
               ),
             ),
             onTap: () {
-              tabController.animateTo(0);
               ref
                   .read(lightingModeProvider.notifier)
                   .setMode(LightingMode.feed);
+              ref.read(deviceProvider.notifier).setMode(LightingMode.feed);
+              ref
+                  .read(bleManagerProvider.notifier)
+                  .setLightMode(LightingMode.feed);
             },
           ),
         ),
@@ -153,7 +165,7 @@ class ModeSelection extends HookConsumerWidget {
                             ? ThemeColors.foreground
                             : ThemeColors.zinc.shade500
                         ..size = 16.0,
-                      n.Text("Ambient Mode")
+                      n.Text("Static Mode")
                         ..textAlign = TextAlign.center
                         ..color = mode == LightingMode.ambient
                             ? ThemeColors.foreground
@@ -166,10 +178,13 @@ class ModeSelection extends HookConsumerWidget {
               ),
             ),
             onTap: () {
-              tabController.animateTo(1);
               ref
                   .read(lightingModeProvider.notifier)
                   .setMode(LightingMode.ambient);
+              ref.read(deviceProvider.notifier).setMode(LightingMode.ambient);
+              ref
+                  .read(bleManagerProvider.notifier)
+                  .setLightMode(LightingMode.ambient);
             },
           ),
         ),

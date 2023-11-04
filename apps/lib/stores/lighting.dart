@@ -9,7 +9,7 @@ final lightingModeProvider =
 class LightingModeProvider extends StateNotifier<LightingMode> {
   LightingModeProvider(super.state);
 
-  void setMode(LightingMode value) {
+  void setMode(LightingMode value) async {
     state = value;
   }
 }

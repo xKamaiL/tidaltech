@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TokenInterceptor extends Interceptor {
@@ -16,6 +17,14 @@ class TokenInterceptor extends Interceptor {
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     //
     super.onResponse(response, handler);
+  }
+  @override
+  void onError(
+      DioException err,
+      ErrorInterceptorHandler handler,
+      ) {
+    debugPrint(err.toString());
+    handler.next(err);
   }
 }
 

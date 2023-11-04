@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -8,15 +11,18 @@ import 'package:tidal_tech/models/token.dart';
 import 'package:tidal_tech/providers/router.dart';
 import 'package:tidal_tech/theme/colors.dart';
 
+// Sets a platform override for desktop to avoid exceptions. See
+// https://flutter.dev/desktop#target-platform-override for more info.
+void _enablePlatformOverrideForDesktop() {
+  if (!kIsWeb && (Platform.isWindows || Platform.isLinux)) {
+    debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
+  }
+}
+
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  final dio = Dio();
-  dio.options.headers['Content-Type'] = 'application/json';
-  dio.options.headers['Accept'] = 'application/json';
-  dio.options.connectTimeout = const Duration(seconds: 3);
-  dio.options.receiveTimeout = const Duration(seconds: 3);
-  dio.interceptors.add(TokenInterceptor());
+  _enablePlatformOverrideForDesktop();
 
   runApp(
     const ProviderScope(

@@ -3,9 +3,12 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tidal_tech/constants/ble_services_ids.dart';
+import 'package:tidal_tech/models/devices.dart';
+import 'package:tidal_tech/models/models.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import '../../stores/bottom_bar.dart';
 import '../../styles/button.dart';
@@ -147,7 +150,7 @@ class DevicesList extends HookConsumerWidget {
 class DeviceItem extends HookConsumerWidget {
   final BluetoothDevice device;
 
-  const DeviceItem({Key? key, required this.device}) : super(key: key);
+  const DeviceItem({super.key, required this.device});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -242,7 +245,47 @@ class DeviceItem extends HookConsumerWidget {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
 
                 await prefs.setString("id", device.remoteId.toString());
+
+                final ch = device.servicesList!
+                    .firstWhere(
+                      (element) =>
+                          element.serviceUuid.toString() ==
+                          BLEServices.deviceInformation,
+                    )
+                    .characteristics
+                    .where((element) =>
+                        element.uuid.toString() ==
+                        DeviceInformationService.getDeviceId)
+                    .first;
+                Uuid deviceId;
+                try {
+                  final idList = await ch.read();
+                  deviceId = Uuid.parse(String.fromCharCodes(idList));
+                } catch (e) {
+                  device.disconnect();
+                  loading.value = false;
+                  showTopSnackBar(
+                    Overlay.of(context),
+                    XSnackBar.error(
+                      message: e.toString(),
+                    ),
+                  );
+                  return;
+                }
+
+                final res = await api.pair(PairParam(id: deviceId.toString()));
+
                 loading.value = false;
+                if (!res.ok) {
+                  print(res.error?.message);
+                  showTopSnackBar(
+                    Overlay.of(context),
+                    XSnackBar.error(
+                      message: "Cannot Pair: ${res.error!.message ?? ""}",
+                    ),
+                  );
+                  return;
+                }
                 showTopSnackBar(
                   Overlay.of(context),
                   const XSnackBar.success(

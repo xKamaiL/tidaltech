@@ -71,6 +71,7 @@ class SpectrumCard extends HookConsumerWidget {
                               minuteInterval: 5,
                               // This is called when the user changes the time.
                               onDateTimeChanged: (DateTime newTime) {
+                                print("debug change");
                                 ref.read(timePointsNotifier.notifier).update(
                                     tp.id,
                                     tp.copyWith(

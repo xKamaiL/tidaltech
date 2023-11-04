@@ -5,6 +5,7 @@ import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:retrofit/retrofit.dart';
+import 'package:tidal_tech/models/devices.dart';
 import 'package:tidal_tech/models/user.dart';
 
 import 'auth.dart';
@@ -78,10 +79,44 @@ abstract class RestClient {
   Future<APIFormat<TokenResult>> signIn(@Body() SignInParam param);
 
   @POST("/auth.Me")
+  @Headers(<String, dynamic>{
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  })
   Future<APIFormat<User>> me();
 
   @POST("/auth.SignUp")
+  @Headers(<String, dynamic>{
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  })
   Future<APIFormat<TokenResult>> signUp(@Body() SignUpParam param);
+
+  @POST("/devices.Get")
+  @Headers(<String, dynamic>{
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  })
+  Future<APIFormat<DeviceItem>> fetchDevice(@Body() PairParam param);
+
+  @POST("/devices.UnPair")
+  @Headers(<String, dynamic>{
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  })
+  Future<APIFormat> unPair(@Body() UnPairParam param);
+
+  @POST("/devices.Pair")
+  Future<APIFormat> pair(@Body() PairParam param);
+
+  @POST("/devices.updateSchedule")
+  Future<APIFormat> updateSchedule(@Body() UpdateScheduleParam param);
+
+  @POST("/devices.setMode")
+  Future<APIFormat> updateMode(@Body() UpdateModeParam param);
+
+  @POST("/devices.updateStaticColor")
+  Future<APIFormat> updateStaticColor(@Body() UpdateStaticColorParam param);
 
 //
 }

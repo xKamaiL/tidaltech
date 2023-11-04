@@ -11,21 +11,26 @@ class SettingsIndexPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final profile = ref.watch(userProvider.select((value) => value.profile));
     return SettingScaffold(
       children: n.Column([
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: Container(
-            height: 80,
-            width: 80,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade900,
-              borderRadius: BorderRadius.circular(100),
+          child: n.Column([
+            Container(
+              height: 80,
+              width: 80,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade900,
+                borderRadius: BorderRadius.circular(100),
+              ),
+              child: n.Icon(Icons.person)
+                ..color = Colors.white
+                ..size = 50,
             ),
-            child: n.Icon(Icons.person)
-              ..color = Colors.white
-              ..size = 50,
-          ),
+            n.Box()..h = 12,
+            n.Text(profile.email),
+          ]),
         ),
         Expanded(
           child: SingleChildScrollView(
