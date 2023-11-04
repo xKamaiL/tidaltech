@@ -7,6 +7,7 @@ import 'package:niku/namespace.dart' as n;
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tidal_tech/providers/ble_manager.dart';
+import 'package:tidal_tech/stores/icon_status.dart';
 import 'package:tidal_tech/theme/colors.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:tidal_tech/ui/snackbar.dart';
@@ -22,48 +23,14 @@ class WiFiStatusIcon extends StatefulHookConsumerWidget {
 }
 
 class _WiFiStatusIconState extends ConsumerState<WiFiStatusIcon> {
-  Timer? timer;
-  bool isFirst = true;
-
-  Timer periodicTimer(Duration duration, void Function(Timer timer) callback,
-      {bool onStart = false}) {
-    var result = Timer.periodic(duration, callback);
-    if (onStart) {
-      isFirst = false;
-      // Asynchronous "immediate" callback as event.
-      Timer(Duration.zero, () {
-        if (result.isActive) callback(result);
-      });
-    }
-    return result;
-  }
-
-  Stream<int> getWifiStatusAsStream() {
-    StreamController<int> controller = StreamController<int>();
-    Timer timer = periodicTimer(const Duration(seconds: 30), (timer) async {
-      final s = await ref.read(bleManagerProvider.notifier).getWifiStatus();
-      controller.add(s);
-    }, onStart: isFirst);
-
-    controller
-      ..onCancel = () {
-        timer.cancel();
-      }
-      ..onPause = () {
-        timer.cancel();
-      }
-      ..onResume = () {};
-    return controller.stream;
-  }
-
   @override
   Widget build(BuildContext context) {
-    final stream = useStream(
-      getWifiStatusAsStream(),
-      initialData: false,
-    );
+    final ok = ref.watch(iconStatusProvider.select((value) => value.wifi));
 
-    final ok = stream.data == 1;
+    useEffect(() {
+      ref.read(bleManagerProvider.notifier).getWifiStatus();
+      return null;
+    }, []);
 
     return InkWell(
       onTap: () async {
