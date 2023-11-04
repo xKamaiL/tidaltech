@@ -111,8 +111,22 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
 
   void delete(TimePoint? tp) {
     if (tp == null) return;
-    state =
+
+    final tmp =
         state.where((element) => element.minutes() != tp.minutes()).toList();
+
+    // sort
+    tmp.sort((a, b) => a.minutes().compareTo(b.minutes()));
+
+    // update id
+    final newState = tmp.map((e) {
+
+      final id = tmp.indexOf(e);
+      print(id);
+      return e.copyWith(id: id);
+    }).toList();
+
+    state = newState;
   }
 
   void editNext() {
