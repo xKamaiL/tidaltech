@@ -28,6 +28,18 @@ class CharacteristicCallbacks : public NimBLECharacteristicCallbacks {
             pCharacteristic->setValue(0);
             return;
         }
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_WIFI_STATUS)) {
+            on_wifi_status(pCharacteristic, connInfo);
+            return;
+        }
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_WIFI_SSID)) {
+            on_wifi_read_ssid(pCharacteristic, connInfo);
+            return;
+        }
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_WIFI_IP)) {
+            on_wifi_read_ip(pCharacteristic, connInfo);
+            return;
+        }
     };
 
     void onWrite(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {
@@ -49,7 +61,13 @@ class CharacteristicCallbacks : public NimBLECharacteristicCallbacks {
         }
     };
 
-    void onNotify(NimBLECharacteristic *pCharacteristic){};
+    void onNotify(NimBLECharacteristic *pCharacteristic) {
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_WIFI_STATUS)) {
+            printf("onNotify: wifi status\n");
+            return;
+        }
+        //
+    };
 
     void onStatus(NimBLECharacteristic *pCharacteristic, int code) {
         std::string str = ("Notification/Indication status code: ");
@@ -98,6 +116,18 @@ void initNimble() {
     NimBLECharacteristic *deviceNameCharacteristic = deviceInformationService->createCharacteristic(
         CHARACTERISTIC_UUID_DEVICE_NAME, NIMBLE_PROPERTY::READ);
     deviceNameCharacteristic->setValue("TIDAL TECH LIGHTING");
+
+    NimBLECharacteristic *wifiStatusCharacteristic = deviceInformationService->createCharacteristic(
+        CHARACTERISTIC_UUID_WIFI_STATUS, NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::NOTIFY);
+    wifiStatusCharacteristic->setCallbacks(&chrCallbacks);
+
+    NimBLECharacteristic *wifiSSIDCharacteristic = deviceInformationService->createCharacteristic(
+        CHARACTERISTIC_UUID_WIFI_SSID, NIMBLE_PROPERTY::READ);
+    wifiSSIDCharacteristic->setCallbacks(&chrCallbacks);
+
+    NimBLECharacteristic *wifiIPCharacteristic = deviceInformationService->createCharacteristic(
+        CHARACTERISTIC_UUID_WIFI_IP, NIMBLE_PROPERTY::READ);
+    wifiIPCharacteristic->setCallbacks(&chrCallbacks);
 
     NimBLEService *colorService = srv->createService(COLOR_SERVICE_UUID);
     NimBLECharacteristic *getCurrentMode = colorService->createCharacteristic(CHARACTERISTIC_UUID_GET_COLOR_MODE, NIMBLE_PROPERTY::READ);
