@@ -114,6 +114,34 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
     state =
         state.where((element) => element.minutes() != tp.minutes()).toList();
   }
+
+  void editNext() {
+    if (state.isEmpty) {
+      return;
+    }
+    final current = ref.read(timePointEditingProvider);
+    if (current == null) {
+      return;
+    }
+    if (current.id == state.length - 1) {
+      return;
+    }
+    final next = findById(current.id + 2);
+    if (next == null) {
+      return;
+    }
+    ref.read(timePointEditingProvider.notifier).set(next);
+  }
+
+  void editPrevious() {
+    if (state.isEmpty) return;
+    final current = ref.read(timePointEditingProvider);
+    if (current == null) return;
+    if (current.id == 0) return;
+    final previous = findById(current.id);
+    if (previous == null) return;
+    ref.read(timePointEditingProvider.notifier).set(previous);
+  }
 }
 
 const Map<LED, ColorPoint> defaultTimePointIntensity = {

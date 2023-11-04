@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:niku/namespace.dart' as n;
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:tidal_tech/providers/feeder.dart';
 import 'package:tidal_tech/providers/lighting.dart';
 import 'package:tidal_tech/theme/colors.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
 
 class SpectrumCard extends HookConsumerWidget {
   const SpectrumCard({super.key});
@@ -15,12 +13,22 @@ class SpectrumCard extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tp = ref.watch(timePointEditingProvider);
+
     if (tp == null) {
-      return n.Box(
-        n.Text("Please select time point above")
-          ..color = ThemeColors.mutedForeground
-          ..my = 64,
-      )..p = 16;
+      return n.Column([
+        n.Icon(Icons.info_outline)
+          ..color = ThemeColors.zinc.shade400
+          ..size = 48,
+        n.Box(
+          n.Text("Schedule is empty")
+            ..color = ThemeColors.mutedForeground
+            ..center,
+        )..px = 24,
+      ])
+        ..wFull
+        ..gap = 8
+        ..height = 200
+        ..mainAxisAlignment = MainAxisAlignment.center;
     }
     // access to timePoint real values
 
@@ -39,70 +47,6 @@ class SpectrumCard extends HookConsumerWidget {
           borderRadius: BorderRadius.circular(8),
           color: ThemeColors.zinc.shade100),
       child: n.Column([
-        n.Row([
-          n.Box(),
-          n.Row(
-            [
-              n.Icon(CupertinoIcons.clock_fill)
-                ..color = ThemeColors.zinc.shade400
-                ..size = 20,
-              CupertinoButton(
-                onPressed: () {
-                  //
-
-                  showCupertinoModalPopup(
-                      context: context,
-                      builder: (builder) {
-                        return Container(
-                          height: 300,
-                          padding: const EdgeInsets.only(top: 0),
-                          margin: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).viewInsets.bottom,
-                          ),
-                          color: CupertinoColors.systemBackground
-                              .resolveFrom(context),
-                          child: SafeArea(
-                            top: false,
-                            child: CupertinoDatePicker(
-                              initialDateTime:
-                                  DateTime(0, 0, 0, tp.hour, tp.minute),
-                              mode: CupertinoDatePickerMode.time,
-                              use24hFormat: true,
-                              minuteInterval: 5,
-                              // This is called when the user changes the time.
-                              onDateTimeChanged: (DateTime newTime) {
-                                print("debug change");
-                                ref.read(timePointsNotifier.notifier).update(
-                                    tp.id,
-                                    tp.copyWith(
-                                      hour: newTime.hour,
-                                      minute: newTime.minute,
-                                    ));
-                                ref
-                                    .read(timePointEditingProvider.notifier)
-                                    .set(tp.copyWith(
-                                      hour: newTime.hour,
-                                      minute: newTime.minute,
-                                    ));
-                              },
-                            ),
-                          ),
-                        );
-                      });
-                },
-                padding: EdgeInsets.zero,
-                child: n.Text(tp.toString())
-                  ..fontSize = 24
-                  ..m = 0,
-              ),
-            ],
-          )
-            ..gap = 4
-            ..mainAxisAlignment = MainAxisAlignment.center,
-        ])
-          ..crossAxisAlignment = CrossAxisAlignment.center
-          ..spaceBetween
-          ..px = 16,
         n.Row([
           Bar(LED.white, whiteValue, (dynamic value) {
             ref.read(timePointEditingProvider.notifier).updateWhite(value);
@@ -139,10 +83,92 @@ class SpectrumCard extends HookConsumerWidget {
               ref.read(timePointEditingProvider.notifier).updateGreen(value);
             }),
           ]),
+          n.Row([
+            n.Button(
+              n.Icon(Icons.arrow_left)..color = ThemeColors.foreground,
+            )
+              ..onPressed = () {
+                ref.read(timePointsNotifier.notifier).editPrevious();
+              }
+              ..color = ThemeColors.foreground
+              ..rounded = 8
+              ..p = 0
+              ..m = 0
+              ..splash = ThemeColors.mutedForeground.withOpacity(0.1)
+              ..bg = ThemeColors.white,
+            n.Row(
+              [
+                CupertinoButton(
+                  onPressed: () {
+                    //
+                    showCupertinoModalPopup(
+                        context: context,
+                        builder: (builder) {
+                          return Container(
+                            height: 300,
+                            padding: const EdgeInsets.only(top: 0),
+                            margin: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom,
+                            ),
+                            color: CupertinoColors.systemBackground
+                                .resolveFrom(context),
+                            child: SafeArea(
+                              top: false,
+                              child: CupertinoDatePicker(
+                                initialDateTime:
+                                    DateTime(0, 0, 0, tp.hour, tp.minute),
+                                mode: CupertinoDatePickerMode.time,
+                                use24hFormat: true,
+                                minuteInterval: 5,
+                                // This is called when the user changes the time.
+                                onDateTimeChanged: (DateTime newTime) {
+                                  ref.read(timePointsNotifier.notifier).update(
+                                      tp.id,
+                                      tp.copyWith(
+                                        hour: newTime.hour,
+                                        minute: newTime.minute,
+                                      ));
+                                  ref
+                                      .read(timePointEditingProvider.notifier)
+                                      .set(tp.copyWith(
+                                        hour: newTime.hour,
+                                        minute: newTime.minute,
+                                      ));
+                                },
+                              ),
+                            ),
+                          );
+                        });
+                  },
+                  padding: const EdgeInsets.all(0),
+                  child: n.Text(tp.toString())
+                    ..fontSize = 24
+                    ..m = 0,
+                ),
+              ],
+            )
+              ..alignBottomCenter
+              ..mainAxisAlignment = MainAxisAlignment.center,
+            n.Button(
+              n.Icon(Icons.arrow_right_outlined)
+                ..color = ThemeColors.foreground,
+            )
+              ..onPressed = () {
+                ref.read(timePointsNotifier.notifier).editNext();
+              }
+              ..color = ThemeColors.foreground
+              ..rounded = 8
+              ..p = 0
+              ..m = 0
+              ..splash = ThemeColors.mutedForeground.withOpacity(0.1)
+              ..bg = ThemeColors.white,
+          ])
+            ..crossAxisAlignment = CrossAxisAlignment.center
+            ..spaceBetween,
         ])
       ])
         ..wFull
-        ..py = 16
+        ..p = 8
         ..crossAxisAlignment = CrossAxisAlignment.start
         ..mainAxisAlignment = MainAxisAlignment.start
         ..gap = 4,
@@ -168,7 +194,8 @@ class Bar extends HookConsumerWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: n.Text("$value%")
-              ..color = ThemeColors.zinc.shade500
+              ..color = ThemeColors.zinc
+              ..fontWeight = FontWeight.w900
               ..ml = 8
               ..fontSize = 12,
           ),
@@ -196,29 +223,6 @@ class Bar extends HookConsumerWidget {
     );
 
     // random value
-    return Expanded(
-      child: SfSliderTheme(
-        data: SfSliderThemeData(),
-        child: SfSlider(
-          min: 0.0,
-          max: 100.0,
-          value: value,
-          enableTooltip: true,
-          minorTicksPerInterval: 1,
-          activeColor: ledColor[color],
-          inactiveColor: ledColor[color]!.withOpacity(0.3),
-          stepSize: 1,
-          tooltipShape: SfRectangularTooltipShape(),
-          tooltipTextFormatterCallback:
-              (dynamic actualValue, String formattedText) {
-            return '$formattedText%';
-          },
-          onChanged: (dynamic value) {
-            onChange!(value);
-          },
-        ),
-      ),
-    );
   }
 }
 
