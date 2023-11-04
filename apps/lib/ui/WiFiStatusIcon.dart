@@ -64,12 +64,6 @@ class _WiFiStatusIconState extends ConsumerState<WiFiStatusIcon> {
       initialData: false,
     );
 
-    useEffect(() {
-      print("did mount");
-
-      return null;
-    });
-
     final ok = stream.data == 1;
 
     return InkWell(
@@ -83,7 +77,7 @@ class _WiFiStatusIconState extends ConsumerState<WiFiStatusIcon> {
         left: 16,
         child: n.Icon(
           ok ? Icons.wifi : Icons.wifi_off,
-          color: ok ? Colors.blueAccent : ThemeColors.danger,
+          color: ok ? ThemeColors.zinc : ThemeColors.danger,
           size: 24,
         ),
       ),
