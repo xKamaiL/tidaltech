@@ -57,7 +57,7 @@ class _WiFiSettingPagesState extends ConsumerState<WiFiSettingPages> {
 
     useEffect(() {
       ref.read(bleManagerProvider.notifier).getWifiSSID().then((value) => {
-            if (value.length > 1) {name.text = value}
+            if (value.length > 1) {name.text = value.trim()}
           });
       return null;
     }, []);

@@ -340,10 +340,8 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
       return 0;
     }
     if (result[0] == 0) {
-      ref.read(iconStatusProvider.notifier).setWifi(false);
       return 0;
     }
-    ref.read(iconStatusProvider.notifier).setWifi(true);
     return 1;
   }
 

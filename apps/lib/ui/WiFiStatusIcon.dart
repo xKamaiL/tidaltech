@@ -25,13 +25,6 @@ class WiFiStatusIcon extends StatefulHookConsumerWidget {
 class _WiFiStatusIconState extends ConsumerState<WiFiStatusIcon> {
   @override
   Widget build(BuildContext context) {
-    final ok = ref.watch(iconStatusProvider.select((value) => value.wifi));
-
-    useEffect(() {
-      ref.read(bleManagerProvider.notifier).getWifiStatus();
-      return null;
-    }, []);
-
     return InkWell(
       onTap: () async {
         context.push("/wifi-settings");
@@ -42,8 +35,8 @@ class _WiFiStatusIconState extends ConsumerState<WiFiStatusIcon> {
         bottom: 8,
         left: 16,
         child: n.Icon(
-          ok ? Icons.wifi : Icons.wifi_off,
-          color: ok ? ThemeColors.zinc : ThemeColors.danger,
+          Icons.wifi,
+          color: ThemeColors.zinc,
           size: 24,
         ),
       ),

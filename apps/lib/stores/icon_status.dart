@@ -10,11 +10,6 @@ class IconStatus {
 class IconStatusNotifier extends StateNotifier<IconStatus> {
   IconStatusNotifier(super.state);
 
-  void setWifi(bool value) {
-    state.wifi = value;
-    state = state;
-  }
-
   void setBluetooth(bool value) {
     state.bluetooth = value;
     state = state;
