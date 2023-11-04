@@ -94,6 +94,24 @@ class DeviceItem {
       _$DeviceItemFromJson(json);
 
   Map<String, dynamic> toJson() => _$DeviceItemToJson(this);
+
+  copyWith({
+    String? id,
+    String? name,
+    String? pairUserId,
+    DateTime? pairAt,
+    DateTime? createdAt,
+    DeviceProperties? properties,
+  }) {
+    return DeviceItem(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      pairUserId: pairUserId ?? this.pairUserId,
+      pairAt: pairAt ?? this.pairAt,
+      createdAt: createdAt ?? this.createdAt,
+      properties: properties ?? this.properties,
+    );
+  }
 }
 
 @JsonSerializable()

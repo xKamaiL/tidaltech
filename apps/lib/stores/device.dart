@@ -106,8 +106,7 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
     return res.error!.message ?? "unknown error";
   }
 
-  Future<void>
-  setMode(LightingMode mode) async {
+  Future<void> setMode(LightingMode mode) async {
     await api.updateMode(UpdateModeParam(
       mode: mode == LightingMode.feed ? "schedule" : "manual",
     ));
@@ -118,10 +117,11 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
       color: rgb,
     ));
     final x = state;
-    x.device = x.device!.properties.copyWith(
-      color: rgb,
+    x.device = x.device!.copyWith(
+      properties: x.device!.properties.copyWith(
+        color: rgb,
+      ),
     );
-
     state = state;
   }
 
@@ -151,7 +151,6 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
       debugPrint("updateSchedule: ${res.error?.message}");
       return;
     }
-
   }
 
 //
