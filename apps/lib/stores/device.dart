@@ -122,7 +122,7 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
         color: rgb,
       ),
     );
-    state = state;
+    state = x;
   }
 
   Future<void> updateSchedule({required List<TimePoint> timePoints}) async {
