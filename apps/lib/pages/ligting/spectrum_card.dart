@@ -22,9 +22,7 @@ class SpectrumCard extends HookConsumerWidget {
           ..size = 48,
         n.Box(
           n.Text(
-            tps.isEmpty
-                ? "Schedule is empty"
-                : "Select a time point to edit",
+            tps.isEmpty ? "Schedule is empty" : "Select a time point to edit",
           )
             ..color = ThemeColors.mutedForeground
             ..center,
@@ -125,6 +123,8 @@ class SpectrumCard extends HookConsumerWidget {
                                 mode: CupertinoDatePickerMode.time,
                                 use24hFormat: true,
                                 minuteInterval: 5,
+                                maximumDate: DateTime(0, 0, 0, 23, 50),
+                                minimumDate: DateTime(0, 0, 0, 0, 10),
                                 // This is called when the user changes the time.
                                 onDateTimeChanged: (DateTime newTime) {
                                   ref.read(timePointsNotifier.notifier).update(
