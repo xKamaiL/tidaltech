@@ -29,7 +29,6 @@ class _WiFiStatusIconState extends ConsumerState<WiFiStatusIcon> {
       {bool onStart = false}) {
     var result = Timer.periodic(duration, callback);
     if (onStart) {
-      print("onStart");
       isFirst = false;
       // Asynchronous "immediate" callback as event.
       Timer(Duration.zero, () {

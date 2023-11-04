@@ -8,21 +8,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tidal_tech/constants/ble_services_ids.dart';
 import 'package:tidal_tech/proto/message.pb.dart';
 import 'package:tidal_tech/providers/feeder.dart';
-import 'package:tidal_tech/providers/lighting.dart';
+import 'package:tidal_tech/stores/icon_status.dart';
 import 'package:tidal_tech/stores/lighting.dart';
 
 const String bleName = "TIDAL";
-
-class TidalDeviceFilter {
-  final String name;
-  final String serviceUUID;
-
-  TidalDeviceFilter(this.name, this.serviceUUID);
-
-  static bool ok(BluetoothDevice device) {
-    return device.platformName.startsWith(bleName);
-  }
-}
 
 @immutable
 class BLEManager extends Equatable {
@@ -30,13 +19,12 @@ class BLEManager extends Equatable {
 
   final List<BluetoothDevice> scanResults;
 
+  // store current paired device
   final BluetoothDevice? connectedDevice;
   final String connectedDeviceId;
 
   final bool isScanning;
   final bool isReconnecting;
-
-  final bool isOnline;
 
   bool get isConnected => connectedDevice != null;
 
@@ -46,9 +34,13 @@ class BLEManager extends Equatable {
 
   List<BluetoothDevice> get knownDevices => scanResults;
 
-  const BLEManager(this.scanResults, this.connectedDevice,
-      this.connectedDeviceId, this.isScanning, this.isReconnecting,
-      {this.isOnline = false});
+  const BLEManager(
+    this.scanResults,
+    this.connectedDevice,
+    this.connectedDeviceId,
+    this.isScanning,
+    this.isReconnecting,
+  );
 
   BLEManager copyWith({
     List<BluetoothDevice>? scanResults,
@@ -56,7 +48,6 @@ class BLEManager extends Equatable {
     String? connectedDeviceId,
     bool? isScanning,
     bool? isReconnecting,
-    bool? isOnline,
   }) {
     return BLEManager(
       scanResults ?? this.scanResults,
@@ -64,7 +55,6 @@ class BLEManager extends Equatable {
       connectedDeviceId ?? this.connectedDeviceId,
       isScanning ?? this.isScanning,
       isReconnecting ?? this.isReconnecting,
-      isOnline: isOnline ?? this.isOnline,
     );
   }
 
@@ -76,42 +66,60 @@ class BLEManager extends Equatable {
         connectedDeviceId,
         isScanning,
         isReconnecting,
-        isOnline,
       ];
 }
 
 final bleManagerProvider =
     StateNotifierProvider<BLEManagerProvider, BLEManager>((ref) {
 //
-  return BLEManagerProvider();
+  return BLEManagerProvider(ref);
 });
 
 class BLEManagerProvider extends StateNotifier<BLEManager> {
-  BLEManagerProvider() : super(const BLEManager([], null, "", false, false));
+  Ref ref;
 
-  void init() {
-    debugPrint("init BLEManagerProvider");
-    FlutterBluePlus.scanResults.listen((event) {
-      for (final result in event) {
-        addScanResult(result);
-      }
-    });
-  }
+  BLEManagerProvider(
+    this.ref,
+  ) : super(const BLEManager([], null, "", false, false));
 
   Future<void> stopScan() async {
     await FlutterBluePlus.stopScan();
     state = state.copyWith(isScanning: false);
   }
 
+  // reconnect
+  // run when user click on bluetooth icon
   void reconnect() {
-    if (state.connectedDevice != null) return;
-    debugPrint("reconnecting");
-    state = state.copyWith(isReconnecting: true);
-    FlutterBluePlus.startScan();
+    if (state.isReconnecting) return;
+    state = state.copyWith(isReconnecting: true, scanResults: []);
+
+    final alreadyConn = FlutterBluePlus.connectedDevices.where(
+        (element) => element.remoteId.toString() == state.connectedDeviceId);
+    if (alreadyConn.isNotEmpty) {
+      state = state.copyWith(
+        connectedDevice: alreadyConn.first,
+        isReconnecting: false,
+      );
+      connect();
+      return;
+    }
+    // start scan
+    final s = FlutterBluePlus.scanResults.listen((event) {
+      for (final result in event) {
+        addScanResult(result);
+      }
+    });
+    debugPrint("start reconnect...");
+    startScan();
+
+    Future.delayed(const Duration(seconds: 5)).then((value) {
+      s.cancel();
+      state = state.copyWith(isReconnecting: false);
+      debugPrint("reconnect done");
+    });
   }
 
   void startScan() async {
-    debugPrint("start scan...");
     if (Platform.isAndroid) {
       FlutterBluePlus.turnOn();
     }
@@ -123,43 +131,32 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
   void startConnect(BluetoothDevice device) async {
     await stopScan();
     device.connect();
-    state = state.copyWith(connectedDevice: device, isOnline: true);
-  }
-
-  void initConnection() {
-    if (state.connectedDevice == null) return;
-    state.connectedDevice?.connectionState
-        .listen((BluetoothConnectionState state) async {
-      if (state == BluetoothConnectionState.disconnected) {
-        // TODO:
-        // 1. typically, start a periodic timer that tries to
-        //    periodically reconnect, or just call connect() again right now
-        // 2. you must always re-discover services after disconnection!
-        // 3. you should cancel subscriptions to all characteristics you listened to
-      }
-    });
+    state = state.copyWith(connectedDevice: device);
   }
 
   void addScanResult(ScanResult s) async {
-    if (s.device.localName.isEmpty) return;
-    if (state.scanResults
-        .any((element) => element.remoteId == s.device.remoteId)) {
-      return;
-    }
-    if (!s.device.localName.startsWith(bleName)) return;
-
+    if (s.device.platformName.isEmpty) return;
     // if we have connected device are set, we will stop scanning
     // and connect to that device
-    if (s.device.remoteId.toString() == state.connectedDeviceId &&
-        state.isReconnecting) {
+
+    if (s.device.remoteId.toString() == state.connectedDeviceId) {
       stopScan();
       state = state.copyWith(
         connectedDevice: s.device,
         isReconnecting: false,
-        isOnline: true,
       );
+      connect();
       return;
     }
+    if (state.scanResults
+        .any((element) => element.remoteId == s.device.remoteId)) {
+      return;
+    }
+
+    if (!s.device.platformName.startsWith(bleName)) {
+      return;
+    }
+
     state = state.copyWith(scanResults: [...state.scanResults, s.device]);
   }
 
@@ -179,49 +176,13 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
   void connect() async {
     final conn = state.connectedDevice;
     if (conn == null) return;
+    debugPrint(
+        "BLEManagerProvider: connect to device ${conn.remoteId.toString()}");
     await conn.connect(
       timeout: const Duration(seconds: 5),
       autoConnect: false,
     );
-  }
-
-  void healthCheck() async {
-    final conn = state.connectedDevice;
-    if (conn == null) {
-      reconnect();
-      return;
-    }
-    await stopScan();
-
-    final s = await conn.connectionState.first;
-    if (s == BluetoothConnectionState.connected) {
-      setOnline();
-      return;
-    }
-    try {
-      //
-      // FlutterBluePlus.setLogLevel(LogLevel.verbose);
-
-      await conn.connect(
-        timeout: const Duration(seconds: 15),
-        autoConnect: false,
-      );
-
-      setOnline();
-
-      state = state.copyWith(isReconnecting: false);
-    } catch (e) {
-      setOffline();
-      // state = state.copyWith(isReconnecting: false);
-    }
-  }
-
-  void setOnline() {
-    state = state.copyWith(isOnline: true);
-  }
-
-  void setOffline() {
-    state = state.copyWith(isOnline: false);
+    ref.read(iconStatusProvider.notifier).setBluetooth(true);
   }
 
   forgot() async {
@@ -235,20 +196,20 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
       String serviceGuid, String characteristicGuid) async {
     final conn = state.connectedDevice;
     if (conn == null) {
-      debugPrint("conn is null");
+      debugPrint("_callCharacteristic: conn is null");
       return null;
     }
     await stopScan();
 
     final connState = await conn.connectionState.first;
     if (connState != BluetoothConnectionState.connected) {
-      debugPrint("conn is not connected");
+      debugPrint("_callCharacteristic: conn is not connected");
       await conn.connect();
     }
     await conn.discoverServices();
 
     if (conn.servicesList == null) {
-      debugPrint("services list is null");
+      debugPrint("_callCharacteristic: services list is null");
       return null;
     }
 
@@ -256,7 +217,7 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
         ?.where((element) => element.serviceUuid.toString() == serviceGuid)
         .first;
     if (service == null) {
-      debugPrint("service is null");
+      debugPrint("_callCharacteristic: service is null");
       return null;
     }
 
@@ -269,28 +230,6 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
     } catch (e) {
       return null;
     }
-  }
-
-  void checkRTC() async {
-    debugPrint("check RTC");
-
-    final c =
-        await _callCharacteristic(BLEServices.rtc, RTCService.getCurrentTime);
-
-    if (c == null) return;
-
-    try {
-      final result = await c.read();
-      // convert into string
-      final str = String.fromCharCodes(result);
-      debugPrint("RTC: $str");
-    } catch (e) {
-      debugPrint("RTC: $e");
-    }
-
-    // parse result to Time
-
-    return;
   }
 
   void sendTimePoints({
