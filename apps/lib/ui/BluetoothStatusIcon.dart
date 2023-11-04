@@ -43,14 +43,20 @@ class _BluetoothStatusIconState extends ConsumerState<BluetoothStatusIcon> {
     final stream = useStream(
       FlutterBluePlus.connectedDevices.isNotEmpty
           ? FlutterBluePlus.connectedDevices[0].connectionState
-          : const Stream.empty(),
+          : Stream.value(null),
       initialData: null,
     );
 
+    // BLE is disconnected
     if (stream.data != null &&
         stream.data != BluetoothConnectionState.connected) {
-      debugPrint("bluetooth disconnected");
       ref.read(iconStatusProvider.notifier).setBluetooth(false);
+    }
+    // BLE is connected
+    if (stream.data != null &&
+        stream.data == BluetoothConnectionState.connected &&
+        !isConnect) {
+      ref.read(iconStatusProvider.notifier).setBluetooth(true);
     }
 
     return InkWell(
