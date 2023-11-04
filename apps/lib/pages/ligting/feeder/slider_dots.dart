@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:tidal_tech/providers/lighting.dart';
@@ -8,8 +7,8 @@ import 'package:niku/namespace.dart' as n;
 
 class SliderDots extends HookConsumerWidget {
   const SliderDots({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   static const double min = 0;
   static const double max = 1440;
@@ -23,31 +22,6 @@ class SliderDots extends HookConsumerWidget {
     );
 
     var active = ref.watch(timePointEditingProvider)?.id;
-
-    void normalizeSlider() {
-      // find time point that duplicate
-      for (var i = 0; i < points.length; i++) {
-        final point = points[i];
-        for (var j = 0; j < points.length; j++) {
-          final point2 = points[j];
-          if (i == j) {
-            continue;
-          }
-          if (point.hour == point2.hour && point.minute == point2.minute) {
-            int minutes = point.minutes();
-            minutes += 40;
-            // adjust +- 30 minutes
-            final newPoint = point.copyWith(
-              hour: minutes ~/ 60,
-              minute: minutes % 60,
-            );
-            ref.read(timePointEditingProvider.notifier).set(newPoint);
-            ref.read(timePointsNotifier.notifier).update(i, newPoint);
-            return;
-          }
-        }
-      }
-    }
 
     void updateSlider(double dx, double maxWidth) {
       final tapPosition = dx;

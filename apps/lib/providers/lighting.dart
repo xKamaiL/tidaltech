@@ -77,14 +77,33 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
       return;
     }
 
-    final newState = state.map((e) {
+    // check if new value is duplicate hh:mm with other time point
+    final duplicate = state.where((element) {
+      return element.id != id &&
+          element.hour == tp.hour &&
+          element.minute == tp.minute;
+    }).toList();
+    if (duplicate.isNotEmpty) {
+      return;
+    }
+
+    final newTps = state.map((e) {
       if (e.id == id) {
-        e = tp;
+        return tp;
       }
       return e;
-    });
+    }).toList();
 
-    state = newState.toList();
+    // sort
+    newTps.sort((a, b) => a.minutes().compareTo(b.minutes()));
+
+    // update id
+    final newState = newTps.map((e) {
+      final id = newTps.indexOf(e);
+      return e.copyWith(id: id);
+    }).toList();
+
+    state = newState;
   }
 
   TimePoint? findById(int id) {
@@ -120,7 +139,6 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
 
     // update id
     final newState = tmp.map((e) {
-
       final id = tmp.indexOf(e);
       print(id);
       return e.copyWith(id: id);
