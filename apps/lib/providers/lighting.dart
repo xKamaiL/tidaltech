@@ -41,9 +41,17 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
 
     int minutes = state.last.minutes();
 
-    if (minutes == 1440) return;
+    debugPrint('minutes: $minutes');
 
-    minutes += 60 * 3; // 3 hours
+    if (minutes >= 1440) {
+      return;
+    }
+
+    if (state.length <= 5) {
+      minutes += 60 * 3; // 3 hours
+    } else {
+      minutes += 60 * 1; // 1 hour
+    }
 
     final hour = (minutes / 60).floor();
     final minute = minutes % 60;
