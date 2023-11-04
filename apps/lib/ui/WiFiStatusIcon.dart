@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -20,13 +22,37 @@ class WiFiStatusIcon extends StatefulHookConsumerWidget {
 }
 
 class _WiFiStatusIconState extends ConsumerState<WiFiStatusIcon> {
+  Timer? timer;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    timer = Timer.periodic(const Duration(seconds: 10), (Timer t) {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer?.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final status =
-        useFuture(ref.read(bleManagerProvider.notifier).getWifiStatus());
-    status.connectionState == ConnectionState.active ||
-        status.connectionState == ConnectionState.waiting;
+    final ok = useState(false);
     useEffect(() {
+      ref.read(bleManagerProvider.notifier).getWifiStatus().then((value) => {
+            if (value == 1)
+              {
+                ok.value = true,
+              }
+            else
+              {
+                ok.value = false,
+              }
+          });
       return null;
     }, []);
 
@@ -40,8 +66,8 @@ class _WiFiStatusIconState extends ConsumerState<WiFiStatusIcon> {
         bottom: 8,
         left: 16,
         child: n.Icon(
-          status.data == 1 ? Icons.wifi : Icons.wifi_off,
-          color: status.data == 1 ? Colors.blueAccent : Colors.white,
+          ok.value ? Icons.wifi : Icons.wifi_off,
+          color: ok.value ? Colors.blueAccent : ThemeColors.danger,
           size: 24,
         ),
       ),

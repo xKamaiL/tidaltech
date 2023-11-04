@@ -156,6 +156,10 @@ class _WiFiSettingPagesState extends ConsumerState<WiFiSettingPages> {
                               await ref
                                   .read(bleManagerProvider.notifier)
                                   .disconnectWifi();
+                              //
+
+                              setState(() {});
+
                               Navigator.of(context).pop();
                             },
                             child: const Text('Confirm'),

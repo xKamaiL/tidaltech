@@ -23,24 +23,26 @@ class BluetoothStatusIcon extends StatefulHookConsumerWidget {
 
 class _BluetoothStatusIconState extends ConsumerState<BluetoothStatusIcon> {
   _BluetoothStatusIconState() : super();
+  Timer? timer;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    FlutterBluePlus.scanResults.listen((event) {
-      for (final result in event) {
-        if (result.device.platformName.startsWith("TIDAL")) {
-          ref.read(bleManagerProvider.notifier).addScanResult(result);
-        }
-      }
+    timer = Timer.periodic(const Duration(seconds: 10), (Timer t) {
+      ref.read(bleManagerProvider.notifier).healthCheck();
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer?.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
     final manager = ref.read(bleManagerProvider.notifier);
-    final device = ref.watch(bleManagerProvider);
 
     final state = useStream<BluetoothConnectionState>(
       FlutterBluePlus.connectedDevices.isEmpty
