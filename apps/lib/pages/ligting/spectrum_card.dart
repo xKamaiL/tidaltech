@@ -13,6 +13,7 @@ class SpectrumCard extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tp = ref.watch(timePointEditingProvider);
+    final tps = ref.watch(timePointsNotifier);
 
     if (tp == null) {
       return n.Column([
@@ -20,7 +21,11 @@ class SpectrumCard extends HookConsumerWidget {
           ..color = ThemeColors.zinc.shade400
           ..size = 48,
         n.Box(
-          n.Text("Schedule is empty")
+          n.Text(
+            tps.isEmpty
+                ? "Schedule is empty"
+                : "Select a time point to edit",
+          )
             ..color = ThemeColors.mutedForeground
             ..center,
         )..px = 24,
