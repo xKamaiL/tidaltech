@@ -176,3 +176,35 @@ void on_wifi_read_ip(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &conn
     printf("onWifiReadIP: %s\n", ip);
     pCharacteristic->setValue(ip);
 }
+
+void on_wifi_disconnect(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {
+    esp_err_t err = esp_wifi_disconnect();
+    if (err != ESP_OK) {
+        printf("onWifiDisconnect: disconnect failed\n");
+        return;
+    }
+    nvs_handle_t nvs_handle;
+    err = nvs_open("nvs.net80211", NVS_READWRITE, &nvs_handle);
+    if (err == ESP_OK) {
+        nvs_erase_key(nvs_handle, "sta.authmode");
+        nvs_erase_key(nvs_handle, "sta.ssid");
+        nvs_erase_key(nvs_handle, "sta.passwd");
+        nvs_close(nvs_handle);
+        printf("onWifiDisconnect: disconnect success\n");
+    } else {
+        ESP_LOGE(TAG, "Error (%s) opening NVS handle for wifi_config", esp_err_to_name(err));
+    }
+    wifi_config_t conf;
+    esp_err_t ret;
+    ret = esp_wifi_get_config(WIFI_IF_STA, &conf);
+    if (ret != ESP_OK) {
+        printf("onWifiDisconnect: get config failed\n");
+        return;
+    }
+    conf.sta.ssid[0] = '\0';
+    conf.sta.password[0] = '\0';
+    esp_wifi_set_config(WIFI_IF_STA, &conf);
+    esp_wifi_disconnect();
+
+    esp_wifi_start();
+}

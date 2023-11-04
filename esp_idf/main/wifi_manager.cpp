@@ -31,10 +31,12 @@ static void smartconfig_example_task(void* parm);
 static void event_handler(void* arg, esp_event_base_t event_base,
                           int32_t event_id, void* event_data) {
     if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
-        //
+        xTaskCreate(smartconfig_example_task, "smartconfig_example_task", 4096, NULL, 3, NULL);
     } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED) {
         esp_wifi_connect();
         xEventGroupClearBits(s_wifi_event_group, CONNECTED_BIT);
+        xTaskCreate(smartconfig_example_task, "smartconfig_example_task", 4096, NULL, 3, NULL);
+
     } else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
         printf("Got IP\n");
         xEventGroupSetBits(s_wifi_event_group, CONNECTED_BIT);
@@ -102,19 +104,21 @@ void initialise_wifi(void) {
     ret = esp_wifi_get_config(WIFI_IF_STA, &conf);
     if (ret == ESP_OK) {
         ESP_LOGI(TAG, "Wifi configuration already stored in flash partition called NVS");
-        ESP_LOGI(TAG, "%s", conf.sta.ssid);
-        ESP_LOGI(TAG, "%s", conf.sta.password);
-        ESP_ERROR_CHECK(esp_wifi_disconnect());
-        ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &conf));
-        esp_wifi_connect();
+        if (conf.sta.ssid[0] == '\0') {
+            ESP_LOGI(TAG, "Wifi configuration not found, starting smartconfig");
+        } else {
+            ESP_LOGI(TAG, "Wifi configuration found, connecting to %s", conf.sta.ssid);
+            ESP_ERROR_CHECK(esp_wifi_disconnect());
+            ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &conf));
+            esp_wifi_connect();
+        }
     } else {
         ESP_LOGI(TAG, "Wifi configuration not found, starting smartconfig");
-        //
-        xTaskCreate(smartconfig_example_task, "smartconfig_example_task", 4096, NULL, 3, NULL);
     }
 }
 
 static void smartconfig_example_task(void* parm) {
+    printf("smartconfig_example_task\n");
     EventBits_t uxBits;
     ESP_ERROR_CHECK(esp_smartconfig_set_type(SC_TYPE_ESPTOUCH));
     smartconfig_start_config_t cfg = SMARTCONFIG_START_CONFIG_DEFAULT();
