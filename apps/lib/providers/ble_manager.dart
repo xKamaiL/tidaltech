@@ -20,7 +20,7 @@ class TidalDeviceFilter {
   TidalDeviceFilter(this.name, this.serviceUUID);
 
   static bool ok(BluetoothDevice device) {
-    return device.localName.startsWith(bleName);
+    return device.platformName.startsWith(bleName);
   }
 }
 
@@ -354,7 +354,6 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
         BLEServices.color, ColorService.setStaticColor);
     // send to device
     if (c == null) {
-
       return;
     }
     final req = SetAmbientRequest();
@@ -364,6 +363,60 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
     req.b = rgb & 0xFF;
     // print value
     c.write(req.writeToBuffer(), withoutResponse: true);
+  }
+
+  Future<String> getWifiIP() async {
+    final c = await _callCharacteristic(
+        BLEServices.deviceInformation, DeviceInformationService.getWifiIP);
+    // send to device
+    if (c == null) {
+      return "";
+    }
+    final result = await c.read();
+    // convert into string
+    final str = String.fromCharCodes(result);
+    return str;
+  }
+
+  Future disconnectWifi() async {
+    final c = await _callCharacteristic(
+        BLEServices.deviceInformation, DeviceInformationService.disconnectWifi);
+    // send to device
+    if (c == null) {
+      return;
+    }
+    await c.write([0], withoutResponse: true);
+  }
+
+  Future<int> getWifiStatus() async {
+    final c = await _callCharacteristic(
+        BLEServices.deviceInformation, DeviceInformationService.getWifiStatus);
+    // send to device
+    if (c == null) {
+      return 0;
+    }
+    final result = await c.read();
+    // convert into string
+    if (result.isEmpty) {
+      return 0;
+    }
+    if (result[0] == 0) {
+      return 0;
+    }
+    return 1;
+  }
+
+  Future<String> getWifiSSID() async {
+    final c = await _callCharacteristic(
+        BLEServices.deviceInformation, DeviceInformationService.getWifiSSID);
+    // send to device
+    if (c == null) {
+      return "";
+    }
+    final result = await c.read();
+    // convert into string
+    final str = String.fromCharCodes(result);
+    return str;
   }
 
 //

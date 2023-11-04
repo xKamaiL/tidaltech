@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:esptouch_smartconfig/esptouch_smartconfig.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:niku/namespace.dart' as n;
+import 'package:tidal_tech/providers/ble_manager.dart';
 import 'package:tidal_tech/styles/button.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
@@ -54,9 +56,18 @@ class _WiFiSettingPagesState extends ConsumerState<WiFiSettingPages> {
     final password = useTextEditingController();
 
     useEffect(() {
-      //
+      ref.read(bleManagerProvider.notifier).getWifiSSID().then((value) => {
+            if (value.length > 1) {name.text = value}
+          });
       return null;
     }, []);
+
+    fetchWifiStatus() async {
+      await Future.delayed(const Duration(seconds: 1));
+      int s = await ref.read(bleManagerProvider.notifier).getWifiStatus();
+      String ipAddr = await ref.read(bleManagerProvider.notifier).getWifiIP();
+      return WifiResult(s, ipAddr);
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -80,17 +91,96 @@ class _WiFiSettingPagesState extends ConsumerState<WiFiSettingPages> {
       ),
       backgroundColor: ThemeColors.zinc.shade100,
       body: FutureBuilder(
-        future: _connectivity.checkConnectivity(),
+        future: fetchWifiStatus(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: CupertinoActivityIndicator(),
             );
           }
-          if (snapshot.data != ConnectivityResult.wifi) {
-            return const Center(
-              child: Text('Please connect to WiFi'),
-            );
+          bool ok = snapshot.data?.status == 1;
+          String ipAddr = snapshot.data?.ipAddr ?? "-";
+
+          if (ok) {
+            return n.Column([
+              n.Row(
+                [
+                  n.Text("Wifi Status")..fontSize = 20,
+                  n.Row([
+                    n.Icon(
+                      !ok ? Icons.cancel_outlined : Icons.check_circle_outline,
+                      size: 20,
+                      color: ok ? ThemeColors.primary : ThemeColors.danger,
+                    ),
+                    n.Text(ok ? "Connected" : "Disconnected")
+                      ..fontSize = 20
+                      ..color = ok ? ThemeColors.primary : ThemeColors.danger,
+                  ])
+                    ..gap = 4,
+                ],
+              )..spaceBetween,
+              n.Row(
+                [
+                  n.Text("IP")..fontSize = 20,
+                  n.Row([
+                    n.Text(ipAddr)
+                      ..fontSize = 20
+                      ..color = ThemeColors.foreground,
+                  ])
+                    ..gap = 4,
+                ],
+              )..spaceBetween,
+              n.Box()..h = 4,
+              n.Button(
+                'Disconnect'.n,
+                onPressed: () async {
+                  //
+
+                  n.showNikuDialog(
+                    context: context,
+                    builder: (context) {
+                      return CupertinoAlertDialog(
+                        title: const Text("Are you sure?"),
+                        content: const Text(
+                            "Device will be disconnected from the current WiFi network."),
+                        actions: [
+                          CupertinoDialogAction(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            isDestructiveAction: true,
+                            child: const Text('Cancel'),
+                          ),
+                          CupertinoDialogAction(
+                            onPressed: () async {
+                              await ref
+                                  .read(bleManagerProvider.notifier)
+                                  .disconnectWifi();
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('Confirm'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              )
+                ..apply = XButtonStyle.confirm(
+                  loading: loading.value,
+                  label: "Disconnect",
+                )
+                ..color = ThemeColors.zinc
+                ..bg = ThemeColors.zinc.shade200
+                ..splash = ThemeColors.zinc.shade200.withOpacity(0.1)
+                ..fullWidth,
+            ])
+              ..wFull
+              ..py = 8
+              ..gap = 16
+              // ..bg = ThemeColors.danger
+              ..mt = 16
+              ..m = 8;
           }
 
           return SingleChildScrollView(
@@ -201,4 +291,11 @@ class _WiFiSettingPagesState extends ConsumerState<WiFiSettingPages> {
       ),
     );
   }
+}
+
+class WifiResult {
+  final int status;
+  final String ipAddr;
+
+  WifiResult(this.status, this.ipAddr);
 }

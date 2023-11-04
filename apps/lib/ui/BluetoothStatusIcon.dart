@@ -25,6 +25,19 @@ class _BluetoothStatusIconState extends ConsumerState<BluetoothStatusIcon> {
   _BluetoothStatusIconState() : super();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    FlutterBluePlus.scanResults.listen((event) {
+      for (final result in event) {
+        if (result.device.platformName.startsWith("TIDAL")) {
+          ref.read(bleManagerProvider.notifier).addScanResult(result);
+        }
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final manager = ref.read(bleManagerProvider.notifier);
     final device = ref.watch(bleManagerProvider);
@@ -53,9 +66,8 @@ class _BluetoothStatusIconState extends ConsumerState<BluetoothStatusIcon> {
                   "Cannot connect to device. Please check light indicator on device.",
             ),
           );
+          manager.reconnect();
         }
-        if (device.isReconnecting) return;
-        manager.reconnect();
       },
       child: n.Padding(
         top: 8,

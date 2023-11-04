@@ -21,6 +21,7 @@ class ThemeColors {
   static const foreground = Color(0xFF0f172a);
   static const muted = Color(0xFFf1f5f9);
   static const mutedForeground = Color(0xFF64748b);
+  static const secondary = Color(0xffF4F4F5);
   static const MaterialColor grey = MaterialColor(0xFF9ca3af, <int, Color>{
     50: Color(0xFFf9fafb),
     100: Color(0xFFf3f4f6),
