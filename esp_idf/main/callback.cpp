@@ -140,7 +140,6 @@ void on_wifi_status(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connI
         }
         return;
     }
-    printf("onWifiStatus: connected\n");
     pCharacteristic->setValue(1);
 }
 

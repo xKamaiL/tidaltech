@@ -40,19 +40,27 @@ class _BluetoothStatusIconState extends ConsumerState<BluetoothStatusIcon> {
     timer?.cancel();
   }
 
+  emptyStream() {
+    return Stream<BluetoothConnectionState>.periodic(
+      const Duration(seconds: 5),
+      (x) {
+        return BluetoothConnectionState.disconnected;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final manager = ref.read(bleManagerProvider.notifier);
 
     final state = useStream<BluetoothConnectionState>(
       FlutterBluePlus.connectedDevices.isEmpty
-          ? null
+          ? emptyStream()
           : FlutterBluePlus.connectedDevices[0].connectionState,
       initialData: BluetoothConnectionState.disconnected,
     );
 
-    final ok = state.connectionState == ConnectionState.active ||
-        state.connectionState == ConnectionState.waiting;
+    final ok = state.data == BluetoothConnectionState.connected;
 
     final isConnect = ok;
 

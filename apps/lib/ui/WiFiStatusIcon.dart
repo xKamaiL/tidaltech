@@ -23,38 +23,54 @@ class WiFiStatusIcon extends StatefulHookConsumerWidget {
 
 class _WiFiStatusIconState extends ConsumerState<WiFiStatusIcon> {
   Timer? timer;
+  bool isFirst = true;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    timer = Timer.periodic(const Duration(seconds: 10), (Timer t) {
-      setState(() {});
-    });
+  Timer periodicTimer(Duration duration, void Function(Timer timer) callback,
+      {bool onStart = false}) {
+    var result = Timer.periodic(duration, callback);
+    if (onStart) {
+      print("onStart");
+      isFirst = false;
+      // Asynchronous "immediate" callback as event.
+      Timer(Duration.zero, () {
+        if (result.isActive) callback(result);
+      });
+    }
+    return result;
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    timer?.cancel();
+  Stream<int> getWifiStatusAsStream() {
+    StreamController<int> controller = StreamController<int>();
+    Timer timer = periodicTimer(const Duration(seconds: 30), (timer) async {
+      final s = await ref.read(bleManagerProvider.notifier).getWifiStatus();
+      controller.add(s);
+    }, onStart: isFirst);
+
+    controller
+      ..onCancel = () {
+        timer.cancel();
+      }
+      ..onPause = () {
+        timer.cancel();
+      }
+      ..onResume = () {};
+    return controller.stream;
   }
 
   @override
   Widget build(BuildContext context) {
-    final ok = useState(false);
+    final stream = useStream(
+      getWifiStatusAsStream(),
+      initialData: false,
+    );
+
     useEffect(() {
-      ref.read(bleManagerProvider.notifier).getWifiStatus().then((value) => {
-            if (value == 1)
-              {
-                ok.value = true,
-              }
-            else
-              {
-                ok.value = false,
-              }
-          });
+      print("did mount");
+
       return null;
-    }, []);
+    });
+
+    final ok = stream.data == 1;
 
     return InkWell(
       onTap: () async {
@@ -66,8 +82,8 @@ class _WiFiStatusIconState extends ConsumerState<WiFiStatusIcon> {
         bottom: 8,
         left: 16,
         child: n.Icon(
-          ok.value ? Icons.wifi : Icons.wifi_off,
-          color: ok.value ? Colors.blueAccent : ThemeColors.danger,
+          ok ? Icons.wifi : Icons.wifi_off,
+          color: ok ? Colors.blueAccent : ThemeColors.danger,
           size: 24,
         ),
       ),
