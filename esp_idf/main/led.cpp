@@ -140,7 +140,7 @@ void set_duty(LEDLevel leds) {
            leds.warm_white,
            leds.royal_blue,
            leds.ultra_violet,
-           leds.ultra_violet,  //
+           leds.ultra_violet  //
     );
     ledc_set_duty(LEDC_HS_MODE, LED_WHITE, (leds.red / 100) * LEDC_DUTY);
     ledc_set_duty(LEDC_HS_MODE, LED_WARM_WHITE, (leds.green / 100) * LEDC_DUTY);
