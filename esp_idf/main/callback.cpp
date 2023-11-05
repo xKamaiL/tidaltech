@@ -110,6 +110,7 @@ void on_set_color_mode(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &co
         return;
     }
 
+    // output the color
     led_display(obtain_time());
 }
 
@@ -137,6 +138,8 @@ void on_set_ambient(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connI
         printf("on_set_ambient: write ambient failed\n");
         return;
     }
+    // output the color
+    led_display(obtain_time());
 }
 
 void on_wifi_status(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {
