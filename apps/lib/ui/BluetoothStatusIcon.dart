@@ -24,11 +24,22 @@ class BluetoothStatusIcon extends StatefulHookConsumerWidget {
 
 class _BluetoothStatusIconState extends ConsumerState<BluetoothStatusIcon> {
   _BluetoothStatusIconState() : super();
+  Timer? timer;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    final manager = ref.read(bleManagerProvider.notifier);
+    timer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      manager.reconnect();
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer?.cancel();
   }
 
   @override
@@ -67,8 +78,9 @@ class _BluetoothStatusIconState extends ConsumerState<BluetoothStatusIcon> {
             Overlay.of(context),
             const XSnackBar.error(
               message:
-                  "Cannot connect to device. Please check light indicator on device.",
+                  "Reconnecting to device, please wait for a few seconds...",
             ),
+            displayDuration: const Duration(seconds: 2),
           );
           manager.reconnect();
         }

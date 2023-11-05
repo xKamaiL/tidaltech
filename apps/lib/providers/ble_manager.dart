@@ -91,6 +91,7 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
   // run when user click on bluetooth icon
   void reconnect() {
     if (state.isReconnecting) return;
+    debugPrint("reconnect with ${state.connectedDeviceId}");
     state = state.copyWith(isReconnecting: true, scanResults: []);
 
     final alreadyConn = FlutterBluePlus.connectedDevices.where(
@@ -100,7 +101,7 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
         connectedDevice: alreadyConn.first,
         isReconnecting: false,
       );
-      connect();
+      // connect();
       return;
     }
     // start scan
