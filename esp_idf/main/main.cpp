@@ -11,38 +11,39 @@
 #include "nvs_flash.h"
 #include "schedule.h"
 #include "sdkconfig.h"
+#include "time_sync.h"
 #include "wifi_manager.h"  // tidal tech wifi manager
 
 #define NTP_SERVER "pool.ntp.org"
 #include "esp_sntp.h"
 #include "time.h"
 
-static const char *TAG = "Time Sync";
-static void initialize_sntp() {
-    ESP_LOGI(TAG, "Initializing SNTP");
-    sntp_setoperatingmode(SNTP_OPMODE_POLL);
-    sntp_setservername(0, NTP_SERVER);
-    sntp_init();
-}
-
-static void obtain_time() {
-    time_t now = 0;
-    struct tm timeinfo = {0};
-
-    time(&now);
-    localtime_r(&now, &timeinfo);
-
-    // Change to GMT+7
-    timeinfo.tm_hour = timeinfo.tm_hour + 7;
-    if (timeinfo.tm_hour >= 24) {
-        timeinfo.tm_hour = timeinfo.tm_hour - 24;
-    }
-    // Print current time
-    ESP_LOGI(TAG, "Current time: %02d:%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
-}
-
 extern "C" {
 void app_main(void);
+}
+
+void daily_task(void* param) {
+    while (true) {
+        tm now = obtain_time();
+
+        // check if stn is synced
+
+        // Print current time
+        printf("Current time: %02d:%02d:%02d\n", now.tm_hour, now.tm_min, now.tm_sec);
+
+        int next = (60 - now.tm_sec);
+        if (next == 0) {
+            next = 5;  // wait 5 seconds if we are at the top of the minute
+        }
+
+        // sntp_get_sync_status() == SNTP_SYNC_STATUS_IN_PROGRESS
+
+        // output to led with current time condition
+        led_display(now);
+
+        printf("\ndelay for %d seconds\n\n", next);
+        vTaskDelay(pdMS_TO_TICKS(next * 1000));
+    }
 }
 
 void app_main(void) {
@@ -55,5 +56,11 @@ void app_main(void) {
     initialise_wifi();
     initNimble();
     initialize_led();
-    // initialize_sntp();
+
+    xTaskCreate(daily_task, "daily_task", 4096, NULL, 1, NULL);
 }
+
+#include "esp_netif_sntp.h"
+#include "esp_sntp.h"
+#include "esp_system.h"
+#include "lwip/ip_addr.h"
