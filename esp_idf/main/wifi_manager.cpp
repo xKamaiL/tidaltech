@@ -118,11 +118,20 @@ void initialise_wifi(void) {
 }
 
 static void smartconfig_example_task(void* parm) {
-    printf("smartconfig_example_task\n");
+    printf("smartconfig: start task\n");
     EventBits_t uxBits;
-    ESP_ERROR_CHECK(esp_smartconfig_set_type(SC_TYPE_ESPTOUCH));
+    esp_err_t err = esp_smartconfig_set_type(SC_TYPE_ESPTOUCH);
+    if (err != ESP_OK) {
+        printf("smartconfig: set type fail %d\n", err);
+        vTaskDelete(NULL);
+        return;
+    }
     smartconfig_start_config_t cfg = SMARTCONFIG_START_CONFIG_DEFAULT();
-    ESP_ERROR_CHECK(esp_smartconfig_start(&cfg));
+    if (esp_smartconfig_start(&cfg) != ESP_OK) {
+        printf("smartconfig: start fail\n");
+        vTaskDelete(NULL);
+        return;
+    }
     while (1) {
         uxBits = xEventGroupWaitBits(s_wifi_event_group, CONNECTED_BIT | ESPTOUCH_DONE_BIT, true, false, portMAX_DELAY);
         if (uxBits & CONNECTED_BIT) {
