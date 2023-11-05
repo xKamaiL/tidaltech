@@ -22,7 +22,7 @@ import 'package:go_router/go_router.dart';
 import '../../ui/snackbar.dart';
 
 class ScanPage extends ConsumerStatefulWidget {
-  const ScanPage({Key? key}) : super(key: key);
+  const ScanPage({super.key});
 
   @override
   ConsumerState<ScanPage> createState() => _ScanPageState();
@@ -41,7 +41,11 @@ class _ScanPageState extends ConsumerState<ScanPage> {
     // TODO: implement initState
     super.initState();
     final manager = ref.read(bleManagerProvider.notifier);
-
+    FlutterBluePlus.scanResults.listen((event) {
+      for (final device in event) {
+        manager.addScanResult(device);
+      }
+    });
     FlutterBluePlus.adapterState.listen((event) {
       if (event == BluetoothAdapterState.on) {
         manager.startScan();
