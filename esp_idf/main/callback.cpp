@@ -3,9 +3,11 @@
 #include "NimBLEDevice.h"
 #include "esp_log.h"
 #include "esp_wifi.h"
+#include "led.h"
 #include "light_mode.h"
 #include "proto/message.pb-c.h"
 #include "schedule.h"
+#include "time_sync.h"
 
 static const char *TAG = "callback";
 
@@ -108,13 +110,13 @@ void on_set_color_mode(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &co
         return;
     }
 
-    // TODO: trigger some function ?
+    led_display(obtain_time());
 }
 
 void on_set_ambient(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {
     SetAmbientRequest *req = set_ambient_request__unpack(NULL, pCharacteristic->getValue().length(), (uint8_t *)pCharacteristic->getValue().c_str());
     if (req == NULL) {
-        printf("onSetAmbient: decode message failed\n");
+        printf("on_set_ambient: decode message failed\n");
         return;
     }
     int r = req->r;
@@ -122,9 +124,19 @@ void on_set_ambient(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connI
     int b = req->b;
     set_ambient_request__free_unpacked(req, NULL);
 
-    // TODO: change ambient R,G,B color
     // but do not change the current color mode
-    printf("onSetAmbient: %d,%d,%d\n", r, g, b);
+    printf("on_set_ambient: %d,%d,%d\n", r, g, b);
+
+    StaticColor color;
+    color.r = r;
+    color.g = g;
+    color.b = b;
+
+    esp_err_t err = write_static_color_to_nvs(color);
+    if (err != ESP_OK) {
+        printf("on_set_ambient: write ambient failed\n");
+        return;
+    }
 }
 
 void on_wifi_status(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {
