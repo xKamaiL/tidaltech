@@ -112,7 +112,7 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
     debugPrint("start reconnect...");
     startScan();
 
-    Future.delayed(const Duration(seconds: 5)).then((value) {
+    Future.delayed(const Duration(seconds: 30)).then((value) {
       s.cancel();
       state = state.copyWith(isReconnecting: false);
       debugPrint("reconnect done");
@@ -138,8 +138,8 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
     if (s.device.platformName.isEmpty) return;
     // if we have connected device are set, we will stop scanning
     // and connect to that device
-
-    if (s.device.remoteId.toString() == state.connectedDeviceId) {
+    if (s.device.remoteId.toString() == state.connectedDeviceId &&
+        state.isReconnecting) {
       stopScan();
       state = state.copyWith(
         connectedDevice: s.device,
