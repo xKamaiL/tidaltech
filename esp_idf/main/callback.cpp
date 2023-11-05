@@ -98,7 +98,7 @@ void on_set_color_mode(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &co
     Mode mode = req->mode;
     set_color_mode_request__free_unpacked(req, NULL);
 
-    int saveMode = mode == MODE__MODE_MANUAL ? 1 : 0;
+    int saveMode = mode == MODE__MODE_MANUAL ? LIGHT_MODE_MANUAL : LIGHT_MODE_SCHEDULE;
 
     printf("onSetColorMode: %d\n", saveMode);
 
