@@ -30,7 +30,7 @@
 #define LEDC_HS_CH4_GPIO (27)
 #define LEDC_HS_CH5_GPIO (32)
 #define LEDC_HS_CH6_GPIO (33)
-#define LEDC_HS_CH7_GPIO (35)
+#define LEDC_HS_CH7_GPIO (15)
 
 /* Handler class for server events */
 
