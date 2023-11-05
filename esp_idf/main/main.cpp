@@ -133,3 +133,34 @@ Mode *read_color_mode_from_nvs()
 
     return 0;
 }
+
+
+#include <chrono>
+#include <thread>
+#include "GMT+7.h" //file GMT+7.cpp be current time naka 
+#include "schedule.h" // input from schedule.cpp
+
+void checkTimeAndUpdate(NVS& nvs) {     //function check time and update
+    while (true) {
+        
+        std::time_t currentTime = GMT::getCurrentTime(); // getCurrentTime() เป็น function GMT+7.cpp
+
+        // change to hour and minute
+        std::tm* ptm = std::localtime(&currentTime);
+        int currentHour = ptm->tm_hour;
+        int currentMinute = ptm->tm_min;
+
+        // Get scheduled time from schedule.cpp
+        std::pair<int, int> scheduledTime = Schedule::getScheduleTime(); // Assuming getScheduleTime() is a function in schedule.cpp
+
+        // Compare time
+        if (currentHour != scheduledTime.first || currentMinute != scheduledTime.second) {
+            //replace the old time with the new time
+            nvs.set(currentTime);
+        }
+
+        // Wait for 5 minutes
+        std::this_thread::sleep_for(std::chrono::minutes(5));
+    }
+}
+
