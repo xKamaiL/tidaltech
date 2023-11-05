@@ -18,6 +18,16 @@
 #define LEDC_HS_CH6_GPIO (33)
 #define LEDC_HS_CH7_GPIO (15)
 
+// -- color led channel mapping --
+#define LED_WHITE LEDC_CHANNEL_0
+#define LED_WARM_WHITE LEDC_CHANNEL_1
+#define LED_RED LEDC_CHANNEL_2
+#define LED_GREEN LEDC_CHANNEL_3
+#define LED_BLUE LEDC_CHANNEL_4
+#define LED_ROYAL_BLUE LEDC_CHANNEL_5
+#define LED_ULTRA_VIOLET LEDC_CHANNEL_6
+#define LED_VIOLET LEDC_CHANNEL_7
+
 void initialize_led();
 // led_display displays the current configuration of the LED
 void led_display(tm now);
