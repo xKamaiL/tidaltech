@@ -5,6 +5,9 @@
 #include <string>
 #include <vector>
 
+#include <chrono>// ของcompare และ update
+#include <thread>
+
 #include "ble_manager.h" // tidal tech ble manager
 #include "driver/rtc_io.h"
 #include "freertos/FreeRTOS.h"
@@ -20,6 +23,7 @@
 #include "wifi_manager.h" // tidal tech wifi manager
 #define STORAGE_SCHEDULE "store"
 #include "driver/ledc.h"
+#include "GMT+7.h" // ของcompare และ update
 
 #define LEDC_HS_TIMER LEDC_TIMER_0
 #define LEDC_HS_MODE LEDC_HIGH_SPEED_MODE
@@ -135,11 +139,6 @@ Mode *read_color_mode_from_nvs()
 }
 
 
-#include <chrono>
-#include <thread>
-#include "GMT+7.h" //file GMT+7.cpp be current time naka 
-#include "schedule.h" // input from schedule.cpp
-
 void checkTimeAndUpdate(NVS& nvs) {     //function check time and update
     while (true) {
         
@@ -163,4 +162,58 @@ void checkTimeAndUpdate(NVS& nvs) {     //function check time and update
         std::this_thread::sleep_for(std::chrono::minutes(5));
     }
 }
+
+
+#define STORAGE_STATIC "store"
+Schedule read_static_from_nvs()
+{
+    nvs_handle1_t handle1;
+    esp_err_t err;
+
+    err = nvs_open(STORAGE_STATIC, NVS_READONLY, &handle1);
+    if (err != ESP_OK)
+        return NULL;
+
+    size_t max = 5;
+    Staticstatics = (Static )malloc(max sizeof(Static));
+    size_t size = sizeof(statics);
+
+    err = nvs_get_blob(handle1, "static", statics, &size);
+
+    if (err != ESP_OK)
+    {
+        free(statics);
+        return NULL;
+    }
+
+    nvs_close(handle1);
+    return statics;
+}
+
+esp_err_t write_static_to_nvs(Static *items)
+{
+    nvs_handle_t handle1;
+    esp_err_t err;
+
+    err = nvs_open(STORAGE_STATIC, NVS_READWRITE, &handle1);
+    if (err != ESP_OK)
+        return err;
+
+    size_t size = sizeof(items);
+    nvs_set_blob(handle1, "static", items, size);
+
+    if (err != ESP_OK)
+    {
+        return err;
+    }
+
+    err = nvs_commit(handle);
+    if (err != ESP_OK)
+        return err;
+
+    nvs_close(handle1);
+    return ESP_OK;
+}
+
+
 
