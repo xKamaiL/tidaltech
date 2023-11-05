@@ -3,23 +3,25 @@ import 'package:esptouch_smartconfig/esptouch_smartconfig.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:niku/namespace.dart' as n;
+import 'package:tidal_tech/stores/icon_status.dart';
 import 'package:tidal_tech/styles/button.dart';
 import 'package:tidal_tech/theme/colors.dart';
 
-class TaskRoute extends StatefulWidget {
+class TaskRoute extends StatefulHookConsumerWidget {
   final String ssid;
   final String password;
 
   const TaskRoute({super.key, required this.ssid, required this.password});
 
   @override
-  State<StatefulWidget> createState() {
+  ConsumerState<StatefulHookConsumerWidget> createState() {
     return TaskRouteState();
   }
 }
 
-class TaskRouteState extends State<TaskRoute> {
+class TaskRouteState extends ConsumerState<TaskRoute> {
   late Stream<ESPTouchResult>? _stream;
 
   @override

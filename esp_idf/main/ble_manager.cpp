@@ -59,6 +59,10 @@ class CharacteristicCallbacks : public NimBLECharacteristicCallbacks {
             on_available_color_time_points(pCharacteristic, connInfo);
             return;
         }
+        if (pCharacteristic->getUUID().equals(CHARACTERISTIC_UUID_WIFI_DISCONNECT)) {
+            on_wifi_disconnect(pCharacteristic, connInfo);
+            return;
+        }
     };
 
     void onNotify(NimBLECharacteristic *pCharacteristic) {
@@ -128,6 +132,10 @@ void initNimble() {
     NimBLECharacteristic *wifiIPCharacteristic = deviceInformationService->createCharacteristic(
         CHARACTERISTIC_UUID_WIFI_IP, NIMBLE_PROPERTY::READ);
     wifiIPCharacteristic->setCallbacks(&chrCallbacks);
+
+    NimBLECharacteristic *wifiDisconnectCharacteristic = deviceInformationService->createCharacteristic(
+        CHARACTERISTIC_UUID_WIFI_DISCONNECT, NIMBLE_PROPERTY::WRITE_NR);
+    wifiDisconnectCharacteristic->setCallbacks(&chrCallbacks);
 
     NimBLEService *colorService = srv->createService(COLOR_SERVICE_UUID);
     NimBLECharacteristic *getCurrentMode = colorService->createCharacteristic(CHARACTERISTIC_UUID_GET_COLOR_MODE, NIMBLE_PROPERTY::READ);

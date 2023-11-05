@@ -26,7 +26,6 @@ class _LandingPageState extends ConsumerState<LandingPage> {
     if (Platform.isAndroid) {
       FlutterBluePlus.turnOn();
     }
-    ref.read(bleManagerProvider.notifier).init();
     SharedPreferences.getInstance().then((prefs) {
       // try to find device from local storage
       final token = prefs.getString("token");
@@ -43,6 +42,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
       ref.read(bleManagerProvider.notifier).setReconnectId(id);
       FlutterNativeSplash.remove();
       // decide to re-connect immediately
+      debugPrint("reconnect when app start");
       ref.read(bleManagerProvider.notifier).reconnect();
       if (token == null) {
         context.go("/sign-in");

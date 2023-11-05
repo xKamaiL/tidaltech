@@ -3,6 +3,10 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 class DeviceInformationService {
   static String getDeviceName = ("c833d84a-56c9-46a9-8717-8210cc30bc69");
   static String getDeviceId = ("bd131062-7e70-4391-8555-88f655c3c334");
+  static String getWifiStatus = ("b3b0b2a0-0b1a-4b7a-9e3a-5b6b7b9b6b6b");
+  static String getWifiSSID = ("b3b0b2a0-0b1a-4b7a-9e3a-5b6b7b9b6b6c");
+  static String getWifiIP = ("b3b0b2a0-0b1a-4b7a-9e3a-5b6b7b9b6b6d");
+  static String disconnectWifi = ("b3b0b2a0-0b1a-4b7a-9e3a-5b6b7b9b6b6e");
 }
 
 class ColorService {

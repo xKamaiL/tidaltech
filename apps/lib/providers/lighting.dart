@@ -41,9 +41,17 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
 
     int minutes = state.last.minutes();
 
-    if (minutes == 1440) return;
+    debugPrint('minutes: $minutes');
 
-    minutes += 60 * 3; // 3 hours
+    if (minutes >= 1440) {
+      return;
+    }
+
+    if (state.length <= 5) {
+      minutes += 60 * 3; // 3 hours
+    } else {
+      minutes += 60 * 1; // 1 hour
+    }
 
     final hour = (minutes / 60).floor();
     final minute = minutes % 60;
@@ -69,14 +77,33 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
       return;
     }
 
-    final newState = state.map((e) {
+    // check if new value is duplicate hh:mm with other time point
+    final duplicate = state.where((element) {
+      return element.id != id &&
+          element.hour == tp.hour &&
+          element.minute == tp.minute;
+    }).toList();
+    if (duplicate.isNotEmpty) {
+      return;
+    }
+
+    final newTps = state.map((e) {
       if (e.id == id) {
-        e = tp;
+        return tp;
       }
       return e;
-    });
+    }).toList();
 
-    state = newState.toList();
+    // sort
+    newTps.sort((a, b) => a.minutes().compareTo(b.minutes()));
+
+    // update id
+    final newState = newTps.map((e) {
+      final id = newTps.indexOf(e);
+      return e.copyWith(id: id);
+    }).toList();
+
+    state = newState;
   }
 
   TimePoint? findById(int id) {
@@ -103,8 +130,49 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
 
   void delete(TimePoint? tp) {
     if (tp == null) return;
-    state =
+
+    final tmp =
         state.where((element) => element.minutes() != tp.minutes()).toList();
+
+    // sort
+    tmp.sort((a, b) => a.minutes().compareTo(b.minutes()));
+
+    // update id
+    final newState = tmp.map((e) {
+      final id = tmp.indexOf(e);
+      print(id);
+      return e.copyWith(id: id);
+    }).toList();
+
+    state = newState;
+  }
+
+  void editNext() {
+    if (state.isEmpty) {
+      return;
+    }
+    final current = ref.read(timePointEditingProvider);
+    if (current == null) {
+      return;
+    }
+    if (current.id == state.length - 1) {
+      return;
+    }
+    final next = findById(current.id + 2);
+    if (next == null) {
+      return;
+    }
+    ref.read(timePointEditingProvider.notifier).set(next);
+  }
+
+  void editPrevious() {
+    if (state.isEmpty) return;
+    final current = ref.read(timePointEditingProvider);
+    if (current == null) return;
+    if (current.id == 0) return;
+    final previous = findById(current.id);
+    if (previous == null) return;
+    ref.read(timePointEditingProvider.notifier).set(previous);
   }
 }
 

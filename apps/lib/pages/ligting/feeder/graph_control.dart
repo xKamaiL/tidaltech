@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -83,20 +82,23 @@ class TimeScheduleControl extends HookConsumerWidget {
         ])
           ..gap = 4,
         n.Row([
-          if (selected != null)
-            n.Button(
-              n.Icon(Icons.play_arrow_outlined)..color = ThemeColors.foreground,
-            )
-              ..color = ThemeColors.foreground
-              ..rounded = 8
-              ..w = 60
-              ..p = 0
-              ..m = 0
-              ..bg = ThemeColors.white,
+          // if (selected != null)
+          //   n.Button(
+          //     n.Icon(Icons.play_arrow_outlined)..color = ThemeColors.foreground,
+          //   )
+          //     ..color = ThemeColors.foreground
+          //     ..rounded = 8
+          //     ..w = 60
+          //     ..p = 0
+          //     ..m = 0
+          //     ..bg = ThemeColors.white,
           if (selected != null)
             n.Button(
               n.Icon(Icons.star_outline)..color = ThemeColors.foreground,
             )
+              ..onPressed = () {
+                // TODO: save as preset
+              }
               ..color = ThemeColors.foreground
               ..rounded = 8
               ..w = 40

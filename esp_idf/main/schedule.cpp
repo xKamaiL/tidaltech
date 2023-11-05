@@ -38,6 +38,7 @@ esp_err_t read_schedule_from_nvs(std::vector<Schedule> &schedules) {
             schedules.resize(5 / sizeof(Schedule));
             return ESP_OK;
         }
+        printf("%d\n", err);
         return err;
     }
 
@@ -45,6 +46,13 @@ esp_err_t read_schedule_from_nvs(std::vector<Schedule> &schedules) {
     err = nvs_get_blob(handle, "schedule", nullptr, &size);
     if (err != ESP_OK) {
         nvs_close(handle);
+        printf("%d\n", err);
+        if (err == ESP_ERR_NVS_NOT_FOUND) {
+            // No schedule found, return empty vector
+            // with size 5
+            schedules.resize(5 / sizeof(Schedule));
+            return ESP_OK;
+        }
         return err;
     }
 
@@ -53,6 +61,7 @@ esp_err_t read_schedule_from_nvs(std::vector<Schedule> &schedules) {
     nvs_close(handle);
 
     if (err != ESP_OK) {
+        printf("%d\n", err);
         return err;
     }
 

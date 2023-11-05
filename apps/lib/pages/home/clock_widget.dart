@@ -27,8 +27,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget> {
   }
 
   void checkRTC() {
-    final conn = ref.read(bleManagerProvider.notifier);
-    conn.checkRTC();
+
   }
 
   @override
@@ -40,7 +39,6 @@ class _ClockWidgetState extends ConsumerState<ClockWidget> {
 
   @override
   Widget build(BuildContext context) {
-    ref.watch(bleManagerProvider.select((value) => value.isOnline));
 
     return StreamBuilder(
       stream: Stream.periodic(const Duration(seconds: 1)),

@@ -7,6 +7,7 @@ import 'package:niku/namespace.dart' as n;
 import 'package:tidal_tech/providers/ble_manager.dart';
 
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:tidal_tech/stores/icon_status.dart';
 import 'package:tidal_tech/theme/colors.dart';
 import 'package:tidal_tech/ui/snackbar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -25,27 +26,43 @@ class _BluetoothStatusIconState extends ConsumerState<BluetoothStatusIcon> {
   _BluetoothStatusIconState() : super();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final manager = ref.read(bleManagerProvider.notifier);
-    final device = ref.watch(bleManagerProvider);
+    final isConnect =
+        ref.watch(iconStatusProvider.select((value) => value.bluetooth));
 
-    final state = useStream<BluetoothConnectionState>(
-      FlutterBluePlus.connectedDevices.isEmpty
-          ? null
-          : FlutterBluePlus.connectedDevices[0].connectionState,
-      initialData: BluetoothConnectionState.disconnected,
-    );
-
-    final ok = state.connectionState == ConnectionState.active ||
-        state.connectionState == ConnectionState.waiting;
-
-    final isConnect = ok;
+    final manager = ref.watch(bleManagerProvider);
 
     final textColor = widget.isDark ? Colors.blueAccent : Colors.white;
 
+    final stream = useStream(
+      FlutterBluePlus.connectedDevices.isNotEmpty
+          ? FlutterBluePlus.connectedDevices[0].connectionState
+          : Stream.value(null),
+      initialData: null,
+    );
+
+    // BLE is disconnected
+    if (stream.data != null &&
+        stream.data != BluetoothConnectionState.connected) {
+      ref.read(iconStatusProvider.notifier).setBluetooth(false);
+    }
+    // BLE is connected
+    if (stream.data != null &&
+        stream.data == BluetoothConnectionState.connected &&
+        !isConnect) {
+      ref.read(iconStatusProvider.notifier).setBluetooth(true);
+    }
+
     return InkWell(
       onTap: () async {
-        if (!ok) {
+        if (!isConnect) {
+          final manager = ref.read(bleManagerProvider.notifier);
           showTopSnackBar(
             Overlay.of(context),
             const XSnackBar.error(
@@ -53,9 +70,8 @@ class _BluetoothStatusIconState extends ConsumerState<BluetoothStatusIcon> {
                   "Cannot connect to device. Please check light indicator on device.",
             ),
           );
+          manager.reconnect();
         }
-        if (device.isReconnecting) return;
-        manager.reconnect();
       },
       child: n.Padding(
         top: 8,
@@ -64,9 +80,7 @@ class _BluetoothStatusIconState extends ConsumerState<BluetoothStatusIcon> {
         left: 16,
         child: n.Icon(
           !isConnect ? Icons.bluetooth_disabled : Icons.bluetooth_connected,
-          color: isConnect
-              ? textColor.withOpacity(ok ? 1 : 0.5)
-              : ThemeColors.danger,
+          color: isConnect ? textColor : ThemeColors.danger,
           size: 24,
         ),
       ),
