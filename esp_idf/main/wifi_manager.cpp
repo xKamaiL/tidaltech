@@ -12,6 +12,7 @@
 #include "freertos/event_groups.h"
 #include "freertos/task.h"
 #include "nvs_flash.h"
+#include "time_sync.h"
 
 const char* TAG = "wifi_manager";
 
@@ -40,6 +41,7 @@ static void event_handler(void* arg, esp_event_base_t event_base,
     } else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
         printf("Got IP\n");
         xEventGroupSetBits(s_wifi_event_group, CONNECTED_BIT);
+        initialize_sntp();
     } else if (event_base == SC_EVENT && event_id == SC_EVENT_SCAN_DONE) {
         printf("Scan done\n");
     } else if (event_base == SC_EVENT && event_id == SC_EVENT_FOUND_CHANNEL) {
@@ -135,7 +137,7 @@ static void smartconfig_example_task(void* parm) {
     while (1) {
         uxBits = xEventGroupWaitBits(s_wifi_event_group, CONNECTED_BIT | ESPTOUCH_DONE_BIT, true, false, portMAX_DELAY);
         if (uxBits & CONNECTED_BIT) {
-            printf("WiFi Connected to ap");
+            printf("smartconfig: wifi connected\n");
         }
         if (uxBits & ESPTOUCH_DONE_BIT) {
             printf("smartconfig over");
