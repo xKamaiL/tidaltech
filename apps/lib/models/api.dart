@@ -6,11 +6,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:tidal_tech/models/devices.dart';
+import 'package:tidal_tech/models/preset.dart';
 import 'package:tidal_tech/models/user.dart';
 
 import 'auth.dart';
 
 part 'api.g.dart';
+
+@JsonSerializable()
+class APIEmpty {
+  APIEmpty();
+
+  factory APIEmpty.fromJson(Map<String, dynamic> json) =>
+      _$APIEmptyFromJson(json);
+
+  Map<String, dynamic> toJson() => _$APIEmptyToJson(this);
+}
 
 @JsonSerializable()
 class APIError {
@@ -117,6 +128,19 @@ abstract class RestClient {
 
   @POST("/devices.updateStaticColor")
   Future<APIFormat> updateStaticColor(@Body() UpdateStaticColorParam param);
+
+  @POST("/presets.List")
+  @Headers(<String, dynamic>{
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  })
+  Future<APIFormat<MyPresetResult>> fetchMyPresets();
+
+  @POST("/presets.Create")
+  Future createPreset(@Body() CreatePresetParam param);
+
+  @POST("/presets.Delete")
+  Future deletePreset(@Body() DeletePresetParam param);
 
 //
 }

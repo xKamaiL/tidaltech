@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:niku/namespace.dart' as n;
+import 'package:tidal_tech/models/models.dart';
 import 'package:tidal_tech/theme/colors.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 class LightingFeederProfilePage extends HookConsumerWidget {
   const LightingFeederProfilePage({super.key});
@@ -11,25 +13,24 @@ class LightingFeederProfilePage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: n.Text("Color Profile")
-          ..color = Colors.grey.shade900
+        leading: IconButton(
+          icon: n.Icon(Icons.arrow_back_ios_rounded)
+            ..color = ThemeColors.foreground
+            ..size = 18.0,
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            }
+          },
+        ),
+        title: n.Text("Schedule Profile")
+          ..color = ThemeColors.foreground
           ..fontSize = 18.0
           ..bold,
         elevation: 0,
         backgroundColor: Colors.white,
         centerTitle: true,
         automaticallyImplyLeading: true,
-        leading: n.IconButton(
-          Icons.arrow_back_ios,
-          onPressed: () {
-            context.pop(true);
-          },
-        )
-          ..splashColor = Colors.transparent
-          ..p = 0
-          ..m = 0
-          ..color = ThemeColors.foreground,
-        actionsIconTheme: const IconThemeData(color: ThemeColors.foreground),
       ),
       backgroundColor: Colors.white,
       body: Padding(
@@ -58,13 +59,12 @@ class LightingFeederProfilePage extends HookConsumerWidget {
   }
 
   loadList() {
-    return Future.delayed(Duration(seconds: 3), () => "Loaded");
+    return api.fetchMyPresets();
   }
 
   Widget buildList() {
     return n.Box(
       n.Text("Hello"),
-
     );
   }
 }
