@@ -64,8 +64,6 @@ void led_display(tm now) {
             return;
         }
 
-        printf("led_display: %d,%d,%d\n", color.r, color.g, color.b);
-
         // output to led with current time condition
         LEDLevel leds = {0};
         leds.red = color.r;
@@ -82,7 +80,7 @@ void led_display(tm now) {
         std::vector<Schedule> schedules;
         err = read_schedule_from_nvs(schedules);
         if (err != ESP_OK) {
-            printf("Error reading schedule from NVS\n");
+            printf("led_display: error reading schedule from NVS\n");
             return;
         }
 
@@ -134,7 +132,16 @@ void led_display(tm now) {
 }
 
 void set_duty(LEDLevel leds) {
-    printf("led set duty red=%d, green=%d, blue=%d, white=%d, warmWhite=%d\n", leds.red, leds.green, leds.blue, leds.white, leds.warm_white);
+    printf("led: set duty red=%d, green=%d, blue=%d, white=%d, warmWhite=%d royalBlue=%d ultraViolet=%d violet=%d\n",
+           leds.red,
+           leds.green,
+           leds.blue,
+           leds.white,
+           leds.warm_white,
+           leds.royal_blue,
+           leds.ultra_violet,
+           leds.ultra_violet,  //
+    );
     ledc_set_duty(LEDC_HS_MODE, LED_WHITE, (leds.red / 100) * LEDC_DUTY);
     ledc_set_duty(LEDC_HS_MODE, LED_WARM_WHITE, (leds.green / 100) * LEDC_DUTY);
     ledc_set_duty(LEDC_HS_MODE, LED_RED, (leds.blue / 100) * LEDC_DUTY);
