@@ -2,6 +2,7 @@
 #define LED_H
 
 #include "driver/ledc.h"
+#include "time.h"
 
 #define LEDC_HS_TIMER LEDC_TIMER_0
 #define LEDC_HS_MODE LEDC_LOW_SPEED_MODE
@@ -18,5 +19,7 @@
 #define LEDC_HS_CH7_GPIO (15)
 
 void initialize_led();
+// led_display displays the current configuration of the LED
+void led_display(tm now);
 
 #endif  // LED_H

@@ -3,6 +3,7 @@
 
 #include "light_mode.h"
 #include "schedule.h"
+#include "time.h"
 
 static int gpio_pins[] = {
     LEDC_HS_CH0_GPIO,  //
@@ -39,5 +40,36 @@ void initialize_led() {
     }
 }
 
-void display() {
+void led_display(tm now) {
+    int8_t mode;
+    esp_err_t err;
+
+    // get current light mode
+    err = read_light_mode_from_nvs(&mode);
+    if (err != ESP_OK) {
+        printf("Error reading light mode from NVS\n");
+        return;
+    }
+
+    if (mode == LIGHT_MODE_MANUAL) {
+        return;
+    }
+
+    if (mode == LIGHT_MODE_SCHEDULE) {
+        // get current schedule
+        std::vector<Schedule> schedules;
+        err = read_schedule_from_nvs(schedules);
+        if (err != ESP_OK) {
+            printf("Error reading schedule from NVS\n");
+            return;
+        }
+
+        for (auto &s : schedules) {
+            //
+        }
+
+        schedules.clear();
+        schedules.shrink_to_fit();
+        return;
+    }
 }
