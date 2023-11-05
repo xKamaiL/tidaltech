@@ -131,6 +131,12 @@ void led_display(tm now) {
     }
 }
 
+void _ledc_set_duty(ledc_channel_t channel, short value);
+
+// maximum power factor is 0.85
+static int power_factor = 0.85;
+
+// set duty cycle of each leds
 void set_duty(LEDLevel leds) {
     printf("led: set duty red=%d, green=%d, blue=%d, white=%d, warmWhite=%d royalBlue=%d ultraViolet=%d violet=%d\n",
            leds.red,
@@ -142,22 +148,18 @@ void set_duty(LEDLevel leds) {
            leds.ultra_violet,
            leds.ultra_violet  //
     );
-    ledc_set_duty(LEDC_HS_MODE, LED_WHITE, (leds.red / 100) * LEDC_DUTY);
-    ledc_set_duty(LEDC_HS_MODE, LED_WARM_WHITE, (leds.green / 100) * LEDC_DUTY);
-    ledc_set_duty(LEDC_HS_MODE, LED_RED, (leds.blue / 100) * LEDC_DUTY);
-    ledc_set_duty(LEDC_HS_MODE, LED_GREEN, (leds.white / 100) * LEDC_DUTY);
-    ledc_set_duty(LEDC_HS_MODE, LED_BLUE, (leds.warm_white / 100) * LEDC_DUTY);
-    ledc_set_duty(LEDC_HS_MODE, LED_ROYAL_BLUE, (leds.royal_blue / 100) * LEDC_DUTY);
-    ledc_set_duty(LEDC_HS_MODE, LED_ULTRA_VIOLET, (leds.ultra_violet / 100) * LEDC_DUTY);
-    // TODO: add violet color
-    ledc_set_duty(LEDC_HS_MODE, LED_VIOLET, (leds.ultra_violet / 100) * LEDC_DUTY);
+    _ledc_set_duty(LED_RED, leds.red);
+    _ledc_set_duty(LED_GREEN, leds.green);
+    _ledc_set_duty(LED_BLUE, leds.blue);
+    _ledc_set_duty(LED_WHITE, leds.white);
+    _ledc_set_duty(LED_WARM_WHITE, leds.warm_white);
+    _ledc_set_duty(LED_ROYAL_BLUE, leds.royal_blue);
+    _ledc_set_duty(LED_ULTRA_VIOLET, leds.ultra_violet);
+    _ledc_set_duty(LED_VIOLET, leds.ultra_violet);
+}
 
-    ledc_update_duty(LEDC_HS_MODE, LED_WHITE);
-    ledc_update_duty(LEDC_HS_MODE, LED_WARM_WHITE);
-    ledc_update_duty(LEDC_HS_MODE, LED_RED);
-    ledc_update_duty(LEDC_HS_MODE, LED_GREEN);
-    ledc_update_duty(LEDC_HS_MODE, LED_BLUE);
-    ledc_update_duty(LEDC_HS_MODE, LED_ROYAL_BLUE);
-    ledc_update_duty(LEDC_HS_MODE, LED_ULTRA_VIOLET);
-    ledc_update_duty(LEDC_HS_MODE, LED_VIOLET);
+void _ledc_set_duty(ledc_channel_t channel, short value) {
+    ledc_set_duty(LEDC_HS_MODE, channel,
+                  (std::min(int(value), 100) / 100) * LEDC_DUTY * power_factor);
+    ledc_update_duty(LEDC_HS_MODE, channel);
 }
