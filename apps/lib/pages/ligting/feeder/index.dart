@@ -5,11 +5,14 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:niku/namespace.dart' as n;
 import 'package:tidal_tech/pages/ligting/feeder/graph.dart';
 import 'package:tidal_tech/pages/ligting/feeder/graph_control.dart';
+import 'package:tidal_tech/pages/ligting/feeder/slider_dots.dart';
 import 'package:tidal_tech/pages/ligting/feeder/time_header.dart';
 import 'package:tidal_tech/pages/ligting/spectrum_card.dart';
 import 'package:tidal_tech/providers/ble_manager.dart';
 import 'package:tidal_tech/providers/lighting.dart';
 import 'package:tidal_tech/stores/device.dart';
+
+import '../../../theme/colors.dart';
 
 class FeederControl extends ConsumerStatefulWidget {
   const FeederControl({super.key});
@@ -48,12 +51,27 @@ class _FeederControlState extends ConsumerState<ConsumerStatefulWidget> {
     });
 
     return n.Column(
-      const [
-        FeederTimeHeader(),
-        TimeScheduleGraph(),
-        TimeScheduleControl(),
-        SpectrumCard(),
+      [
+        n.Column([
+          const TimeScheduleGraph(),
+          const FeederTimeHeader(),
+          n.Box(
+            const SliderDots(),
+          )
+            ..bg = ThemeColors.zinc.shade100
+            ..mt = 8,
+        ])
+          ..gap = 8,
+        n.Column(const [
+          SpectrumCard(),
+          TimeScheduleControl(),
+        ])
+          ..gap = 8,
       ],
-    )..gap = 8;
+    )
+      ..gap = 8
+      ..my = 16
+      ..mainAxisAlignment = MainAxisAlignment.spaceBetween
+      ..hFull;
   }
 }

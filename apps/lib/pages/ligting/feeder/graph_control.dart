@@ -45,7 +45,8 @@ class TimeScheduleControl extends HookConsumerWidget {
                   context: context,
                   builder: (context) {
                     return CupertinoAlertDialog(
-                      title: const Text("Delete time schedule point?"),
+                      title: Text(
+                          "Delete time at ${selected.hour}:${selected.minute} ?"),
                       content: const Text(
                           "Are you sure you want to delete this time?"),
                       actions: [
