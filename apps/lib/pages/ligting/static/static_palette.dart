@@ -4,6 +4,7 @@ import 'package:niku/namespace.dart' as n;
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tidal_tech/providers/ble_manager.dart';
+import 'package:tidal_tech/stores/device.dart';
 import 'package:tidal_tech/stores/static_led_mode.dart';
 
 import '../../../providers/feeder.dart';
@@ -48,6 +49,7 @@ class _StaticColorPaletteState extends ConsumerState<StaticColorPalette> {
       timer?.cancel();
       timer = Timer(const Duration(milliseconds: 500), () {
         ref.read(bleManagerProvider.notifier).setStaticColor(next.colors);
+        ref.read(deviceProvider.notifier).setStaticColor(next.colors);
         //
       });
     });
