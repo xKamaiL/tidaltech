@@ -14,6 +14,7 @@ import (
 	"github.com/moonrhythm/validator"
 
 	"github.com/xkamail/tidaltech/api/auth"
+	"github.com/xkamail/tidaltech/pkg/led"
 	"github.com/xkamail/tidaltech/pkg/schedule"
 )
 
@@ -284,7 +285,7 @@ func UpdateSchedule(ctx context.Context, p *UpdateScheduleParam) error {
 }
 
 type UpdateStaticColorParam struct {
-	Color *int `json:"color"`
+	Colors map[led.Color]led.Level `json:"colors"`
 }
 
 func UpdateStaticColor(ctx context.Context, p *UpdateStaticColorParam) error {
@@ -310,7 +311,7 @@ func UpdateStaticColor(ctx context.Context, p *UpdateStaticColorParam) error {
 	}
 	//
 
-	properties.Color = p.Color
+	properties.Colors = p.Colors
 
 	// update value
 	_, err = pgctx.Exec(ctx, `update devices set properties = $1 where id = $2`,
