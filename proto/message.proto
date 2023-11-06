@@ -18,10 +18,14 @@ message SetColorModeRequest {
   Mode mode = 1;
 }
 
-message SetAmbientRequest {
-  uint32 r = 1;
-  uint32 g = 2;
-  uint32 b = 3;
+message SetStaticColorRequest {
+  uint32 white = 1;
+  uint32 warm_white = 2;
+  uint32 red = 3;
+  uint32 green = 4;
+  uint32 blue = 5;
+  uint32 royal_blue = 6;
+  uint32 ultra_violet = 7;
 }
 
 message RTCRequest {
