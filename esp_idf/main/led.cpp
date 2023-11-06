@@ -156,14 +156,14 @@ void set_duty(LEDLevel leds) {
 }
 
 void _ledc_set_duty(ledc_channel_t channel, short value) {
-    float_t v = (std::min(int(value), 100) / 100.0) * LEDC_DUTY;
+    float v = (std::min(int(value), 100) / 100.0) * LEDC_DUTY;
     if (channel == LED_BLUE || channel == LED_ROYAL_BLUE) {
         v = v * 0.4;
     } else {
         v = v * 0.35;
     }
-    printf("led: set duty channel=%d, value=%d\n", channel, v);
+    printf("led: set duty channel=%hu, value=%lu\n", channel, (uint32_t)v);
     ledc_set_duty(LEDC_HS_MODE, channel,
-                  v);
+                  (uint32_t)v);
     ledc_update_duty(LEDC_HS_MODE, channel);
 }
