@@ -41,9 +41,6 @@ class _LandingPageState extends ConsumerState<LandingPage> {
       }
       ref.read(bleManagerProvider.notifier).setReconnectId(id);
       FlutterNativeSplash.remove();
-      // decide to re-connect immediately
-      debugPrint("reconnect when app start");
-      ref.read(bleManagerProvider.notifier).delayReconnect();
       if (token == null) {
         context.go("/sign-in");
         return;
