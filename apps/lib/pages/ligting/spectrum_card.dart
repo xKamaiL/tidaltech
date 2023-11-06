@@ -100,61 +100,64 @@ class SpectrumCard extends HookConsumerWidget {
               ..m = 0
               ..splash = ThemeColors.mutedForeground.withOpacity(0.1)
               ..bg = ThemeColors.white,
-            n.Row(
-              [
-                CupertinoButton(
-                  onPressed: () {
-                    //
-                    showCupertinoModalPopup(
-                        context: context,
-                        builder: (builder) {
-                          return Container(
-                            height: 300,
-                            padding: const EdgeInsets.only(top: 0),
-                            margin: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom,
+            n.Box(
+              CupertinoButton(
+                onPressed: () {
+                  //
+                  showCupertinoModalPopup(
+                      context: context,
+                      builder: (builder) {
+                        return Container(
+                          height: 300,
+                          padding: const EdgeInsets.only(top: 0),
+                          margin: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom,
+                          ),
+                          color: CupertinoColors.systemBackground
+                              .resolveFrom(context),
+                          child: SafeArea(
+                            top: false,
+                            child: CupertinoDatePicker(
+                              initialDateTime:
+                                  DateTime(0, 0, 0, tp.hour, tp.minute),
+                              mode: CupertinoDatePickerMode.time,
+                              use24hFormat: true,
+                              minuteInterval: 5,
+                              // maximumDate: DateTime(0, 0, 0, 23, 50),
+                              // minimumDate: DateTime(0, 0, 0, 0, 10),
+                              // This is called when the user changes the time.
+                              onDateTimeChanged: (DateTime newTime) {
+                                ref.read(timePointsNotifier.notifier).update(
+                                    tp.id,
+                                    tp.copyWith(
+                                      hour: newTime.hour,
+                                      minute: newTime.minute,
+                                    ));
+                                ref
+                                    .read(timePointEditingProvider.notifier)
+                                    .set(tp.copyWith(
+                                      hour: newTime.hour,
+                                      minute: newTime.minute,
+                                    ));
+                              },
                             ),
-                            color: CupertinoColors.systemBackground
-                                .resolveFrom(context),
-                            child: SafeArea(
-                              top: false,
-                              child: CupertinoDatePicker(
-                                initialDateTime:
-                                    DateTime(0, 0, 0, tp.hour, tp.minute),
-                                mode: CupertinoDatePickerMode.time,
-                                use24hFormat: true,
-                                minuteInterval: 5,
-                                maximumDate: DateTime(0, 0, 0, 23, 50),
-                                minimumDate: DateTime(0, 0, 0, 0, 10),
-                                // This is called when the user changes the time.
-                                onDateTimeChanged: (DateTime newTime) {
-                                  ref.read(timePointsNotifier.notifier).update(
-                                      tp.id,
-                                      tp.copyWith(
-                                        hour: newTime.hour,
-                                        minute: newTime.minute,
-                                      ));
-                                  ref
-                                      .read(timePointEditingProvider.notifier)
-                                      .set(tp.copyWith(
-                                        hour: newTime.hour,
-                                        minute: newTime.minute,
-                                      ));
-                                },
-                              ),
-                            ),
-                          );
-                        });
-                  },
-                  padding: const EdgeInsets.all(0),
-                  child: n.Text(tp.toString())
-                    ..fontSize = 24
-                    ..m = 0,
-                ),
-              ],
+                          ),
+                        );
+                      });
+                },
+                padding: const EdgeInsets.all(0),
+                child: n.Text(tp.toString())
+                  ..fontSize = 24
+                  ..m = 0,
+              ),
             )
-              ..alignBottomCenter
-              ..mainAxisAlignment = MainAxisAlignment.center,
+              ..bg = ThemeColors.white
+              ..p = 0
+              ..rounded = 8
+              ..mx = 0
+              ..w = 160
+              ..h = 38
+              ..center,
             n.Button(
               n.Icon(Icons.arrow_right_outlined)
                 ..color = ThemeColors.foreground,
@@ -181,4 +184,3 @@ class SpectrumCard extends HookConsumerWidget {
     );
   }
 }
-
