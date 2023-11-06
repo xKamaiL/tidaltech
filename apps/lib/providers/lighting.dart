@@ -160,6 +160,10 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
     }
     final next = findById(current.id + 2);
     if (next == null) {
+      // go to first time point
+      final first = findById(1);
+      if (first == null) return;
+      ref.read(timePointEditingProvider.notifier).set(first);
       return;
     }
     ref.read(timePointEditingProvider.notifier).set(next);
@@ -169,7 +173,13 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
     if (state.isEmpty) return;
     final current = ref.read(timePointEditingProvider);
     if (current == null) return;
-    if (current.id == 0) return;
+    if (current.id == 0) {
+      // go to last time point
+      final last = findById(state.length);
+      if (last == null) return;
+      ref.read(timePointEditingProvider.notifier).set(last);
+      return;
+    }
     final previous = findById(current.id);
     if (previous == null) return;
     ref.read(timePointEditingProvider.notifier).set(previous);

@@ -5,6 +5,7 @@ import 'package:tidal_tech/models/devices.dart';
 import 'package:tidal_tech/models/models.dart';
 import 'package:tidal_tech/providers/lighting.dart';
 import 'package:tidal_tech/stores/lighting.dart';
+import 'package:tidal_tech/stores/static_led_mode.dart';
 
 import '../providers/feeder.dart';
 
@@ -47,7 +48,31 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
               ? LightingMode.feed
               : LightingMode.ambient,
         );
-    int i = 0;
+
+    if (res.result!.properties.colors != null) {
+      ref.read(staticLEDColorProvider.notifier).setWhite(
+        res.result!.properties.colors!["white"]!.toDouble(),
+      );
+      ref.read(staticLEDColorProvider.notifier).setBlue(
+        res.result!.properties.colors!["blue"]!.toDouble(),
+      );
+      ref.read(staticLEDColorProvider.notifier).setRoyalBlue(
+        res.result!.properties.colors!["royalBlue"]!.toDouble(),
+      );
+      ref.read(staticLEDColorProvider.notifier).setWarmWhite(
+        res.result!.properties.colors!["warmWhite"]!.toDouble(),
+      );
+      ref.read(staticLEDColorProvider.notifier).setUltraViolet(
+        res.result!.properties.colors!["ultraViolet"]!.toDouble(),
+      );
+      ref.read(staticLEDColorProvider.notifier).setRed(
+        res.result!.properties.colors!["red"]!.toDouble(),
+      );
+      ref.read(staticLEDColorProvider.notifier).setGreen(
+        res.result!.properties.colors!["green"]!.toDouble(),
+      );
+    }
+
     final currentTimePoints = ref.read(timePointsNotifier);
     if (currentTimePoints.isNotEmpty) {
       return;
@@ -93,6 +118,9 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
     if (tps.isNotEmpty) {
       ref.read(timePointEditingProvider.notifier).set(tps[0]);
     }
+
+
+
     //
   }
 

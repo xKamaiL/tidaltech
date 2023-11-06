@@ -38,7 +38,9 @@ DeviceProperties _$DevicePropertiesFromJson(Map<String, dynamic> json) =>
       mode: json['mode'] as String,
       schedule:
           DeviceSchedule.fromJson(json['schedule'] as Map<String, dynamic>),
-      colors: Map<String, int>.from(json['colors'] as Map),
+      colors: (json['colors'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, e as int),
+      ),
     );
 
 Map<String, dynamic> _$DevicePropertiesToJson(DeviceProperties instance) =>

@@ -40,7 +40,7 @@ class DeviceProperties {
   final bool power;
   final String mode;
   final DeviceSchedule schedule;
-  final Map<String, int> colors;
+  final Map<String, int>? colors;
 
   DeviceProperties({
     required this.power,
