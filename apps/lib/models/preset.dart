@@ -7,9 +7,9 @@ part 'preset.g.dart';
 class PresetItem {
   final String id;
   final String name;
-  final DeviceSchedule schedule;
+  final List<DeviceTimePoint>? timePoints;
 
-  PresetItem({required this.id, required this.name, required this.schedule});
+  PresetItem({required this.id, required this.name, required this.timePoints});
 
   factory PresetItem.fromJson(Map<String, dynamic> json) =>
       _$PresetItemFromJson(json);
@@ -32,9 +32,9 @@ class MyPresetResult {
 @JsonSerializable()
 class CreatePresetParam {
   final String name;
-  final DeviceSchedule schedule;
+  final List<DeviceTimePoint>? timePoints;
 
-  CreatePresetParam({required this.name, required this.schedule});
+  CreatePresetParam({required this.name, required this.timePoints});
 
   factory CreatePresetParam.fromJson(Map<String, dynamic> json) =>
       _$CreatePresetParamFromJson(json);

@@ -129,12 +129,9 @@ class TimeScheduleControl extends HookConsumerWidget {
                             api
                                 .createPreset(CreatePresetParam(
                               name: presetName.text,
-                              schedule: DeviceSchedule(
-                                points: points
-                                    .map((e) => e.toDeviceTimePoint())
-                                    .toList(),
-                                weekday: 0,
-                              ),
+                              timePoints: points
+                                  .map((e) => e.toDeviceTimePoint())
+                                  .toList(),
                             ))
                                 .then((value) {
                               presetName.clear();
