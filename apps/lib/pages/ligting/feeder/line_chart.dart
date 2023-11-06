@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -37,9 +39,6 @@ class ShowLineChart extends HookConsumerWidget {
         // }
         return;
       }
-
-
-
     }
 
     return LineChart(
@@ -125,6 +124,55 @@ class ShowLineChart extends HookConsumerWidget {
     ];
   }
 
+  List<FlSpot> getSpots(List<TimePoint> tps, LED color) {
+    List<FlSpot> spots = [const FlSpot(0, 0)];
+
+    for (var i = 0; i < tps.length; i++) {
+      if (i == 0 && tps.length > 1) {
+        spots.add(
+          FlSpot(
+            max(tps[i].minutes().toDouble() - 60, 0),
+            0,
+          ),
+        );
+      }
+      if (i > 0) {
+        // if previous item has value but current is zero
+        if (tps[i - 1].colors[color]!.intensity > 0 &&
+            tps[i].colors[color]!.intensity == 0) {
+          spots.add(
+            FlSpot(
+              tps[i].minutes().toDouble(),
+              tps[i - 1].colors[color]!.intensity.toDouble(),
+            ),
+          );
+        }
+        // if previous item is zero but current has value
+        if (tps[i - 1].colors[color]!.intensity == 0 &&
+            tps[i].colors[color]!.intensity > 0) {
+          spots.add(
+            FlSpot(
+              max(tps[i].minutes().toDouble() - 60, 0),
+              0,
+            ),
+          );
+        }
+      }
+
+      spots.add(
+        FlSpot(
+          tps[i].minutes().toDouble(),
+          tps[i].colors[color]!.intensity.toDouble(),
+        ),
+      );
+    }
+
+    spots.add(
+      const FlSpot(1440, 0),
+    );
+    return spots;
+  }
+
   LineChartBarData drawLineFromColor(LED color, List<TimePoint> tps) {
     tps.sort(
       (a, b) => a.minutes().compareTo(b.minutes()),
@@ -157,6 +205,14 @@ class ShowLineChart extends HookConsumerWidget {
           return spot.x != 0 && spot.x != 1440;
         },
         getDotPainter: (spot, percent, barData, index) {
+          // remove zero value dots
+          if (spot.y == 0) {
+            return FlDotCirclePainter(
+              radius: 0,
+              color: ledColor[color]!,
+              strokeWidth: 0,
+            );
+          }
           return FlDotCirclePainter(
             radius: 5,
             color: ledColor[color]!,
@@ -170,18 +226,7 @@ class ShowLineChart extends HookConsumerWidget {
           ColorPriority(color).getOpacity(),
         ),
       ),
-      spots: [
-        const FlSpot(0, 0),
-        // sort timePoint by minutes
-        ...tps.map((tp) {
-          return FlSpot(
-            tp.minutes().toDouble(),
-            tp.colors[color]!.intensity.toDouble(),
-          );
-        }).toList(),
-        //
-        const FlSpot(1440, 0),
-      ],
+      spots: getSpots(tps, color),
     );
   }
 
