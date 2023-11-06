@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tidal_tech/models/devices.dart';
 import 'package:tidal_tech/providers/feeder.dart';
 
 final timePointsProvider = timePointsNotifier;
@@ -14,8 +15,47 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
 
   TimePointsNotifier(this.ref) : super([]);
 
-  void initTimePoint(List<TimePoint> tps) {
-    state = tps;
+  void initTimePoint(List<DeviceTimePoint> tps) {
+    final t = tps.map<TimePoint>((t) {
+          Map<LED, ColorPoint> defaultTimePointIntensity = {
+            LED.white: ColorPoint(LED.white, t.brightness["white"]!),
+            LED.blue: ColorPoint(LED.blue, t.brightness["blue"]!),
+            LED.royalBlue:
+                ColorPoint(LED.royalBlue, t.brightness["royalBlue"]!),
+            LED.warmWhite:
+                ColorPoint(LED.warmWhite, t.brightness["warmWhite"]!),
+            LED.ultraViolet:
+                ColorPoint(LED.ultraViolet, t.brightness["ultraViolet"]!),
+            LED.red: ColorPoint(LED.red, t.brightness["red"]!),
+            LED.green: ColorPoint(LED.green, t.brightness["green"]!),
+          };
+
+          int hh = int.parse(t.time.substring(0, 2));
+          int mm = int.parse(t.time.substring(3, 5));
+          return TimePoint(
+            0,
+            hh,
+            mm,
+            defaultTimePointIntensity,
+          );
+        }).toList(
+          growable: true,
+        ) ??
+        [];
+
+    t.sort((a, b) {
+      if (a.hour == b.hour) return a.minute.compareTo(b.minute);
+      return a.hour.compareTo(b.hour);
+    });
+
+    for (int i = 0; i < t.length; i++) {
+      t[i] = t[i].copyWith(id: i);
+    }
+
+    state = t;
+    if (t.isNotEmpty) {
+      ref.read(timePointEditingProvider.notifier).set(t[0]);
+    }
   }
 
   void addTimePoint() {

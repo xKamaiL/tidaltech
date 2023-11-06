@@ -7,9 +7,14 @@ part 'preset.g.dart';
 class PresetItem {
   final String id;
   final String name;
+  final String description;
   final List<DeviceTimePoint>? timePoints;
 
-  PresetItem({required this.id, required this.name, required this.timePoints});
+  PresetItem(
+      {required this.id,
+      required this.name,
+      required this.timePoints,
+      required this.description});
 
   factory PresetItem.fromJson(Map<String, dynamic> json) =>
       _$PresetItemFromJson(json);

@@ -77,47 +77,9 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
     if (currentTimePoints.isNotEmpty) {
       return;
     }
-
-    final tps = res.result!.properties.schedule.points?.map<TimePoint>((t) {
-          Map<LED, ColorPoint> defaultTimePointIntensity = {
-            LED.white: ColorPoint(LED.white, t.brightness["white"]!),
-            LED.blue: ColorPoint(LED.blue, t.brightness["blue"]!),
-            LED.royalBlue:
-                ColorPoint(LED.royalBlue, t.brightness["royalBlue"]!),
-            LED.warmWhite:
-                ColorPoint(LED.warmWhite, t.brightness["warmWhite"]!),
-            LED.ultraViolet:
-                ColorPoint(LED.ultraViolet, t.brightness["ultraViolet"]!),
-            LED.red: ColorPoint(LED.red, t.brightness["red"]!),
-            LED.green: ColorPoint(LED.green, t.brightness["green"]!),
-          };
-
-          int hh = int.parse(t.time.substring(0, 2));
-          int mm = int.parse(t.time.substring(3, 5));
-          return TimePoint(
-            0,
-            hh,
-            mm,
-            defaultTimePointIntensity,
-          );
-        }).toList(
-          growable: true,
-        ) ??
-        [];
-
-    tps.sort((a, b) {
-      if (a.hour == b.hour) return a.minute.compareTo(b.minute);
-      return a.hour.compareTo(b.hour);
-    });
-
-    for (int i = 0; i < tps.length; i++) {
-      tps[i] = tps[i].copyWith(id: i);
-    }
+    final tps = (res.result!.properties.schedule.points ?? []).toList();
 
     ref.read(timePointsNotifier.notifier).initTimePoint(tps);
-    if (tps.isNotEmpty) {
-      ref.read(timePointEditingProvider.notifier).set(tps[0]);
-    }
 
     //
   }

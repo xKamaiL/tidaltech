@@ -12,12 +12,14 @@ PresetItem _$PresetItemFromJson(Map<String, dynamic> json) => PresetItem(
       timePoints: (json['timePoints'] as List<dynamic>?)
           ?.map((e) => DeviceTimePoint.fromJson(e as Map<String, dynamic>))
           .toList(),
+      description: json['description'] as String,
     );
 
 Map<String, dynamic> _$PresetItemToJson(PresetItem instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
+      'description': instance.description,
       'timePoints': instance.timePoints,
     };
 

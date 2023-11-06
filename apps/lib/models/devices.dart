@@ -1,6 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
 
+import '../providers/feeder.dart';
+
 part 'devices.g.dart';
 
 @JsonSerializable()
