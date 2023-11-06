@@ -40,7 +40,7 @@ class DeviceProperties {
   final bool power;
   final String mode;
   final DeviceSchedule schedule;
-  final int? color;
+  final Map<String, int> color;
 
   DeviceProperties({
     required this.power,
@@ -58,7 +58,7 @@ class DeviceProperties {
     bool? power,
     String? mode,
     DeviceSchedule? schedule,
-    int? color,
+    Map<String, int>? color,
   }) {
     return DeviceProperties(
       power: power ?? this.power,
@@ -164,9 +164,9 @@ class UpdateModeParam {
 
 @JsonSerializable()
 class UpdateStaticColorParam {
-  final int color;
+  final Map<String, int> colors;
 
-  UpdateStaticColorParam({required this.color});
+  UpdateStaticColorParam({required this.colors});
 
   factory UpdateStaticColorParam.fromJson(Map<String, dynamic> json) =>
       _$UpdateStaticColorParamFromJson(json);

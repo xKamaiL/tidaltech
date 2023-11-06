@@ -112,14 +112,14 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
     ));
   }
 
-  Future<void> setStaticColor(int rgb) async {
+  Future<void> setStaticColor(Map<LED, ColorPoint> colors) async {
     await api.updateStaticColor(UpdateStaticColorParam(
-      color: rgb,
+      colors: colors.map((key, value) => MapEntry(key.name, value.intensity)),
     ));
     final x = state;
     x.device = x.device!.copyWith(
       properties: x.device!.properties.copyWith(
-        color: rgb,
+        color: colors.map((key, value) => MapEntry(key.name, value.intensity)),
       ),
     );
     state = x;

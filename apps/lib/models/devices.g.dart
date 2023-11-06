@@ -38,7 +38,7 @@ DeviceProperties _$DevicePropertiesFromJson(Map<String, dynamic> json) =>
       mode: json['mode'] as String,
       schedule:
           DeviceSchedule.fromJson(json['schedule'] as Map<String, dynamic>),
-      color: json['color'] as int?,
+      color: Map<String, int>.from(json['color'] as Map),
     );
 
 Map<String, dynamic> _$DevicePropertiesToJson(DeviceProperties instance) =>
@@ -115,11 +115,11 @@ Map<String, dynamic> _$UpdateModeParamToJson(UpdateModeParam instance) =>
 UpdateStaticColorParam _$UpdateStaticColorParamFromJson(
         Map<String, dynamic> json) =>
     UpdateStaticColorParam(
-      color: json['color'] as int,
+      colors: Map<String, int>.from(json['colors'] as Map),
     );
 
 Map<String, dynamic> _$UpdateStaticColorParamToJson(
         UpdateStaticColorParam instance) =>
     <String, dynamic>{
-      'color': instance.color,
+      'colors': instance.colors,
     };
