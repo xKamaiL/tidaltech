@@ -77,7 +77,7 @@ class RouterNotifier extends ChangeNotifier {
             ]),
         ShellRoute(
           builder: (context, state, child) => DashboardScreen(
-            child,
+            child: child,
           ),
           routes: [
             GoRoute(

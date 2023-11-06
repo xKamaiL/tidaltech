@@ -1,25 +1,50 @@
 import 'dart:ui';
 
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tidal_tech/models/devices.dart';
 import 'package:tidal_tech/models/models.dart';
+import 'package:tidal_tech/providers/ble_manager.dart';
 import 'package:tidal_tech/stores/bottom_bar.dart';
 import 'package:tidal_tech/stores/device.dart';
 import 'package:tidal_tech/ui/widget/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class DashboardScreen extends HookConsumerWidget {
-  static const blur = 5.0;
+const blur = 5.0;
 
+class DashboardScreen extends StatefulHookConsumerWidget {
   final Widget child;
 
-  const DashboardScreen(this.child, {super.key});
+  const DashboardScreen({super.key, required this.child});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends ConsumerState<DashboardScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    FlutterBluePlus.adapterState.listen((event) {
+      if (event == BluetoothAdapterState.on) {
+        Future(() {
+          ref.read(bleManagerProvider.notifier).reconnect();
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final isHome =
         GoRouter.of(context).routerDelegate.currentConfiguration.fullPath ==
             '/home';
@@ -34,7 +59,7 @@ class DashboardScreen extends HookConsumerWidget {
       extendBodyBehindAppBar: true,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: !isHome
-          ? SafeArea(child: child)
+          ? SafeArea(child: widget.child)
           : Container(
               decoration: BoxDecoration(
                 image: isHome
@@ -53,7 +78,7 @@ class DashboardScreen extends HookConsumerWidget {
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
                   child: SafeArea(
-                    child: child,
+                    child: widget.child,
                   ),
                 ),
               ),
