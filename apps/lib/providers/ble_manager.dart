@@ -87,6 +87,12 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
     state = state.copyWith(isScanning: false);
   }
 
+  void delayReconnect(){
+    Future.delayed(const Duration(seconds: 3)).then((value) {
+      reconnect();
+    });
+  }
+
   // reconnect
   // run when user click on bluetooth icon
   void reconnect() {
@@ -101,7 +107,7 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
         connectedDevice: alreadyConn.first,
         isReconnecting: false,
       );
-      // connect();
+      connect();
       return;
     }
     // start scan
