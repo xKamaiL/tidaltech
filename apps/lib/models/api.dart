@@ -144,6 +144,10 @@ abstract class RestClient {
   Future createPreset(@Body() CreatePresetParam param);
 
   @POST("/presets.Delete")
+  @Headers(<String, dynamic>{
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  })
   Future deletePreset(@Body() DeletePresetParam param);
 
 //

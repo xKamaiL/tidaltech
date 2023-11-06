@@ -67,36 +67,43 @@ class LightingFeederProfilePage extends HookConsumerWidget {
                       for (var item in res.result!.items)
                         Padding(
                           padding: const EdgeInsets.only(bottom: 8),
-                          child: n.ListTile(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            tileColor: ThemeColors.zinc.shade100,
-                            title: n.Text(item.name)
-                              ..fontWeight = FontWeight.w600
-                              ..color = ThemeColors.foreground,
-                            subtitle: n.Text(item.description.isEmpty
-                                ? "-"
-                                : item.description)
-                              ..color = ThemeColors.zinc,
-                            trailing: IconButton(
-                              icon: n.Icon(Icons.more_vert)
-                                ..color = ThemeColors.foreground
-                                ..size = 18.0,
-                              onPressed: () {},
-                            ),
-                            onTap: () {
-                              if (item.timePoints == null) {
-                                return;
-                              }
-                              ref
-                                  .read(timePointsNotifier.notifier)
-                                  .initTimePoint(item.timePoints!);
-
-                              if (context.canPop()) {
-                                context.pop();
-                              }
+                          child: Dismissible(
+                            key: UniqueKey(),
+                            background: Container(color: Colors.red),
+                            onDismissed: (direction) {
+                              api.deletePreset(DeletePresetParam(id: item.id));
                             },
+                            child: n.ListTile(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              tileColor: ThemeColors.zinc.shade100,
+                              title: n.Text(item.name)
+                                ..fontWeight = FontWeight.w600
+                                ..color = ThemeColors.foreground,
+                              subtitle: n.Text(item.description.isEmpty
+                                  ? "-"
+                                  : item.description)
+                                ..color = ThemeColors.zinc,
+                              trailing: IconButton(
+                                icon: n.Icon(Icons.more_vert)
+                                  ..color = ThemeColors.foreground
+                                  ..size = 18.0,
+                                onPressed: () {},
+                              ),
+                              onTap: () {
+                                if (item.timePoints == null) {
+                                  return;
+                                }
+                                ref
+                                    .read(timePointsNotifier.notifier)
+                                    .initTimePoint(item.timePoints!);
+
+                                if (context.canPop()) {
+                                  context.pop();
+                                }
+                              },
+                            ),
                           ),
                         )
                     ]),
