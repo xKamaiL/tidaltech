@@ -71,7 +71,7 @@ func Create(ctx context.Context, p *CreateParam) (*CreateResult, error) {
 		userID,
 		p.Name,
 		"",
-		p.TimePoints,
+		pgsql.JSON(p.TimePoints),
 	)
 	if err != nil {
 		return nil, err
