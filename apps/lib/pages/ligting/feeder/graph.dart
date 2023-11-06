@@ -14,9 +14,6 @@ class TimeScheduleGraph extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final points = ref.watch(
-      timePointsNotifier,
-    );
     return Column(
       children: [
         const AspectRatio(
