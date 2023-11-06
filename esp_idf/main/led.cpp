@@ -57,18 +57,14 @@ void led_display(tm now) {
         printf("led_display: manual mode\n");
         // get current light configuration
 
-        StaticColor color;
-        err = read_static_color_from_nvs(&color);
+        LEDLevel leds;
+        err = read_static_color_from_nvs(&leds);
         if (err != ESP_OK) {
             printf("led_display: Error reading static color from NVS\n");
             return;
         }
 
         // output to led with current time condition
-        LEDLevel leds = {0};
-        leds.red = color.r;
-        leds.green = color.g;
-        leds.blue = color.b;
         set_duty(leds);
 
         return;

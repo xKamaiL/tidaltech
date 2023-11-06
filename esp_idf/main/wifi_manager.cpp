@@ -39,12 +39,13 @@ void disconnect_wifi(void) {
         printf("wifi retry: get config failed\n");
         return;
     }
-    conf.sta.ssid[0] = '\0';
-    conf.sta.password[0] = '\0';
-    esp_wifi_set_config(WIFI_IF_STA, &conf);
+    wifi_config_t wifi_cfg_empty;
+    memset(&wifi_cfg_empty, 0, sizeof(wifi_config_t));
+    esp_wifi_set_config(WIFI_IF_STA, &wifi_cfg_empty);
     esp_wifi_disconnect();
+    esp_wifi_stop();
     esp_wifi_start();
-    printf("Wifi disconnected, restarting: %d\n", s_retry_num);
+    printf("Wifi disconnected\n");
 }
 
 static void event_handler(void* arg, esp_event_base_t event_base,
@@ -52,14 +53,13 @@ static void event_handler(void* arg, esp_event_base_t event_base,
     if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
         xTaskCreate(smartconfig_example_task, "smartconfig_example_task", 4096, NULL, 3, NULL);
     } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED) {
-        if (s_retry_num < 5) {
+        if (s_retry_num < 4) {
             printf("Wifi disconnected, reconnecting: %d\n", s_retry_num);
             esp_wifi_connect();
-            s_retry_num++;
-            if (s_retry_num >= 4) {
-                disconnect_wifi();
-            }
+        } else {
+            disconnect_wifi();
         }
+        s_retry_num++;
         xEventGroupClearBits(s_wifi_event_group, CONNECTED_BIT);
         ESP_LOGI(TAG, "connect to the AP fail");
     } else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
@@ -68,11 +68,11 @@ static void event_handler(void* arg, esp_event_base_t event_base,
         initialize_sntp();
         s_retry_num = 0;  // reset retry counter
     } else if (event_base == SC_EVENT && event_id == SC_EVENT_SCAN_DONE) {
-        printf("Scan done\n");
+        printf("wifi events: Scan done\n");
     } else if (event_base == SC_EVENT && event_id == SC_EVENT_FOUND_CHANNEL) {
-        printf("Found channel\n");
+        printf("wifi events: Found channel\n");
     } else if (event_base == SC_EVENT && event_id == SC_EVENT_GOT_SSID_PSWD) {
-        printf("Got SSID and password\n");
+        printf("wifi events: Got SSID and password\n");
 
         smartconfig_event_got_ssid_pswd_t* evt = (smartconfig_event_got_ssid_pswd_t*)event_data;
         wifi_config_t wifi_config;

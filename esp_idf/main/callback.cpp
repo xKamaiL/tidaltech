@@ -116,25 +116,22 @@ void on_set_color_mode(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &co
 }
 
 void on_set_ambient(NimBLECharacteristic *pCharacteristic, NimBLEConnInfo &connInfo) {
-    SetAmbientRequest *req = set_ambient_request__unpack(NULL, pCharacteristic->getValue().length(), (uint8_t *)pCharacteristic->getValue().c_str());
+    SetStaticColorRequest *req = set_static_color_request__unpack(NULL, pCharacteristic->getValue().length(), (uint8_t *)pCharacteristic->getValue().c_str());
     if (req == NULL) {
         printf("on_set_ambient: decode message failed\n");
         return;
     }
-    int r = req->r;
-    int g = req->g;
-    int b = req->b;
-    set_ambient_request__free_unpacked(req, NULL);
+    LEDLevel leds;
+    leds.white = req->white;
+    leds.warm_white = req->warm_white;
+    leds.red = req->red;
+    leds.green = req->green;
+    leds.blue = req->blue;
+    leds.royal_blue = req->royal_blue;
+    leds.ultra_violet = req->ultra_violet;
+    set_static_color_request__free_unpacked(req, NULL);
 
-    // but do not change the current color mode
-    printf("on_set_ambient: %d,%d,%d\n", r, g, b);
-
-    StaticColor color;
-    color.r = r;
-    color.g = g;
-    color.b = b;
-
-    esp_err_t err = write_static_color_to_nvs(color);
+    esp_err_t err = write_static_color_to_nvs(leds);
     if (err != ESP_OK) {
         printf("on_set_ambient: write ambient failed\n");
         return;

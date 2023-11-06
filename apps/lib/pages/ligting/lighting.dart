@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:niku/namespace.dart' as n;
-import 'package:tidal_tech/pages/ligting/ambient/color_picker.dart';
 import 'package:tidal_tech/pages/ligting/feeder/index.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:tidal_tech/pages/ligting/static/favorite_color_palette.dart';
+import 'package:tidal_tech/pages/ligting/static/static_palette.dart';
 import 'package:tidal_tech/providers/ble_manager.dart';
 
 import 'package:tidal_tech/stores/device.dart';
@@ -52,9 +53,9 @@ class LightingIndexPage extends HookConsumerWidget {
                 SingleChildScrollView(
                   child: n.Column(renderCustom()),
                 ),
-                SingleChildScrollView(
-                  child: n.Column(renderPreset()),
-                ),
+                n.Column(renderPreset())
+                  ..gap = 16
+                  ..mt = 16,
               ],
             ),
           )
@@ -74,7 +75,8 @@ class LightingIndexPage extends HookConsumerWidget {
   // ambient mode
   List<Widget> renderPreset() {
     return [
-      const ColorPicker(),
+      const FavoriteColorPalette(),
+      const StaticColorPalette(),
     ];
   }
 }

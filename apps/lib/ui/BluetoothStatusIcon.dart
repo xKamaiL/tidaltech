@@ -32,7 +32,7 @@ class _BluetoothStatusIconState extends ConsumerState<BluetoothStatusIcon> {
     super.initState();
     final manager = ref.read(bleManagerProvider.notifier);
     timer = Timer.periodic(const Duration(seconds: 10), (timer) {
-      manager.reconnect();
+      // manager.reconnect();
     });
   }
 

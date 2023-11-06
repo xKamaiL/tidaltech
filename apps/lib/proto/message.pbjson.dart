@@ -57,27 +57,6 @@ final $typed_data.Uint8List modeDescriptor = $convert.base64Decode(
     'CgRNb2RlEhQKEE1PREVfVU5TUEVDSUZJRUQQABIPCgtNT0RFX01BTlVBTBABEhEKDU1PREVfU0'
     'NIRURVTEUQAg==');
 
-@$core.Deprecated('Use lEDDescriptor instead')
-const LED$json = {
-  '1': 'LED',
-  '2': [
-    {'1': 'LED_UNSPECIFIED', '2': 0},
-    {'1': 'LED_WHITE', '2': 1},
-    {'1': 'LED_WARM_WHITE', '2': 2},
-    {'1': 'LED_RED', '2': 3},
-    {'1': 'LED_GREEN', '2': 4},
-    {'1': 'LED_BLUE', '2': 5},
-    {'1': 'LED_ROYAL_BLUE', '2': 6},
-    {'1': 'LED_ULTRA_VIOLET', '2': 7},
-  ],
-};
-
-/// Descriptor for `LED`. Decode as a `google.protobuf.EnumDescriptorProto`.
-final $typed_data.Uint8List lEDDescriptor = $convert.base64Decode(
-    'CgNMRUQSEwoPTEVEX1VOU1BFQ0lGSUVEEAASDQoJTEVEX1dISVRFEAESEgoOTEVEX1dBUk1fV0'
-    'hJVEUQAhILCgdMRURfUkVEEAMSDQoJTEVEX0dSRUVOEAQSDAoITEVEX0JMVUUQBRISCg5MRURf'
-    'Uk9ZQUxfQkxVRRAGEhQKEExFRF9VTFRSQV9WSU9MRVQQBw==');
-
 @$core.Deprecated('Use deviceInformationRequestDescriptor instead')
 const DeviceInformationRequest$json = {
   '1': 'DeviceInformationRequest',

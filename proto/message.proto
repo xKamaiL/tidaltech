@@ -102,19 +102,6 @@ enum Mode {
   MODE_SCHEDULE = 2;
 }
 
-// LED specifies the LED
-enum LED {
-  LED_UNSPECIFIED = 0;
-  LED_WHITE = 1;
-  LED_WARM_WHITE = 2;
-  LED_RED = 3;
-  LED_GREEN = 4;
-  LED_BLUE = 5;
-  LED_ROYAL_BLUE = 6;
-  LED_ULTRA_VIOLET = 7;
-}
-
-
 message TimeStamp {
   uint32 seconds = 1;
   uint32 white = 3;

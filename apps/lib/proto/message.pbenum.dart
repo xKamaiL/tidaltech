@@ -62,32 +62,5 @@ class Mode extends $pb.ProtobufEnum {
   const Mode._($core.int v, $core.String n) : super(v, n);
 }
 
-class LED extends $pb.ProtobufEnum {
-  static const LED LED_UNSPECIFIED = LED._(0, _omitEnumNames ? '' : 'LED_UNSPECIFIED');
-  static const LED LED_WHITE = LED._(1, _omitEnumNames ? '' : 'LED_WHITE');
-  static const LED LED_WARM_WHITE = LED._(2, _omitEnumNames ? '' : 'LED_WARM_WHITE');
-  static const LED LED_RED = LED._(3, _omitEnumNames ? '' : 'LED_RED');
-  static const LED LED_GREEN = LED._(4, _omitEnumNames ? '' : 'LED_GREEN');
-  static const LED LED_BLUE = LED._(5, _omitEnumNames ? '' : 'LED_BLUE');
-  static const LED LED_ROYAL_BLUE = LED._(6, _omitEnumNames ? '' : 'LED_ROYAL_BLUE');
-  static const LED LED_ULTRA_VIOLET = LED._(7, _omitEnumNames ? '' : 'LED_ULTRA_VIOLET');
-
-  static const $core.List<LED> values = <LED> [
-    LED_UNSPECIFIED,
-    LED_WHITE,
-    LED_WARM_WHITE,
-    LED_RED,
-    LED_GREEN,
-    LED_BLUE,
-    LED_ROYAL_BLUE,
-    LED_ULTRA_VIOLET,
-  ];
-
-  static final $core.Map<$core.int, LED> _byValue = $pb.ProtobufEnum.initByValue(values);
-  static LED? valueOf($core.int value) => _byValue[value];
-
-  const LED._($core.int v, $core.String n) : super(v, n);
-}
-
 
 const _omitEnumNames = $core.bool.fromEnvironment('protobuf.omit_enum_names');

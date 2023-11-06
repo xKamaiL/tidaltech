@@ -87,8 +87,9 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
     state = state.copyWith(isScanning: false);
   }
 
-  void delayReconnect(){
-    Future.delayed(const Duration(seconds: 3)).then((value) {
+  void delayReconnect() {
+    Future.delayed(const Duration(seconds: 1)).then((value) {
+      debugPrint("delay reconnect");
       reconnect();
     });
   }
@@ -200,7 +201,8 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
   }
 
   Future<BluetoothCharacteristic?> _callCharacteristic(
-      String serviceGuid, String characteristicGuid) async {
+      String serviceGuid, String characteristicGuid,
+      {bool reconnect = true}) async {
     final conn = state.connectedDevice;
     if (conn == null) {
       debugPrint("_callCharacteristic: conn is null");
@@ -209,9 +211,11 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
     await stopScan();
 
     final connState = await conn.connectionState.first;
-    if (connState != BluetoothConnectionState.connected) {
+    if (connState != BluetoothConnectionState.connected && reconnect) {
       debugPrint("_callCharacteristic: conn is not connected");
       await conn.connect();
+      return _callCharacteristic(serviceGuid, characteristicGuid,
+          reconnect: false);
     }
     await conn.discoverServices();
 
@@ -295,18 +299,25 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
     //
   }
 
-  void setStaticColor(int rgb) async {
+  void setStaticColor(Map<LED, ColorPoint> colors) async {
     final c = await _callCharacteristic(
         BLEServices.color, ColorService.setStaticColor);
     // send to device
     if (c == null) {
       return;
     }
-    final req = SetAmbientRequest();
+    final req = SetStaticColorRequest();
 
-    req.r = (rgb >> 16) & 0xFF;
-    req.g = (rgb >> 8) & 0xFF;
-    req.b = rgb & 0xFF;
+    req.white = colors[LED.white]!.intensity;
+    req.blue = colors[LED.blue]!.intensity;
+    req.royalBlue = colors[LED.royalBlue]!.intensity;
+    req.warmWhite = colors[LED.warmWhite]!.intensity;
+    req.ultraViolet = colors[LED.ultraViolet]!.intensity;
+    req.red = colors[LED.red]!.intensity;
+    req.green = colors[LED.green]!.intensity;
+
+
+
     // print value
     c.write(req.writeToBuffer(), withoutResponse: true);
   }
