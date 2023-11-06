@@ -31,6 +31,22 @@ static void smartconfig_example_task(void* parm);
 
 static int s_retry_num = 0;
 
+void disconnect_wifi(void) {
+    wifi_config_t conf;
+    esp_err_t ret;
+    ret = esp_wifi_get_config(WIFI_IF_STA, &conf);
+    if (ret != ESP_OK) {
+        printf("wifi retry: get config failed\n");
+        return;
+    }
+    conf.sta.ssid[0] = '\0';
+    conf.sta.password[0] = '\0';
+    esp_wifi_set_config(WIFI_IF_STA, &conf);
+    esp_wifi_disconnect();
+    esp_wifi_start();
+    printf("Wifi disconnected, restarting: %d\n", s_retry_num);
+}
+
 static void event_handler(void* arg, esp_event_base_t event_base,
                           int32_t event_id, void* event_data) {
     if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
@@ -40,20 +56,9 @@ static void event_handler(void* arg, esp_event_base_t event_base,
             printf("Wifi disconnected, reconnecting: %d\n", s_retry_num);
             esp_wifi_connect();
             s_retry_num++;
-        } else {
-            wifi_config_t conf;
-            esp_err_t ret;
-            ret = esp_wifi_get_config(WIFI_IF_STA, &conf);
-            if (ret != ESP_OK) {
-                printf("wifi retry: get config failed\n");
-                return;
+            if (s_retry_num >= 4) {
+                disconnect_wifi();
             }
-            conf.sta.ssid[0] = '\0';
-            conf.sta.password[0] = '\0';
-            esp_wifi_set_config(WIFI_IF_STA, &conf);
-            esp_wifi_disconnect();
-            esp_wifi_start();
-            printf("Wifi disconnected, restarting: %d\n", s_retry_num);
         }
         xEventGroupClearBits(s_wifi_event_group, CONNECTED_BIT);
         ESP_LOGI(TAG, "connect to the AP fail");
