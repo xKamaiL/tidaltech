@@ -94,5 +94,10 @@ type DeleteParam struct {
 }
 
 func Delete(ctx context.Context, p *DeleteParam) error {
+	userID := auth.GetAccountID(ctx)
+	_, err := pgctx.Exec(ctx, `delete from schedule_presets where id = $1 and user_id = $2`, p.ID, userID)
+	if err != nil {
+		return err
+	}
 	return nil
 }
