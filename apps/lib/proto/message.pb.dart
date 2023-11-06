@@ -173,16 +173,20 @@ class SetColorModeRequest extends $pb.GeneratedMessage {
   void clearMode() => clearField(1);
 }
 
-class SetAmbientRequest extends $pb.GeneratedMessage {
-  factory SetAmbientRequest() => create();
-  SetAmbientRequest._() : super();
-  factory SetAmbientRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory SetAmbientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+class SetStaticColorRequest extends $pb.GeneratedMessage {
+  factory SetStaticColorRequest() => create();
+  SetStaticColorRequest._() : super();
+  factory SetStaticColorRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory SetStaticColorRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SetAmbientRequest', createEmptyInstance: create)
-    ..a<$core.int>(1, _omitFieldNames ? '' : 'r', $pb.PbFieldType.OU3)
-    ..a<$core.int>(2, _omitFieldNames ? '' : 'g', $pb.PbFieldType.OU3)
-    ..a<$core.int>(3, _omitFieldNames ? '' : 'b', $pb.PbFieldType.OU3)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SetStaticColorRequest', createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'white', $pb.PbFieldType.OU3)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'warmWhite', $pb.PbFieldType.OU3)
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'red', $pb.PbFieldType.OU3)
+    ..a<$core.int>(4, _omitFieldNames ? '' : 'green', $pb.PbFieldType.OU3)
+    ..a<$core.int>(5, _omitFieldNames ? '' : 'blue', $pb.PbFieldType.OU3)
+    ..a<$core.int>(6, _omitFieldNames ? '' : 'royalBlue', $pb.PbFieldType.OU3)
+    ..a<$core.int>(7, _omitFieldNames ? '' : 'ultraViolet', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -190,49 +194,85 @@ class SetAmbientRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  SetAmbientRequest clone() => SetAmbientRequest()..mergeFromMessage(this);
+  SetStaticColorRequest clone() => SetStaticColorRequest()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  SetAmbientRequest copyWith(void Function(SetAmbientRequest) updates) => super.copyWith((message) => updates(message as SetAmbientRequest)) as SetAmbientRequest;
+  SetStaticColorRequest copyWith(void Function(SetStaticColorRequest) updates) => super.copyWith((message) => updates(message as SetStaticColorRequest)) as SetStaticColorRequest;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static SetAmbientRequest create() => SetAmbientRequest._();
-  SetAmbientRequest createEmptyInstance() => create();
-  static $pb.PbList<SetAmbientRequest> createRepeated() => $pb.PbList<SetAmbientRequest>();
+  static SetStaticColorRequest create() => SetStaticColorRequest._();
+  SetStaticColorRequest createEmptyInstance() => create();
+  static $pb.PbList<SetStaticColorRequest> createRepeated() => $pb.PbList<SetStaticColorRequest>();
   @$core.pragma('dart2js:noInline')
-  static SetAmbientRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SetAmbientRequest>(create);
-  static SetAmbientRequest? _defaultInstance;
+  static SetStaticColorRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SetStaticColorRequest>(create);
+  static SetStaticColorRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.int get r => $_getIZ(0);
+  $core.int get white => $_getIZ(0);
   @$pb.TagNumber(1)
-  set r($core.int v) { $_setUnsignedInt32(0, v); }
+  set white($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasR() => $_has(0);
+  $core.bool hasWhite() => $_has(0);
   @$pb.TagNumber(1)
-  void clearR() => clearField(1);
+  void clearWhite() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.int get g => $_getIZ(1);
+  $core.int get warmWhite => $_getIZ(1);
   @$pb.TagNumber(2)
-  set g($core.int v) { $_setUnsignedInt32(1, v); }
+  set warmWhite($core.int v) { $_setUnsignedInt32(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasG() => $_has(1);
+  $core.bool hasWarmWhite() => $_has(1);
   @$pb.TagNumber(2)
-  void clearG() => clearField(2);
+  void clearWarmWhite() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.int get b => $_getIZ(2);
+  $core.int get red => $_getIZ(2);
   @$pb.TagNumber(3)
-  set b($core.int v) { $_setUnsignedInt32(2, v); }
+  set red($core.int v) { $_setUnsignedInt32(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasB() => $_has(2);
+  $core.bool hasRed() => $_has(2);
   @$pb.TagNumber(3)
-  void clearB() => clearField(3);
+  void clearRed() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.int get green => $_getIZ(3);
+  @$pb.TagNumber(4)
+  set green($core.int v) { $_setUnsignedInt32(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasGreen() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearGreen() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.int get blue => $_getIZ(4);
+  @$pb.TagNumber(5)
+  set blue($core.int v) { $_setUnsignedInt32(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasBlue() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearBlue() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.int get royalBlue => $_getIZ(5);
+  @$pb.TagNumber(6)
+  set royalBlue($core.int v) { $_setUnsignedInt32(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasRoyalBlue() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearRoyalBlue() => clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.int get ultraViolet => $_getIZ(6);
+  @$pb.TagNumber(7)
+  set ultraViolet($core.int v) { $_setUnsignedInt32(6, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasUltraViolet() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearUltraViolet() => clearField(7);
 }
 
 class RTCRequest extends $pb.GeneratedMessage {

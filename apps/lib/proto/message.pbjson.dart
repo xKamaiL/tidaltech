@@ -117,20 +117,26 @@ const SetColorModeRequest$json = {
 final $typed_data.Uint8List setColorModeRequestDescriptor = $convert.base64Decode(
     'ChNTZXRDb2xvck1vZGVSZXF1ZXN0EhkKBG1vZGUYASABKA4yBS5Nb2RlUgRtb2Rl');
 
-@$core.Deprecated('Use setAmbientRequestDescriptor instead')
-const SetAmbientRequest$json = {
-  '1': 'SetAmbientRequest',
+@$core.Deprecated('Use setStaticColorRequestDescriptor instead')
+const SetStaticColorRequest$json = {
+  '1': 'SetStaticColorRequest',
   '2': [
-    {'1': 'r', '3': 1, '4': 1, '5': 13, '10': 'r'},
-    {'1': 'g', '3': 2, '4': 1, '5': 13, '10': 'g'},
-    {'1': 'b', '3': 3, '4': 1, '5': 13, '10': 'b'},
+    {'1': 'white', '3': 1, '4': 1, '5': 13, '10': 'white'},
+    {'1': 'warm_white', '3': 2, '4': 1, '5': 13, '10': 'warmWhite'},
+    {'1': 'red', '3': 3, '4': 1, '5': 13, '10': 'red'},
+    {'1': 'green', '3': 4, '4': 1, '5': 13, '10': 'green'},
+    {'1': 'blue', '3': 5, '4': 1, '5': 13, '10': 'blue'},
+    {'1': 'royal_blue', '3': 6, '4': 1, '5': 13, '10': 'royalBlue'},
+    {'1': 'ultra_violet', '3': 7, '4': 1, '5': 13, '10': 'ultraViolet'},
   ],
 };
 
-/// Descriptor for `SetAmbientRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List setAmbientRequestDescriptor = $convert.base64Decode(
-    'ChFTZXRBbWJpZW50UmVxdWVzdBIMCgFyGAEgASgNUgFyEgwKAWcYAiABKA1SAWcSDAoBYhgDIA'
-    'EoDVIBYg==');
+/// Descriptor for `SetStaticColorRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List setStaticColorRequestDescriptor = $convert.base64Decode(
+    'ChVTZXRTdGF0aWNDb2xvclJlcXVlc3QSFAoFd2hpdGUYASABKA1SBXdoaXRlEh0KCndhcm1fd2'
+    'hpdGUYAiABKA1SCXdhcm1XaGl0ZRIQCgNyZWQYAyABKA1SA3JlZBIUCgVncmVlbhgEIAEoDVIF'
+    'Z3JlZW4SEgoEYmx1ZRgFIAEoDVIEYmx1ZRIdCgpyb3lhbF9ibHVlGAYgASgNUglyb3lhbEJsdW'
+    'USIQoMdWx0cmFfdmlvbGV0GAcgASgNUgt1bHRyYVZpb2xldA==');
 
 @$core.Deprecated('Use rTCRequestDescriptor instead')
 const RTCRequest$json = {
