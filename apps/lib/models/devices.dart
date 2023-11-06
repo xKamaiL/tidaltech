@@ -64,7 +64,7 @@ class DeviceProperties {
       power: power ?? this.power,
       mode: mode ?? this.mode,
       schedule: schedule ?? this.schedule,
-      color: color ?? this.color,
+      colors: color ?? colors,
     );
   }
 //
