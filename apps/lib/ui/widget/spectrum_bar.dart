@@ -6,6 +6,16 @@ import 'package:niku/namespace.dart' as n;
 import 'package:tidal_tech/providers/feeder.dart';
 import 'package:tidal_tech/theme/colors.dart';
 
+final ledLabel = {
+  LED.red: "Red",
+  LED.green: "Green",
+  LED.blue: "Blue",
+  LED.white: "White",
+  LED.ultraViolet: "UV",
+  LED.royalBlue: "Royal",
+  LED.warmWhite: "Warm",
+};
+
 class Bar extends HookConsumerWidget {
   final LED color;
   final int value;
@@ -17,17 +27,24 @@ class Bar extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final popup = useState(false);
     final GlobalKey<TooltipState> tooltipkey = GlobalKey<TooltipState>();
-
+    String label = ledLabel[color] ?? "-";
     return Expanded(
       child: Stack(
         children: [
           Align(
             alignment: Alignment.centerLeft,
             child: n.Text("$value%")
-              ..color = ThemeColors.zinc
+              ..color = ThemeColors.zinc.shade600
               ..fontWeight = FontWeight.w900
               ..ml = 8
-              ..fontSize = 12,
+              ..fontSize = 14,
+          ),
+          Align(
+            alignment: Alignment.topRight,
+            child: n.Text(label)
+              ..color = ThemeColors.zinc.shade400
+              ..fontWeight = FontWeight.w900
+              ..fontSize = 10,
           ),
           SizedBox(
             width: double.infinity,
