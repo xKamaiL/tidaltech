@@ -40,13 +40,19 @@ void daily_task(void* param) {
 
         // output to led with current time condition
         led_display(now);
-
+        // next = 5;
         printf("\ndelay for %d seconds\n\n", next);
         vTaskDelay(pdMS_TO_TICKS(next * 1000));
     }
 }
+#include "driver/gpio.h"
 
 void app_main(void) {
+    gpio_reset_pin(GPIO_NUM_13);
+    // set gpio 13 to low
+    gpio_set_direction(GPIO_NUM_13, GPIO_MODE_OUTPUT);
+    gpio_set_level(GPIO_NUM_13, 0);
+
     esp_err_t err = nvs_flash_init();
     if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
         ESP_ERROR_CHECK(nvs_flash_erase());
