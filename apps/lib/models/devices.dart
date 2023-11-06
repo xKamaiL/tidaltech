@@ -40,13 +40,13 @@ class DeviceProperties {
   final bool power;
   final String mode;
   final DeviceSchedule schedule;
-  final Map<String, int> color;
+  final Map<String, int> colors;
 
   DeviceProperties({
     required this.power,
     required this.mode,
     required this.schedule,
-    required this.color,
+    required this.colors,
   });
 
   factory DeviceProperties.fromJson(Map<String, dynamic> json) =>
