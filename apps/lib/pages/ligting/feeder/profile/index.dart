@@ -70,8 +70,18 @@ class LightingFeederProfilePage extends HookConsumerWidget {
                           child: Dismissible(
                             key: UniqueKey(),
                             background: Container(color: Colors.red),
-                            onDismissed: (direction) {
-                              api.deletePreset(DeletePresetParam(id: item.id));
+                            direction: DismissDirection.endToStart,
+                            onDismissed: (direction) {},
+                            confirmDismiss: (direction) async {
+                              if (direction == DismissDirection.endToStart) {
+                                return false;
+                              }
+                              final res = await api
+                                  .deletePreset(DeletePresetParam(id: item.id));
+                              if (!res.ok) {
+                                return false;
+                              }
+                              return true;
                             },
                             child: n.ListTile(
                               shape: RoundedRectangleBorder(
