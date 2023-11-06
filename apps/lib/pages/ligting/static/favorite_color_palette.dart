@@ -17,32 +17,47 @@ class FavoriteColorPalette extends HookConsumerWidget {
       {},
     ];
 
-    return Container(
+    return SizedBox(
+      height: 300,
       width: double.infinity,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: ThemeColors.zinc.shade100),
-      child: SizedBox(
-        height: 250,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Container(
-            margin: EdgeInsets.only(top: 8, bottom: 8),
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: false,
-              children: [
-                n.Box()
-                  ..w = 40
-                  ..h = 40
-                  ..bg = Colors.red
-                  ..rounded
-                  ..pr = 8,
-              ],
-            ),
-          ),
-        ),
+      child: GridView.count(
+        crossAxisCount: 2,
+        mainAxisSpacing: 16,
+        crossAxisSpacing: 16,
+        scrollDirection: Axis.horizontal,
+        children: [
+          SceneItem(),
+          SceneItem(),
+          SceneItem(),
+          SceneItem(),
+          SceneItem(),
+        ],
       ),
     );
+  }
+}
+
+class SceneItem extends HookConsumerWidget {
+  const SceneItem({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return n.Row([
+      n.Column([
+        n.Icon(CupertinoIcons.sun_dust_fill)
+          ..color = ThemeColors.zinc
+          ..size = 40,
+        n.Box()..h = 10,
+        n.Text('Sunlight')..fontSize = 16,
+      ])
+        ..spaceBetween
+        ..mainAxisAlignment = MainAxisAlignment.center
+        ..gap = 4,
+    ])
+      ..bg = ThemeColors.zinc.shade100
+      ..wFull
+      ..rounded = 8
+      ..crossAxisAlignment = CrossAxisAlignment.center
+      ..mainAxisAlignment = MainAxisAlignment.center;
   }
 }

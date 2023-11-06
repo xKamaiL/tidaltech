@@ -206,6 +206,7 @@ class BLEManagerProvider extends StateNotifier<BLEManager> {
     final conn = state.connectedDevice;
     if (conn == null) {
       debugPrint("_callCharacteristic: conn is null");
+      this.reconnect();
       return null;
     }
     await stopScan();
