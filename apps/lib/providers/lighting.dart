@@ -50,7 +50,7 @@ class TimePointsNotifier extends StateNotifier<List<TimePoint>> {
     if (state.length <= 5) {
       minutes += 60 * 3; // 3 hours
     } else {
-      minutes += 60 * 1; // 1 hour
+      minutes += 30; // 1 hour
     }
 
     final hour = (minutes / 60).floor();
