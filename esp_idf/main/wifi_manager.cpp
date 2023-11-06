@@ -29,19 +29,39 @@ static const int ESPTOUCH_DONE_BIT = BIT1;
 
 static void smartconfig_example_task(void* parm);
 
+static int s_retry_num = 0;
+
 static void event_handler(void* arg, esp_event_base_t event_base,
                           int32_t event_id, void* event_data) {
     if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
         xTaskCreate(smartconfig_example_task, "smartconfig_example_task", 4096, NULL, 3, NULL);
     } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED) {
-        esp_wifi_connect();
+        if (s_retry_num < 5) {
+            printf("Wifi disconnected, reconnecting: %d\n", s_retry_num);
+            esp_wifi_connect();
+            s_retry_num++;
+        } else {
+            wifi_config_t conf;
+            esp_err_t ret;
+            ret = esp_wifi_get_config(WIFI_IF_STA, &conf);
+            if (ret != ESP_OK) {
+                printf("wifi retry: get config failed\n");
+                return;
+            }
+            conf.sta.ssid[0] = '\0';
+            conf.sta.password[0] = '\0';
+            esp_wifi_set_config(WIFI_IF_STA, &conf);
+            esp_wifi_disconnect();
+            esp_wifi_start();
+            printf("Wifi disconnected, restarting: %d\n", s_retry_num);
+        }
         xEventGroupClearBits(s_wifi_event_group, CONNECTED_BIT);
-        xTaskCreate(smartconfig_example_task, "smartconfig_example_task", 4096, NULL, 3, NULL);
-
+        ESP_LOGI(TAG, "connect to the AP fail");
     } else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
         printf("Got IP\n");
         xEventGroupSetBits(s_wifi_event_group, CONNECTED_BIT);
         initialize_sntp();
+        s_retry_num = 0;  // reset retry counter
     } else if (event_base == SC_EVENT && event_id == SC_EVENT_SCAN_DONE) {
         printf("Scan done\n");
     } else if (event_base == SC_EVENT && event_id == SC_EVENT_FOUND_CHANNEL) {
