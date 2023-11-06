@@ -13,6 +13,8 @@ class FavoriteColorPalette extends HookConsumerWidget {
     final colors = [
       {},
       {},
+      {},
+      {},
     ];
 
     return Container(
@@ -20,22 +22,27 @@ class FavoriteColorPalette extends HookConsumerWidget {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           color: ThemeColors.zinc.shade100),
-      child: n.Row([
-        for (var i = 0; i < colors.length; i++)
-          Expanded(
-            child: GestureDetector(
-              onTap: () {},
-              child: Container(
-                height: 50,
-                color: Colors.red,
-                child: const Center(
-                  child: Icon(Icons.check, color: Colors.white),
-                ),
-              ),
+      child: SizedBox(
+        height: 250,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Container(
+            margin: EdgeInsets.only(top: 8, bottom: 8),
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: false,
+              children: [
+                n.Box()
+                  ..w = 40
+                  ..h = 40
+                  ..bg = Colors.red
+                  ..rounded
+                  ..pr = 8,
+              ],
             ),
           ),
-      ])
-        ..h = MediaQuery.of(context).size.height / 2.5,
+        ),
+      ),
     );
   }
 }
