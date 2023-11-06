@@ -137,6 +137,10 @@ abstract class RestClient {
   Future<APIFormat<MyPresetResult>> fetchMyPresets();
 
   @POST("/presets.Create")
+  @Headers(<String, dynamic>{
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  })
   Future createPreset(@Body() CreatePresetParam param);
 
   @POST("/presets.Delete")

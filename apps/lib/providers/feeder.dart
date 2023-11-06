@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:tidal_tech/proto/message.pb.dart';
 
+import '../models/devices.dart';
+
 // LED that available on the product
 enum LED {
   white, // 20
@@ -117,6 +119,22 @@ class TimePoint {
 
   int hours() {
     return hour;
+  }
+
+  DeviceTimePoint toDeviceTimePoint() {
+    return DeviceTimePoint(
+      time:
+          "${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}",
+      brightness: {
+        "white": colors[LED.white]!.intensity,
+        "blue": colors[LED.blue]!.intensity,
+        "royalBlue": colors[LED.royalBlue]!.intensity,
+        "warmWhite": colors[LED.warmWhite]!.intensity,
+        "ultraViolet": colors[LED.ultraViolet]!.intensity,
+        "red": colors[LED.red]!.intensity,
+        "green": colors[LED.green]!.intensity,
+      },
+    );
   }
 
   LightingScheduleRequest toProto() {

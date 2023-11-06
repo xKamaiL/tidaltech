@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
@@ -27,7 +28,6 @@ class _ClockWidgetState extends ConsumerState<ClockWidget> {
   }
 
   void checkRTC() {
-
   }
 
   @override
@@ -39,12 +39,11 @@ class _ClockWidgetState extends ConsumerState<ClockWidget> {
 
   @override
   Widget build(BuildContext context) {
-
     return StreamBuilder(
       stream: Stream.periodic(const Duration(seconds: 1)),
       builder: (context, snap) {
         return Panel(
-          onPressed: () => {
+          onPressed: () {
             //
           },
           child: n.Column([

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:tidal_tech/models/models.dart';
 import 'package:tidal_tech/pages/ligting/feeder/profile.dart';
 import 'package:tidal_tech/providers/lighting.dart';
 import 'package:tidal_tech/theme/colors.dart';
@@ -17,6 +18,8 @@ class TimeScheduleControl extends HookConsumerWidget {
       timePointsNotifier,
     );
     final selected = ref.watch(timePointEditingProvider);
+    final presetName = useTextEditingController();
+
     return n.Box(
       n.Row([
         n.Row([
@@ -98,7 +101,53 @@ class TimeScheduleControl extends HookConsumerWidget {
               n.Icon(Icons.star_outline)..color = ThemeColors.foreground,
             )
               ..onPressed = () {
-                // TODO: save as preset
+                n.showNikuDialog(
+                  context: context,
+                  builder: (context) {
+                    return CupertinoAlertDialog(
+                      title: const Text("Save a new preset"),
+                      content: n.Column([
+                        CupertinoTextField(
+                          placeholder: "Enter name",
+                          onChanged: (value) {
+                            //
+                          },
+                          autofocus: true,
+                          controller: presetName,
+                        )
+                      ]),
+                      actions: [
+                        CupertinoDialogAction(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          isDestructiveAction: true,
+                          child: const Text('Cancel'),
+                        ),
+                        CupertinoDialogAction(
+                          onPressed: () async {
+                            api
+                                .createPreset(CreatePresetParam(
+                              name: presetName.text,
+                              schedule: DeviceSchedule(
+                                points: points
+                                    .map((e) => e.toDeviceTimePoint())
+                                    .toList(),
+                                weekday: 0,
+                              ),
+                            ))
+                                .then((value) {
+                              presetName.clear();
+                              Navigator.of(context).pop();
+                              context.push('/lighting/feeder/profile');
+                            });
+                          },
+                          child: const Text('Save'),
+                        ),
+                      ],
+                    );
+                  },
+                );
               }
               ..color = ThemeColors.foreground
               ..rounded = 8

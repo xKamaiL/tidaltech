@@ -71,7 +71,6 @@ class _FeederControlState extends ConsumerState<ConsumerStatefulWidget> {
     )
       ..gap = 8
       ..my = 16
-      ..mainAxisAlignment = MainAxisAlignment.spaceBetween
-      ..hFull;
+      ..mainAxisAlignment = MainAxisAlignment.spaceBetween;
   }
 }

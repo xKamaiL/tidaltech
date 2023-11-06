@@ -51,26 +51,26 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
 
     if (res.result!.properties.colors != null) {
       ref.read(staticLEDColorProvider.notifier).setWhite(
-        res.result!.properties.colors!["white"]!.toDouble(),
-      );
+            res.result!.properties.colors!["white"]!.toDouble(),
+          );
       ref.read(staticLEDColorProvider.notifier).setBlue(
-        res.result!.properties.colors!["blue"]!.toDouble(),
-      );
+            res.result!.properties.colors!["blue"]!.toDouble(),
+          );
       ref.read(staticLEDColorProvider.notifier).setRoyalBlue(
-        res.result!.properties.colors!["royalBlue"]!.toDouble(),
-      );
+            res.result!.properties.colors!["royalBlue"]!.toDouble(),
+          );
       ref.read(staticLEDColorProvider.notifier).setWarmWhite(
-        res.result!.properties.colors!["warmWhite"]!.toDouble(),
-      );
+            res.result!.properties.colors!["warmWhite"]!.toDouble(),
+          );
       ref.read(staticLEDColorProvider.notifier).setUltraViolet(
-        res.result!.properties.colors!["ultraViolet"]!.toDouble(),
-      );
+            res.result!.properties.colors!["ultraViolet"]!.toDouble(),
+          );
       ref.read(staticLEDColorProvider.notifier).setRed(
-        res.result!.properties.colors!["red"]!.toDouble(),
-      );
+            res.result!.properties.colors!["red"]!.toDouble(),
+          );
       ref.read(staticLEDColorProvider.notifier).setGreen(
-        res.result!.properties.colors!["green"]!.toDouble(),
-      );
+            res.result!.properties.colors!["green"]!.toDouble(),
+          );
     }
 
     final currentTimePoints = ref.read(timePointsNotifier);
@@ -119,8 +119,6 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
       ref.read(timePointEditingProvider.notifier).set(tps[0]);
     }
 
-
-
     //
   }
 
@@ -157,19 +155,7 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
     final res = await api.updateSchedule(UpdateScheduleParam(
         schedule: DeviceSchedule(
       points: timePoints.map<DeviceTimePoint>((e) {
-        return DeviceTimePoint(
-          time:
-              "${e.hour.toString().padLeft(2, '0')}:${e.minute.toString().padLeft(2, '0')}",
-          brightness: {
-            "white": e.colors[LED.white]!.intensity,
-            "blue": e.colors[LED.blue]!.intensity,
-            "royalBlue": e.colors[LED.royalBlue]!.intensity,
-            "warmWhite": e.colors[LED.warmWhite]!.intensity,
-            "ultraViolet": e.colors[LED.ultraViolet]!.intensity,
-            "red": e.colors[LED.red]!.intensity,
-            "green": e.colors[LED.green]!.intensity,
-          },
-        );
+        return e.toDeviceTimePoint();
       }).toList(),
       // TODO: add weekday
       weekday: 0,

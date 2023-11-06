@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:niku/namespace.dart' as n;
@@ -15,14 +16,13 @@ import 'package:tidal_tech/pages/home/water_temp_widget.dart';
 import 'package:tidal_tech/ui/BluetoothStatusIcon.dart';
 import 'package:tidal_tech/ui/widget/scene_card.dart';
 
-import '../../ui/WiFiStatusIcon.dart';
-
 class HomeIndexPage extends HookConsumerWidget {
   const HomeIndexPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //
+
     return Scaffold(
       appBar: AppBar(
         title: n.Text('Your Home')

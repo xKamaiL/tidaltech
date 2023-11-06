@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:niku/namespace.dart' as n;
+import 'package:tidal_tech/models/api.dart';
 import 'package:tidal_tech/models/models.dart';
 import 'package:tidal_tech/theme/colors.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -40,7 +41,7 @@ class LightingFeederProfilePage extends HookConsumerWidget {
             future: loadList(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
-                return buildList();
+                return buildList(snapshot.data);
               } else {
                 return const SizedBox(
                   height: 400,
@@ -62,9 +63,28 @@ class LightingFeederProfilePage extends HookConsumerWidget {
     return api.fetchMyPresets();
   }
 
-  Widget buildList() {
+  Widget buildList(
+    APIFormat<MyPresetResult> res,
+  ) {
+    if (!res.ok) {
+      return const SizedBox(
+        height: 400,
+        child: Center(
+          child: Text("Error"),
+        ),
+      );
+    }
+    if (res.result == null) {
+      return const SizedBox(
+        height: 400,
+        child: Center(
+          child: Text("No data"),
+        ),
+      );
+    }
+
     return n.Box(
-      n.Text("Hello"),
+      n.Text("Hello ${res.result?.items}"),
     );
   }
 }
