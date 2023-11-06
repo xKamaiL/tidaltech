@@ -50,12 +50,12 @@ class LightingIndexPage extends HookConsumerWidget {
               physics: const NeverScrollableScrollPhysics(),
               controller: tabController,
               children: [
-                SingleChildScrollView(
-                  child: n.Column(renderCustom()),
-                ),
+                renderCustom(),
                 n.Column(renderPreset())
                   ..gap = 16
-                  ..mt = 16,
+                  ..hFull
+                  ..mainAxisAlignment = MainAxisAlignment.spaceBetween
+                  ..my = 16,
               ],
             ),
           )
@@ -66,10 +66,8 @@ class LightingIndexPage extends HookConsumerWidget {
   }
 
   // feeder mode
-  List<Widget> renderCustom() {
-    return [
-      const FeederControl(),
-    ];
+  Widget renderCustom() {
+    return const FeederControl();
   }
 
   // ambient mode
