@@ -46,6 +46,73 @@ create table schedule_presets
     primary key (id)
 );
 
+insert into schedule_presets (user_id, name, description, time_points)
+values (null,
+        'Recommended',
+        'Recommended schedule for Tidal Tech Lighting',
+        '[
+          {
+            "time": "08:00",
+            "brightness": {
+              "red": 74,
+              "blue": 77,
+              "green": 9,
+              "white": 0,
+              "royalBlue": 77,
+              "warmWhite": 0,
+              "ultraViolet": 0
+            }
+          },
+          {
+            "time": "09:30",
+            "brightness": {
+              "red": 74,
+              "blue": 100,
+              "green": 29,
+              "white": 65,
+              "royalBlue": 100,
+              "warmWhite": 0,
+              "ultraViolet": 0
+            }
+          },
+          {
+            "time": "15:30",
+            "brightness": {
+              "red": 74,
+              "blue": 74,
+              "green": 7,
+              "white": 0,
+              "royalBlue": 76,
+              "warmWhite": 47,
+              "ultraViolet": 0
+            }
+          },
+          {
+            "time": "18:00",
+            "brightness": {
+              "red": 0,
+              "blue": 4,
+              "green": 0,
+              "white": 0,
+              "royalBlue": 5,
+              "warmWhite": 0,
+              "ultraViolet": 0
+            }
+          },
+          {
+            "time": "24:00",
+            "brightness": {
+              "red": 0,
+              "blue": 4,
+              "green": 0,
+              "white": 0,
+              "royalBlue": 5,
+              "warmWhite": 0,
+              "ultraViolet": 0
+            }
+          }
+        ]'::jsonb);
+
 insert into devices (id, token, name, pair_user_id, pair_at, properties, created_at)
 values ('83ac6d47-82fd-403a-b903-1a7df6248d46', 'TOKEN', 'TIDAL TECH LIGHTING', null, null,
         '{

@@ -11,6 +11,7 @@ import (
 	"os"
 
 	"github.com/acoshift/pgsql/pgctx"
+	"github.com/google/uuid"
 	"github.com/lib/pq"
 
 	"github.com/xkamail/tidaltech/schema"
@@ -19,9 +20,10 @@ import (
 const masterDBName = "neondb"
 
 type DB struct {
-	db       *sql.DB
-	masterDB *sql.DB
-	dbName   string
+	db        *sql.DB
+	masterDB  *sql.DB
+	dbName    string
+	AccountID uuid.UUID
 }
 
 func New() *DB {
@@ -82,6 +84,7 @@ func New() *DB {
 		panic(err)
 	}
 
+	x.AccountID = uuid.MustParse("00000000-0000-0000-0000-000000000001")
 	return &x
 }
 

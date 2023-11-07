@@ -2,11 +2,13 @@ package preset
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"github.com/acoshift/pgsql"
 	"github.com/acoshift/pgsql/pgctx"
 	"github.com/google/uuid"
+	"github.com/moonrhythm/validator"
 
 	"github.com/xkamail/tidaltech/api/auth"
 	"github.com/xkamail/tidaltech/pkg/schedule"
@@ -17,6 +19,7 @@ type Preset struct {
 	Name        string                `json:"name"`
 	Description string                `json:"description"`
 	TimePoints  []*schedule.TimePoint `json:"timePoints"`
+	IsPublic    bool                  `json:"isPublic"`
 	CreatedAt   time.Time             `json:"createdAt"`
 }
 
@@ -41,9 +44,9 @@ func List(ctx context.Context) (*ListResult, error) {
 		}
 		result = append(result, &p)
 		return nil
-	}, `select id, name,description,time_points,created_at 
+	}, `select id, name, description,time_points,created_at 
 			from schedule_presets 
-			where user_id = $1 order by created_at desc`,
+			where (user_id = $1 or user_id is null) order by created_at desc`,
 		userID,
 	)
 	if err != nil {
@@ -62,6 +65,15 @@ type CreateParam struct {
 	TimePoints []*schedule.TimePoint `json:"timePoints"`
 }
 
+func (p *CreateParam) Valid() error {
+	v := validator.New()
+	p.Name = strings.TrimSpace(p.Name)
+	v.Must(p.Name != "", "name is required")
+	v.Must(len(p.Name) <= 100, "name is too long")
+	v.Must(len(p.TimePoints) > 0, "timePoints is required")
+	return v.Error()
+}
+
 func Create(ctx context.Context, p *CreateParam) (*CreateResult, error) {
 	userID := auth.GetAccountID(ctx)
 
@@ -70,13 +82,12 @@ func Create(ctx context.Context, p *CreateParam) (*CreateResult, error) {
 		uuid.New(),
 		userID,
 		p.Name,
-		"",
+		"-",
 		pgsql.JSON(p.TimePoints),
 	)
 	if err != nil {
 		return nil, err
 	}
-
 	return &CreateResult{}, nil
 }
 
