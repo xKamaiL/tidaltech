@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/acoshift/arpc/v2"
 	"github.com/acoshift/pgsql"
 	"github.com/acoshift/pgsql/pgctx"
 	"github.com/google/uuid"
@@ -12,6 +13,10 @@ import (
 
 	"github.com/xkamail/tidaltech/api/auth"
 	"github.com/xkamail/tidaltech/pkg/schedule"
+)
+
+var (
+	ErrNotFound = arpc.NewErrorCode("PRESET_NOT_FOUND", "preset: not found")
 )
 
 type Preset struct {
@@ -106,9 +111,16 @@ type DeleteParam struct {
 
 func Delete(ctx context.Context, p *DeleteParam) error {
 	userID := auth.GetAccountID(ctx)
-	_, err := pgctx.Exec(ctx, `delete from schedule_presets where id = $1 and user_id = $2`, p.ID, userID)
+	r, err := pgctx.Exec(ctx, `delete from schedule_presets where id = $1 and user_id = $2`, p.ID, userID)
 	if err != nil {
 		return err
+	}
+	n, err := r.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if n == 0 {
+		return ErrNotFound
 	}
 	return nil
 }
