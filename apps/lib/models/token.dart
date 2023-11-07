@@ -8,6 +8,7 @@ class TokenInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
+    print("REQUEST[${options.method}] => PATH: ${options.path}");
     final token = await getToken();
     options.headers['Authorization'] = 'Bearer $token';
     super.onRequest(options, handler);

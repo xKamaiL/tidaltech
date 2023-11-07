@@ -7,6 +7,7 @@ export 'devices.dart';
 export 'preset.dart';
 export 'token.dart';
 export 'scenes.dart';
+export 'api.dart';
 
 final api = RestClient(
   Dio()

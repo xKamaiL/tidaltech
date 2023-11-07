@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tidal_tech/models/models.dart';
 import 'package:tidal_tech/providers/feeder.dart';
 
 final staticLEDColorProvider =
@@ -78,5 +79,17 @@ class StaticLEDColor extends StateNotifier<StaticLEDColorState> {
       ...state.colors,
       LED.green: ColorPoint(LED.green, value.toInt()),
     });
+  }
+
+  void setFromScene(SceneItem scene) {
+    if (scene.colors.isEmpty) return;
+
+    setWhite(scene.colors.first.color[LED.white]!.toDouble());
+    setBlue(scene.colors.first.color[LED.blue]!.toDouble());
+    setRoyalBlue(scene.colors.first.color[LED.royalBlue]!.toDouble());
+    setWarmWhite(scene.colors.first.color[LED.warmWhite]!.toDouble());
+    setUltraViolet(scene.colors.first.color[LED.ultraViolet]!.toDouble());
+    setRed(scene.colors.first.color[LED.red]!.toDouble());
+    setGreen(scene.colors.first.color[LED.green]!.toDouble());
   }
 }

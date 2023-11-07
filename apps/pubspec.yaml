@@ -68,6 +68,7 @@ dependencies:
   connectivity_plus: ^5.0.1
   wifi_info_flutter: ^2.0.2
   esptouch_smartconfig: ^1.1.0
+  flutter_hooks: ^0.20.3
 
 
 dev_dependencies:

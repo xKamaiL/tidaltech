@@ -6,7 +6,7 @@ part 'scenes.g.dart';
 @JsonSerializable()
 class SceneTimeline {
   final int duration;
-  final Map<String, int> color;
+  final Map<LED, int> color;
 
   SceneTimeline({required this.duration, required this.color});
 
@@ -58,4 +58,16 @@ class ListSceneResult {
       _$ListSceneResultFromJson(json);
 
   Map<String, dynamic> toJson() => _$ListSceneResultToJson(this);
+}
+
+@JsonSerializable()
+class GetSceneParam {
+  final String id;
+
+  GetSceneParam({required this.id});
+
+  factory GetSceneParam.fromJson(Map<String, dynamic> json) =>
+      _$GetSceneParamFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GetSceneParamToJson(this);
 }

@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -21,8 +20,7 @@ class SceneCard extends HookConsumerWidget {
   final bool? active;
 
   const SceneCard(
-      {Key? key, required this.scene, required this.onTap, this.active})
-      : super(key: key);
+      {super.key, required this.scene, required this.onTap, this.active});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

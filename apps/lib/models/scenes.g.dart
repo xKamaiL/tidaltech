@@ -9,14 +9,26 @@ part of 'scenes.dart';
 SceneTimeline _$SceneTimelineFromJson(Map<String, dynamic> json) =>
     SceneTimeline(
       duration: json['duration'] as int,
-      color: Map<String, int>.from(json['color'] as Map),
+      color: (json['color'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry($enumDecode(_$LEDEnumMap, k), e as int),
+      ),
     );
 
 Map<String, dynamic> _$SceneTimelineToJson(SceneTimeline instance) =>
     <String, dynamic>{
       'duration': instance.duration,
-      'color': instance.color,
+      'color': instance.color.map((k, e) => MapEntry(_$LEDEnumMap[k]!, e)),
     };
+
+const _$LEDEnumMap = {
+  LED.white: 'white',
+  LED.blue: 'blue',
+  LED.royalBlue: 'royalBlue',
+  LED.warmWhite: 'warmWhite',
+  LED.ultraViolet: 'ultraViolet',
+  LED.red: 'red',
+  LED.green: 'green',
+};
 
 SceneItem _$SceneItemFromJson(Map<String, dynamic> json) => SceneItem(
       id: json['id'] as String,
@@ -54,4 +66,14 @@ ListSceneResult _$ListSceneResultFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$ListSceneResultToJson(ListSceneResult instance) =>
     <String, dynamic>{
       'items': instance.items,
+    };
+
+GetSceneParam _$GetSceneParamFromJson(Map<String, dynamic> json) =>
+    GetSceneParam(
+      id: json['id'] as String,
+    );
+
+Map<String, dynamic> _$GetSceneParamToJson(GetSceneParam instance) =>
+    <String, dynamic>{
+      'id': instance.id,
     };

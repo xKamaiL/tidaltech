@@ -159,4 +159,11 @@ abstract class RestClient {
     "Accept": "application/json",
   })
   Future<APIFormat<ListSceneResult>> fetchScenes(@Body() ListSceneParam param);
+
+  @POST("/scenes.Get")
+  @Headers(<String, dynamic>{
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  })
+  Future<APIFormat<SceneItem>> getScene(@Body() GetSceneParam param);
 }
