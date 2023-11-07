@@ -10,6 +10,8 @@ import (
 	"github.com/acoshift/arpc/v2"
 	"github.com/acoshift/pgsql"
 	"github.com/acoshift/pgsql/pgctx"
+	"github.com/acoshift/pgsql/pgstmt"
+	"github.com/lib/pq"
 	"github.com/moonrhythm/validator"
 
 	"github.com/xkamail/tidaltech/pkg/effect"
@@ -33,12 +35,41 @@ type ListResult struct {
 	Items []*Scene `json:"items"`
 }
 
-func List(ctx context.Context) (*ListResult, error) {
+type ListParams struct {
+	Query []string `json:"query"`
+}
+
+func (p *ListParams) Valid() error {
+	v := validator.New()
+	for _, q := range p.Query {
+		v.Must(len(q) > 0, "query is required")
+	}
+	return v.Error()
+}
+
+func List(ctx context.Context, p *ListParams) (*ListResult, error) {
+	if err := p.Valid(); err != nil {
+		return nil, err
+	}
+
 	items := make([]*Scene, 0)
 
-	err := pgctx.Iter(ctx, func(scan pgsql.Scanner) error {
-		var s Scene
+	filter := func(b pgstmt.Cond) {
+		b.Mode().Or()
+		if len(p.Query) > 0 {
+			b.Or(func(b pgstmt.Cond) {
+				b.Eq("id", pgstmt.Any(pq.Array(p.Query)))
+			})
+		}
+	}
 
+	err := pgstmt.Select(func(b pgstmt.SelectStatement) {
+		b.From("scenes")
+		b.OrderBy("created_at desc")
+		b.Columns("id", "name", "icon", "data", "created_at")
+		b.Where(filter)
+	}).IterWith(ctx, func(scan pgsql.Scanner) error {
+		var s Scene
 		if err := scan(
 			&s.ID,
 			&s.Name,
@@ -51,7 +82,7 @@ func List(ctx context.Context) (*ListResult, error) {
 		items = append(items, &s)
 
 		return nil
-	}, `select id, name, icon, data, created_at from scenes order by created_at desc`)
+	})
 	if err != nil {
 		return nil, err
 	}
