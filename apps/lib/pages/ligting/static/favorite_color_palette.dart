@@ -29,15 +29,29 @@ class FavoriteColorPalette extends HookConsumerWidget {
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
-        return const CircularProgressIndicator();
+        return const Center(child: CupertinoActivityIndicator());
       },
     );
   }
 
   _buildSceneList(BuildContext context,
       AsyncSnapshot<APIFormat<ListSceneResult>> snapshot, WidgetRef ref) {
-    if (snapshot.data == null) return const SizedBox();
-    if (!snapshot.data!.ok) return const SizedBox();
+    if (snapshot.data == null) {
+      return const SizedBox(
+        height: 380,
+        child: Center(
+          child: Text("Failed to load scenes"),
+        ),
+      );
+    }
+    if (!snapshot.data!.ok) {
+      return const SizedBox(
+        height: 380,
+        child: Center(
+          child: Text("Failed to load scenes"),
+        ),
+      );
+    }
     return SizedBox(
       height: 380,
       child:
