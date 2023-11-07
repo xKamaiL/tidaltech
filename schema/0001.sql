@@ -150,3 +150,199 @@ values ('sunrise', 'Sunrise', 'sunrise', '[
     }
   }
 ]');
+
+insert into scenes (id, name, icon, data)
+values ('sunset', 'Sunset', 'sunset', '[
+  {
+    "duration": 60,
+    "color": {
+      "red": 0,
+      "blue": 4,
+      "green": 0,
+      "white": 0,
+      "royalBlue": 5,
+      "warmWhite": 0,
+      "ultraViolet": 0
+    }
+  }
+]');
+
+insert into scenes (id, name, icon, data)
+values ('storm', 'Storm', 'storm', '[
+  {
+    "duration": 60,
+    "color": {
+      "red": 74,
+      "blue": 77,
+      "green": 9,
+      "white": 0,
+      "royalBlue": 77,
+      "warmWhite": 0,
+      "ultraViolet": 0
+    }
+  },
+  {
+    "duration": 60,
+    "color": {
+      "red": 0,
+      "blue": 4,
+      "green": 0,
+      "white": 0,
+      "royalBlue": 5,
+      "warmWhite": 0,
+      "ultraViolet": 0
+    }
+  }
+]');
+
+insert into scenes (id, name, icon, data)
+values ('cloudy', 'Cloudy', 'cloudy', '[
+  {
+    "duration": 60,
+    "color": {
+      "red": 74,
+      "blue": 77,
+      "green": 9,
+      "white": 0,
+      "royalBlue": 77,
+      "warmWhite": 0,
+      "ultraViolet": 0
+    }
+  },
+  {
+    "duration": 60,
+    "color": {
+      "red": 74,
+      "blue": 74,
+      "green": 7,
+      "white": 0,
+      "royalBlue": 76,
+      "warmWhite": 47,
+      "ultraViolet": 0
+    }
+  }
+]');
+
+insert into scenes (id, name, icon, data)
+values ('lightning', 'Lightning', 'lightning', '[
+  {
+    "duration": 60,
+    "color": {
+      "red": 74,
+      "blue": 77,
+      "green": 9,
+      "white": 0,
+      "royalBlue": 77,
+      "warmWhite": 0,
+      "ultraViolet": 0
+    }
+  },
+  {
+    "duration": 60,
+    "color": {
+      "red": 74,
+      "blue": 74,
+      "green": 7,
+      "white": 0,
+      "royalBlue": 76,
+      "warmWhite": 47,
+      "ultraViolet": 0
+    }
+  },
+  {
+    "duration": 60,
+    "color": {
+      "red": 0,
+      "blue": 4,
+      "green": 0,
+      "white": 0,
+      "royalBlue": 5,
+      "warmWhite": 0,
+      "ultraViolet": 0
+    }
+  }
+]');
+
+insert into scenes (id, name, icon, data)
+values ('moonlight', 'Moonlight', 'moonlight', '[
+  {
+    "duration": 60,
+    "color": {
+      "red": 0,
+      "blue": 4,
+      "green": 0,
+      "white": 0,
+      "royalBlue": 5,
+      "warmWhite": 0,
+      "ultraViolet": 0
+    }
+  }
+]');
+
+insert into scenes (id, name, icon, data)
+values ('daylight', 'Daylight', 'daylight', '[
+  {
+    "duration": 60,
+    "color": {
+      "red": 74,
+      "blue": 100,
+      "green": 29,
+      "white": 65,
+      "royalBlue": 100,
+      "warmWhite": 0,
+      "ultraViolet": 0
+    }
+  }
+]');
+
+insert into scenes (id, name, icon, data)
+values ('thunderstorm', 'Thunderstorm', 'thunderstorm', '[
+  {
+    "duration": 60,
+    "color": {
+      "red": 74,
+      "blue": 77,
+      "green": 9,
+      "white": 0,
+      "royalBlue": 77,
+      "warmWhite": 0,
+      "ultraViolet": 0
+    }
+  },
+  {
+    "duration": 60,
+    "color": {
+      "red": 74,
+      "blue": 74,
+      "green": 7,
+      "white": 0,
+      "royalBlue": 76,
+      "warmWhite": 47,
+      "ultraViolet": 0
+    }
+  },
+  {
+    "duration": 60,
+    "color": {
+      "red": 0,
+      "blue": 4,
+      "green": 0,
+      "white": 0,
+      "royalBlue": 5,
+      "warmWhite": 0,
+      "ultraViolet": 0
+    }
+  },
+  {
+    "duration": 60,
+    "color": {
+      "red": 74,
+      "blue": 77,
+      "green": 9,
+      "white": 0,
+      "royalBlue": 77,
+      "warmWhite": 0,
+      "ultraViolet": 0
+    }
+  }
+]');

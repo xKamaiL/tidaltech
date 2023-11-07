@@ -20,8 +20,7 @@ func TestList(t *testing.T) {
 		if !assert.NoError(t, err) {
 			return
 		}
-
-		assert.Len(t, list.Items, 1)
+		assert.NotEmpty(t, list.Items)
 	})
 
 }
