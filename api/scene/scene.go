@@ -65,9 +65,9 @@ func List(ctx context.Context, p *ListParams) (*ListResult, error) {
 
 	err := pgstmt.Select(func(b pgstmt.SelectStatement) {
 		b.From("scenes")
-		b.OrderBy("created_at desc")
 		b.Columns("id", "name", "icon", "data", "created_at")
 		b.Where(filter)
+		b.OrderBy("no").Desc()
 	}).IterWith(ctx, func(scan pgsql.Scanner) error {
 		var s Scene
 		if err := scan(

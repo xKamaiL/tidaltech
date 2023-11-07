@@ -132,6 +132,7 @@ create table scenes
     name       varchar not null,
     icon       varchar not null,
     data       jsonb   not null,
+    no int default 0,
     created_at timestamp default now()
 );
 
