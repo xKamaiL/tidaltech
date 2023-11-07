@@ -124,3 +124,29 @@ values ('83ac6d47-82fd-403a-b903-1a7df6248d46', 'TOKEN', 'TIDAL TECH LIGHTING', 
           }
         }',
         now());
+
+
+create table scenes
+(
+    id         varchar not null primary key,
+    name       varchar not null,
+    icon       varchar not null,
+    data       jsonb   not null,
+    created_at timestamp default now()
+);
+
+insert into scenes (id, name, icon, data)
+values ('sunrise', 'Sunrise', 'sunrise', '[
+  {
+    "duration": 60,
+    "color": {
+      "red": 74,
+      "blue": 77,
+      "green": 9,
+      "white": 0,
+      "royalBlue": 77,
+      "warmWhite": 0,
+      "ultraViolet": 0
+    }
+  }
+]');
