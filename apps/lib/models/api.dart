@@ -7,6 +7,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:tidal_tech/models/devices.dart';
 import 'package:tidal_tech/models/preset.dart';
+import 'package:tidal_tech/models/scenes.dart';
 import 'package:tidal_tech/models/user.dart';
 
 import 'auth.dart';
@@ -150,5 +151,12 @@ abstract class RestClient {
   })
   Future deletePreset(@Body() DeletePresetParam param);
 
-//
+  //
+
+  @POST("/scenes.List")
+  @Headers(<String, dynamic>{
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  })
+  Future<APIFormat<ListSceneResult>> fetchScenes(@Body() ListSceneParam param);
 }
