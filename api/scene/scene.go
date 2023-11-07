@@ -115,6 +115,7 @@ func Get(ctx context.Context, p *GetParams) (*Scene, error) {
 		&s.Name,
 		&s.Icon,
 		pgsql.JSON(&s.Timeline),
+		&s.CreatedAt,
 	)
 	if errors.Is(err, sql.ErrNoRows) {
 		return nil, ErrNotFound
