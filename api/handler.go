@@ -9,6 +9,7 @@ import (
 	"github.com/xkamail/tidaltech/api/auth"
 	"github.com/xkamail/tidaltech/api/device"
 	"github.com/xkamail/tidaltech/api/preset"
+	"github.com/xkamail/tidaltech/api/scene"
 )
 
 func Mount(m *httpmux.Mux, am *arpc.Manager) {
@@ -44,6 +45,11 @@ func Mount(m *httpmux.Mux, am *arpc.Manager) {
 		m.Handle("/presets.Create", am.Handler(preset.Create))
 		m.Handle("/presets.Update", am.Handler(preset.Update))
 		m.Handle("/presets.Delete", am.Handler(preset.Delete))
+	}
+	// scenes
+	{
+		m.Handle("/scenes.List", am.Handler(scene.List))
+		m.Handle("/scenes.Get", am.Handler(scene.Get))
 	}
 }
 
