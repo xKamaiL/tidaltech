@@ -159,15 +159,23 @@ void _ledc_set_duty(ledc_channel_t channel, short value) {
             break;
         case LED_ROYAL_BLUE:
             v = v * 0.62;
+            break;
         case LED_RED:
-            v = v * 0.1;
+            v = v * 0.15;
+            break;
         case LED_GREEN:
-            v = v * 0.1;
+            v = v * 0.15;
+            break;
         case LED_WARM_WHITE:
-            v = v * 0.1;
-
+            // 100% at 0.1 = ok
+            v = v * 0.15;
+            break;
+        case LED_WHITE:
+            // 100% at 0.1 = ok
+            v = v * 0.15;
+            break;
         default:
-            v = v * 0.35;
+            v = v * 0.50;
             break;
     }
 
