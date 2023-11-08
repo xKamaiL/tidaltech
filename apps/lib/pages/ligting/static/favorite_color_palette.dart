@@ -144,6 +144,8 @@ class SceneCard extends HookConsumerWidget {
         return Icons.flash_on;
       case "storm":
         return Icons.cloud_queue;
+      case "light":
+        return Icons.light_mode_outlined;
     }
     return Icons.question_mark_outlined;
   }
