@@ -10,7 +10,13 @@ import 'package:tidal_tech/stores/static_led_mode.dart';
 import '../providers/feeder.dart';
 
 final deviceProvider = StateNotifierProvider<DeviceNotifier, DeviceProvider>(
-  (ref) => DeviceNotifier(DeviceProvider(), ref),
+  (ref) => DeviceNotifier(
+      DeviceProvider(
+        isLoading: true,
+        isNotPair: false,
+        isError: false,
+      ),
+      ref),
 );
 
 class DeviceNotifier extends StateNotifier<DeviceProvider> {
@@ -25,22 +31,23 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
     final prefs = await SharedPreferences.getInstance();
     final res = await api.fetchDevice(PairParam(id: "id"));
 
-    final xState = state;
+    var xState = state;
     if (!res.ok) {
       if (res.error?.code == "DEVICE_NOT_FOUND") {
-        xState.isNotPair = true;
+        xState = xState.copyWith(isNotPair: true);
       } else {
-        xState.isError = true;
+        xState.copyWith(isError: true);
       }
-      xState.isLoading = false;
+      xState.copyWith(isLoading: false);
       state = xState;
       return;
     }
     prefs.setString("deviceId", res.result!.id); //
-    xState.isLoading = false;
-    xState.isError = false;
-    xState.isNotPair = false;
-    xState.device = res.result!;
+    xState = xState.copyWith(
+        isLoading: false,
+        isError: false,
+        isNotPair: false,
+        device: res.result!);
     state = xState;
 
     ref.read(lightingModeProvider.notifier).setMode(
@@ -104,13 +111,13 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
     await api.updateStaticColor(UpdateStaticColorParam(
       colors: colors.map((key, value) => MapEntry(key.name, value.intensity)),
     ));
-    final x = state;
-    x.device = x.device!.copyWith(
-      properties: x.device!.properties.copyWith(
+
+    state = state.copyWith(
+        device: state.device!.copyWith(
+      properties: state.device!.properties.copyWith(
         color: colors.map((key, value) => MapEntry(key.name, value.intensity)),
       ),
-    );
-    state = x;
+    ));
   }
 
   Future<void> updateSchedule({required List<TimePoint> timePoints}) async {
@@ -132,9 +139,33 @@ class DeviceNotifier extends StateNotifier<DeviceProvider> {
 //
 }
 
+@immutable
 class DeviceProvider {
-  bool isLoading = true;
-  DeviceItem? device;
-  bool isNotPair = false;
-  bool isError = false;
+  final bool isLoading;
+
+  final DeviceItem? device;
+  final bool isNotPair;
+
+  final bool isError;
+
+  const DeviceProvider({
+    required this.isLoading,
+    this.device,
+    required this.isNotPair,
+    required this.isError,
+  });
+
+  copyWith({
+    bool? isLoading,
+    DeviceItem? device,
+    bool? isNotPair,
+    bool? isError,
+  }) {
+    return DeviceProvider(
+      isLoading: isLoading ?? this.isLoading,
+      device: device ?? this.device,
+      isNotPair: isNotPair ?? this.isNotPair,
+      isError: isError ?? this.isError,
+    );
+  }
 }

@@ -14,19 +14,83 @@ class OnHourWidget extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final d = ref.read(deviceProvider).device;
+    final d = ref.watch(deviceProvider.select((value) => value.device));
+    int white = 0;
+    int blue = 0;
+    int red = 0;
+    int warmWhite = 0;
+    int green = 0;
+    int royalBlue = 0;
+    int ultraViolet = 0;
+    if (d != null) {
+      if (d.properties.mode == "schedule") {
+        final points = d.properties.schedule.points;
+        if (points != null) {
+          //
+          final now = DateTime.now();
+          final hour = now.hour;
+          final minute = now.minute;
+          // find schedule which in range of now
+
+          final greater = points.where((element) {
+            final h = int.parse(element.time.split(":")[0]);
+            final m = int.parse(element.time.split(":")[1]);
+            if (h <= hour) {
+              if (h == hour && m > minute) {
+                return false;
+              }
+              return true;
+            }
+            return false;
+          });
+          final greatest = greater.reduce((curr, next) {
+            final h = int.parse(curr.time.split(":")[0]);
+            final m = int.parse(curr.time.split(":")[1]);
+            final nh = int.parse(next.time.split(":")[0]);
+            final nm = int.parse(next.time.split(":")[1]);
+            if (h > nh) {
+              return curr;
+            } else if (h == nh) {
+              if (m > nm) {
+                return curr;
+              }
+            }
+            return next;
+          });
+          final colors = greatest.brightness;
+          white = colors["white"] ?? 0;
+          blue = colors["blue"] ?? 0;
+          red = colors["red"] ?? 0;
+          warmWhite = colors["warmWhite"] ?? 0;
+          green = colors["green"] ?? 0;
+          royalBlue = colors["royalBlue"] ?? 0;
+          ultraViolet = colors["ultraViolet"] ?? 0;
+        }
+      } else {
+        final colors = d.properties.colors;
+        if (colors != null) {
+          white = colors["white"] ?? 0;
+          blue = colors["blue"] ?? 0;
+          red = colors["red"] ?? 0;
+          warmWhite = colors["warmWhite"] ?? 0;
+          green = colors["green"] ?? 0;
+          royalBlue = colors["royalBlue"] ?? 0;
+          ultraViolet = colors["ultraViolet"] ?? 0;
+        }
+      }
+    }
 
     return Panel(
         child: AspectRatio(
       aspectRatio: 1,
       child: n.Column([
         n.Row([
-          n.Icon(Icons.timer_outlined)
-            ..color = const Color(0xFF00BFA5)
+          n.Icon(Icons.light_mode_rounded)
+            ..color = Colors.limeAccent
             ..size = 14,
-          n.Text("Schedule")
+          n.Text("Level")
             // aquarium colors
-            ..color = const Color(0xFF00BFA5)
+            ..color = Colors.limeAccent
             ..fontSize = 14
             ..textAlign = TextAlign.center
             ..bold
@@ -38,33 +102,33 @@ class OnHourWidget extends HookConsumerWidget {
           child: n.Row([
             BarColor(
               ledColor[LED.white]!,
-              1,
+              white,
             ),
             BarColor(
               ledColor[LED.blue]!,
-              50,
+              blue,
             ),
             BarColor(
               ledColor[LED.red]!,
-              20,
+              red,
             ),
             //
             BarColor(
               ledColor[LED.warmWhite]!,
-              30,
+              warmWhite,
             ),
             BarColor(
               ledColor[LED.green]!,
-              40,
+              green,
             ),
             BarColor(
               ledColor[LED.royalBlue]!,
-              50,
+              royalBlue,
             ),
             //
             BarColor(
               ledColor[LED.ultraViolet]!,
-              60,
+              ultraViolet,
             ),
           ])
             ..spaceBetween

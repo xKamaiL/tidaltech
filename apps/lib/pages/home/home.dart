@@ -28,7 +28,7 @@ class HomeIndexPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //
-    void runScene(String id) async {
+    runScene(String id) async {
       final res = await api.getScene(GetSceneParam(id: id));
       if (!res.ok) {
         debugPrint(res.error!.message);
@@ -43,14 +43,15 @@ class HomeIndexPage extends HookConsumerWidget {
         debugPrint("result.colors is empty");
         return;
       }
-      final colors =   result.colors.first.color
+      final colors = result.colors.first.color
           .map((key, value) => MapEntry(key, ColorPoint(key, value)));
-      ref.read(deviceProvider.notifier).setStaticColor(colors);
-      ref.read(deviceProvider.notifier).setMode(LightingMode.ambient);
+      await ref.read(deviceProvider.notifier).setStaticColor(colors);
+      await ref.read(deviceProvider.notifier).setMode(LightingMode.ambient);
       ref.read(bleManagerProvider.notifier).setStaticColor(
-          colors,
+            colors,
           );
       ref.read(staticLEDColorProvider.notifier).setFromScene(result);
+      await ref.read(deviceProvider.notifier).fetchCurrentDevice();
     }
 
     return Scaffold(
@@ -73,12 +74,12 @@ class HomeIndexPage extends HookConsumerWidget {
         minSpacing: 8,
         rowMainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const ClockWidget(),
-          const MoonLightWidget(),
-          const OnHourWidget(),
-          const WaterTemperature(),
-          const SunriseWidget(),
-          const HistoryWidget(),
+          ClockWidget(),
+          MoonLightWidget(),
+          OnHourWidget(),
+          WaterTemperature(),
+          SunriseWidget(),
+          HistoryWidget(),
           n.Text("Scenes")
             ..mt = 8
             ..color = Colors.white
@@ -91,7 +92,7 @@ class HomeIndexPage extends HookConsumerWidget {
               icon: CupertinoIcons.color_filter,
             ),
             onTap: () async {
-              runScene("full");
+              await runScene("full");
             },
           ),
           SceneCard(
@@ -99,9 +100,9 @@ class HomeIndexPage extends HookConsumerWidget {
               title: "Sunrise",
               icon: CupertinoIcons.sunrise,
             ),
-            onTap: () {
+            onTap: () async {
               //
-              runScene("sunrise");
+              await runScene("sunrise");
             },
           ),
           SceneCard(
@@ -109,8 +110,8 @@ class HomeIndexPage extends HookConsumerWidget {
               title: "Moonlight",
               icon: CupertinoIcons.moon,
             ),
-            onTap: () {
-              runScene("moonlight");
+            onTap: () async {
+              await runScene("moonlight");
             },
           ),
           n.Box(),
