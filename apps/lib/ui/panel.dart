@@ -25,7 +25,6 @@ class Panel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const blur = 10.0;
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 0),
       color: Colors.black.withOpacity(0.3),

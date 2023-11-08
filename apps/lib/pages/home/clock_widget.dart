@@ -66,7 +66,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget> {
               ..textAlign = TextAlign.left
               ..bold
               ..color = Colors.white,
-            n.Text(DateFormat('EEEE, d MMMM yyyy').format(DateTime.now()))
+            n.Text(DateFormat('d MMMM yyyy').format(DateTime.now()))
               ..color = Colors.white.withOpacity(0.75)
           ])
             ..gap = 4

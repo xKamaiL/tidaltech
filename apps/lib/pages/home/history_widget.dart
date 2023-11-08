@@ -11,7 +11,7 @@ class HistoryWidget extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return StreamBuilder(
-      stream: Stream.periodic(const Duration(seconds: 1)),
+      stream: Stream.periodic(const Duration(seconds: 5)),
       builder: (context, snap) {
         return Panel(
           child: n.Column([
@@ -19,7 +19,7 @@ class HistoryWidget extends HookConsumerWidget {
               n.Icon(Icons.history)
                 ..color = Colors.white.withOpacity(0.65)
                 ..size = 14,
-              n.Text("Historical")
+              n.Text("History")
                 ..color = Colors.white.withOpacity(0.65)
                 ..fontSize = 14
                 ..textAlign = TextAlign.center
@@ -36,8 +36,6 @@ class HistoryWidget extends HookConsumerWidget {
               ..wFull
               ..my = 39
               ..color = Colors.white.withOpacity(0.5),
-            n.Text(DateFormat('EEEE, d MMMM yyyy').format(DateTime.now()))
-              ..color = Colors.white.withOpacity(0.75)
           ])
             ..gap = 4
             ..spaceBetween,

@@ -127,17 +127,17 @@ class SceneCard extends HookConsumerWidget {
   IconData? getSceneIcon(String icon) {
     switch (icon) {
       case "cloudy":
-        return Icons.wb_cloudy;
+        return Icons.wb_cloudy_outlined;
       case "sunrise":
-        return CupertinoIcons.sunrise_fill;
+        return CupertinoIcons.sunrise;
       case "sunset":
-        return CupertinoIcons.sunset_fill;
+        return CupertinoIcons.sunset;
       case "rain":
         return Icons.water;
       case "moonlight":
-        return Icons.nightlight_round;
+        return CupertinoIcons.moon;
       case "daylight":
-        return Icons.wb_sunny;
+        return Icons.wb_sunny_outlined;
       case "thunderstorm":
         return CupertinoIcons.cloud_rain;
       case "lightning":
