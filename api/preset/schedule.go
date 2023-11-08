@@ -43,13 +43,13 @@ func List(ctx context.Context) (*ListResult, error) {
 
 	err := pgctx.Iter(ctx, func(scan pgsql.Scanner) error {
 		var p Preset
-		err := scan(&p.ID, &p.Name, &p.Description, pgsql.JSON(&p.TimePoints), &p.CreatedAt)
+		err := scan(&p.ID, &p.Name, &p.Description, pgsql.JSON(&p.TimePoints), &p.CreatedAt, &p.IsPublic)
 		if err != nil {
 			return err
 		}
 		result = append(result, &p)
 		return nil
-	}, `select id, name, description,time_points,created_at 
+	}, `select id, name, description,time_points,created_at, bool(user_id is null)
 			from schedule_presets 
 			where (user_id = $1 or user_id is null) order by created_at desc`,
 		userID,

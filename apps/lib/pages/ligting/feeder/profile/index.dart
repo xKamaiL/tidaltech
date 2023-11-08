@@ -71,16 +71,16 @@ class LightingFeederProfilePage extends HookConsumerWidget {
                             key: UniqueKey(),
                             background: Container(color: Colors.red),
                             direction: DismissDirection.endToStart,
-                            onDismissed: (direction) {},
-                            confirmDismiss: (direction) async {
-                              if (direction == DismissDirection.endToStart) {
+                            onDismissed: (direction) {
+                              print("remove ${item.id}");
+                            },
+                            confirmDismiss: (DismissDirection direction) async {
+                              print(item.isPublic);
+                              if (item.isPublic) {
                                 return false;
                               }
                               final res = await api
                                   .deletePreset(DeletePresetParam(id: item.id));
-                              if (!res.ok) {
-                                return false;
-                              }
                               return true;
                             },
                             child: n.ListTile(

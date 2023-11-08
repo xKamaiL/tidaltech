@@ -9,12 +9,15 @@ class PresetItem {
   final String name;
   final String description;
   final List<DeviceTimePoint>? timePoints;
+  final bool isPublic;
 
-  PresetItem(
-      {required this.id,
-      required this.name,
-      required this.timePoints,
-      required this.description});
+  PresetItem({
+    required this.id,
+    required this.name,
+    required this.timePoints,
+    required this.description,
+    required this.isPublic,
+  });
 
   factory PresetItem.fromJson(Map<String, dynamic> json) =>
       _$PresetItemFromJson(json);

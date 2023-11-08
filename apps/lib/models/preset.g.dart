@@ -13,6 +13,7 @@ PresetItem _$PresetItemFromJson(Map<String, dynamic> json) => PresetItem(
           ?.map((e) => DeviceTimePoint.fromJson(e as Map<String, dynamic>))
           .toList(),
       description: json['description'] as String,
+      isPublic: json['isPublic'] as bool,
     );
 
 Map<String, dynamic> _$PresetItemToJson(PresetItem instance) =>
@@ -21,6 +22,7 @@ Map<String, dynamic> _$PresetItemToJson(PresetItem instance) =>
       'name': instance.name,
       'description': instance.description,
       'timePoints': instance.timePoints,
+      'isPublic': instance.isPublic,
     };
 
 MyPresetResult _$MyPresetResultFromJson(Map<String, dynamic> json) =>
