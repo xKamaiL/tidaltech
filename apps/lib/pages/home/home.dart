@@ -43,10 +43,12 @@ class HomeIndexPage extends HookConsumerWidget {
         debugPrint("result.colors is empty");
         return;
       }
+      final colors =   result.colors.first.color
+          .map((key, value) => MapEntry(key, ColorPoint(key, value)));
+      ref.read(deviceProvider.notifier).setStaticColor(colors);
       ref.read(deviceProvider.notifier).setMode(LightingMode.ambient);
       ref.read(bleManagerProvider.notifier).setStaticColor(
-            result.colors.first.color
-                .map((key, value) => MapEntry(key, ColorPoint(key, value))),
+          colors,
           );
       ref.read(staticLEDColorProvider.notifier).setFromScene(result);
     }
