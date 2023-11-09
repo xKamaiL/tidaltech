@@ -17,7 +17,7 @@ class SunriseWidget extends HookConsumerWidget {
     final device = ref.watch(deviceProvider.select((value) => value.device));
     if (device != null) {
       final points = device.properties.schedule.points;
-      if (points != null) {
+      if (points != null && points.firstOrNull != null) {
         sunriseTime = points.first.time;
         sunset = points.last.time;
       }

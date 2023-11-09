@@ -47,6 +47,7 @@ class _ScanPageState extends ConsumerState<ScanPage> {
       }
     });
     FlutterBluePlus.adapterState.listen((event) {
+      final manager = ref.read(bleManagerProvider.notifier);
       if (event == BluetoothAdapterState.on) {
         manager.startScan();
       }
