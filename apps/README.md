@@ -1,4 +1,4 @@
-# TidalTech
+# TidalTech Application
 
-
-https://pub.dev/packages/syncfusion_flutter_sliders
++ go_router
++ flutter_blue_plus
