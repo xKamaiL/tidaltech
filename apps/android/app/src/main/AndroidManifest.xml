@@ -1,29 +1,12 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <!--    add permission -->
-    <uses-permission
-            android:name="android.permission.BLUETOOTH_SCAN"
-            android:usesPermissionFlags="neverForLocation" />
-    <!--BLUETOOTH PERMISSION-->
-    <!-- Request legacy Bluetooth permissions on older devices. -->
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <!-- Needed only if your app looks for Bluetooth devices.
-             If your app doesn't use Bluetooth scan results to derive physical
-             location information, you can strongly assert that your app
-             doesn't derive physical location. -->
-    <!-- Needed only if your app makes the device discoverable to Bluetooth
-      devices. -->
-    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
-    <!-- Needed only if your app communicates with already-paired Bluetooth
-           devices. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.tidaltech.apps"
+          xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:maxSdkVersion="30" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-    <!--bibo01 : hardware option-->
-    <uses-feature
-            android:name="android.hardware.bluetooth"
-            android:required="false" />
-    <uses-feature
-            android:name="android.hardware.bluetooth_le"
-            android:required="false" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" android:usesPermissionFlags="neverForLocation"
+                     tools:targetApi="s" />
 
     <application
             android:label="Tidal Tech"
@@ -43,10 +26,10 @@
                  to determine the Window background behind the Flutter UI. -->
             <meta-data
                     android:name="io.flutter.embedding.android.NormalTheme"
-                    android:resource="@style/NormalTheme" />
+                    android:resource="@style/NormalTheme"/>
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
@@ -54,6 +37,6 @@
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
                 android:name="flutterEmbedding"
-                android:value="2" />
+                android:value="2"/>
     </application>
 </manifest>

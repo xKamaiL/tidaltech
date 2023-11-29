@@ -28,10 +28,12 @@ class _SplashPageState extends ConsumerState<SplashPage> {
       Permission.locationAlways,
       Permission.bluetooth,
     ].request().then((value) {
+      // Hotfix for permission not working
+      context.go("/landing");
       if ((value[Permission.locationAlways]!.isGranted ||
               value[Permission.locationWhenInUse]!.isGranted) &&
           value[Permission.bluetooth]!.isGranted) {
-        context.go("/landing");
+        // context.go("/landing");
       }
     }).then((value) => FlutterNativeSplash.remove());
 

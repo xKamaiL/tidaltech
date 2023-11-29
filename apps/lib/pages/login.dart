@@ -174,7 +174,9 @@ class LoginPage extends HookConsumerWidget {
                           );
 
                       ref.read(bottomBarProvider.notifier).setPosition(0);
-                      context.go("/home");
+                      prefs.getString("id") == null
+                          ? context.go("/scan")
+                          : context.go("/home");
                     }
                   }
                   ..fullWidth,

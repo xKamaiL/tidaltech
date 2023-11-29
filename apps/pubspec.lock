@@ -651,10 +651,11 @@ packages:
   niku:
     dependency: "direct main"
     description:
-      name: niku
-      sha256: "1557e22a91bfc1bf92f4f9d6d00514739f31f41e32b92c4580dd7cf6798036f2"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "274702afd0110e30183bdc9ffc2c9fcd8cc7877c"
+      url: "https://github.com/leeyisoft/niku"
+    source: git
     version: "2.4.2"
   nm:
     dependency: transitive
